@@ -66,7 +66,6 @@ abstract class Enum
      * Return translated value. This method may be re-writed on children enum class.
      *
      * @param  mixed  $value
-     * @return string
      */
     public static function trans($value): string
     {

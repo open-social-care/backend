@@ -35,6 +35,7 @@ class Subject extends Model
     protected $casts = [
         'birth_date' => 'datetime',
     ];
+
     public function formAnswers(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(FormAnswer::class);

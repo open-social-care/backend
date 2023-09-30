@@ -351,8 +351,8 @@ class ComposerStaticInite3489a2e592dc48e108f088499a932d7
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -519,6 +519,11 @@ class ComposerStaticInite3489a2e592dc48e108f088499a932d7
 
     public static $classMap = array (
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
+        'App\\Enums\\DocumentTypes' => __DIR__ . '/../..' . '/app/Enums/DocumentTypes.php',
+        'App\\Enums\\Enum' => __DIR__ . '/../..' . '/app/Enums/Enum.php',
+        'App\\Enums\\Exceptions\\InvalidEnumValueException' => __DIR__ . '/../..' . '/app/Enums/Exceptions/InvalidEnumValueException.php',
+        'App\\Enums\\Roles' => __DIR__ . '/../..' . '/app/Enums/Roles.php',
+        'App\\Enums\\SkinColors' => __DIR__ . '/../..' . '/app/Enums/SkinColors.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
@@ -531,6 +536,24 @@ class ComposerStaticInite3489a2e592dc48e108f088499a932d7
         'App\\Http\\Middleware\\TrustProxies' => __DIR__ . '/../..' . '/app/Http/Middleware/TrustProxies.php',
         'App\\Http\\Middleware\\ValidateSignature' => __DIR__ . '/../..' . '/app/Http/Middleware/ValidateSignature.php',
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
+        'App\\Models\\Address' => __DIR__ . '/../..' . '/app/Models/Address.php',
+        'App\\Models\\City' => __DIR__ . '/../..' . '/app/Models/City.php',
+        'App\\Models\\FileUpload' => __DIR__ . '/../..' . '/app/Models/FileUpload.php',
+        'App\\Models\\FormAnswer' => __DIR__ . '/../..' . '/app/Models/FormAnswer.php',
+        'App\\Models\\FormTemplate' => __DIR__ . '/../..' . '/app/Models/FormTemplate.php',
+        'App\\Models\\MultipleChoiceAnswer' => __DIR__ . '/../..' . '/app/Models/MultipleChoiceAnswer.php',
+        'App\\Models\\MultipleChoiceOption' => __DIR__ . '/../..' . '/app/Models/MultipleChoiceOption.php',
+        'App\\Models\\MultipleChoiceQuestion' => __DIR__ . '/../..' . '/app/Models/MultipleChoiceQuestion.php',
+        'App\\Models\\Organization' => __DIR__ . '/../..' . '/app/Models/Organization.php',
+        'App\\Models\\OrganizationFormTemplate' => __DIR__ . '/../..' . '/app/Models/OrganizationFormTemplate.php',
+        'App\\Models\\OrganizationUser' => __DIR__ . '/../..' . '/app/Models/OrganizationUser.php',
+        'App\\Models\\PostAnswerNote' => __DIR__ . '/../..' . '/app/Models/PostAnswerNote.php',
+        'App\\Models\\Role' => __DIR__ . '/../..' . '/app/Models/Role.php',
+        'App\\Models\\RoleUser' => __DIR__ . '/../..' . '/app/Models/RoleUser.php',
+        'App\\Models\\ShortAnswer' => __DIR__ . '/../..' . '/app/Models/ShortAnswer.php',
+        'App\\Models\\ShortQuestion' => __DIR__ . '/../..' . '/app/Models/ShortQuestion.php',
+        'App\\Models\\State' => __DIR__ . '/../..' . '/app/Models/State.php',
+        'App\\Models\\Subject' => __DIR__ . '/../..' . '/app/Models/Subject.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
         'App\\Providers\\AuthServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AuthServiceProvider.php',
