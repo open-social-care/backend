@@ -2,17 +2,18 @@
 
 namespace App\Enums;
 
-class SkinColors extends Enum
+enum SkinColors implements Enum
 {
-    const BLACK = 'black';
+    case BLACK;
+    case MEDIUM_BLACK;
+    case INDIGENOUS;
+    case WHITE;
+    case YELLOW;
 
-    const MEDIUM_BLACK = 'medium_black';
-
-    const INDIGENOUS = 'indigenous';
-
-    const WHITE = 'white';
-
-    const YELLOW = 'yellow';
+    public static function getCasesNameValues(): array
+    {
+        return array_column(self::cases(), 'name');
+    }
 
     public static function trans($value): string
     {

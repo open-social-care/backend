@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('contact_phone');
             $table->string('cpf');
             $table->string('rg');
-            $table->enum('skin_color', \App\Enums\SkinColors::getConstantsValues());
+            $table->enum('skin_color', \App\Enums\SkinColors::getCasesNameValues());
             $table->timestamps();
         });
     }

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('phone');
-            $table->enum('document_type', \App\Enums\DocumentTypes::getConstantsValues());
+            $table->enum('document_type', \App\Enums\DocumentTypes::getCasesNameValues());
             $table->string('document');
             $table->timestamps();
             $table->softDeletes();

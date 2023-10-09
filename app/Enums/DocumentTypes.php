@@ -2,14 +2,18 @@
 
 namespace App\Enums;
 
-class DocumentTypes extends Enum
+enum DocumentTypes implements Enum
 {
-    const CPF = 'cpf';
+    case CPF;
+    case CNPJ;
 
-    const CNPJ = 'CNPJ';
+    public static function getCasesNameValues(): array
+    {
+        return array_column(self::cases(), 'name');
+    }
 
     public static function trans($value): string
     {
-        return __('enums.document-types.'.$value);
+        return __('enums.document_types.'.$value);
     }
 }

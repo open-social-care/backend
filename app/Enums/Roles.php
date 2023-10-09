@@ -2,15 +2,18 @@
 
 namespace App\Enums;
 
-class Roles extends Enum
+enum Roles implements Enum
 {
-    const ADMIN = 'admin';
+    case ADMIN;
+    case MANAGER;
+    case SOCIAL_ASSISTANT;
 
-    const MANAGER = 'manager';
+    public static function getCasesNameValues(): array
+    {
+        return array_column(self::cases(), 'name');
+    }
 
-    const SOCIAL_ASSISTANT = 'social_assistant';
-
-    public static function trans($value): string
+    public static function trans(string $value): string
     {
         return __('enums.roles.'.$value);
     }
