@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Enums\Roles;
 
 return new class extends Migration
 {
@@ -13,7 +14,9 @@ return new class extends Migration
     {
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
-            $table->enum('name', \App\Enums\Roles::getCasesNameValues());
+            $table->enum('name',
+                array_column(Roles::cases(), 'value')
+            )->default(Roles::SOCIAL_ASSISTANT->value);
             $table->timestamps();
         });
     }

@@ -2,21 +2,15 @@
 
 namespace App\Enums;
 
-enum SkinColors implements Enum
+use App\Traits\EnumTranslation;
+
+enum SkinColors: string
 {
-    case BLACK;
-    case MEDIUM_BLACK;
-    case INDIGENOUS;
-    case WHITE;
-    case YELLOW;
+    use EnumTranslation;
 
-    public static function getCasesNameValues(): array
-    {
-        return array_column(self::cases(), 'name');
-    }
-
-    public static function trans($value): string
-    {
-        return __('enums.skin_colors.'.$value);
-    }
+    case BLACK = 'black';
+    case MEDIUM_BLACK = 'medium_black';
+    case INDIGENOUS = 'indigenous';
+    case WHITE = 'white';
+    case YELLOW = 'yellow';
 }

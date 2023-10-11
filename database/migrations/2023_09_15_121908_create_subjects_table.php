@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Enums\SkinColors;
 
 return new class extends Migration
 {
@@ -20,7 +21,7 @@ return new class extends Migration
             $table->string('contact_phone');
             $table->string('cpf');
             $table->string('rg');
-            $table->enum('skin_color', \App\Enums\SkinColors::getCasesNameValues());
+            $table->enum('skin_color', array_column(SkinColors::cases(), 'value'));
             $table->timestamps();
         });
     }

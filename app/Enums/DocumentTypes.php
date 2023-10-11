@@ -2,18 +2,12 @@
 
 namespace App\Enums;
 
-enum DocumentTypes implements Enum
+use App\Traits\EnumTranslation;
+
+enum DocumentTypes: string
 {
-    case CPF;
-    case CNPJ;
+    use EnumTranslation;
 
-    public static function getCasesNameValues(): array
-    {
-        return array_column(self::cases(), 'name');
-    }
-
-    public static function trans($value): string
-    {
-        return __('enums.document_types.'.$value);
-    }
+    case CPF = 'cpf';
+    case CNPJ = 'cnpj';
 }

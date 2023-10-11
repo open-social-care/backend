@@ -2,19 +2,13 @@
 
 namespace App\Enums;
 
-enum Roles implements Enum
+use App\Traits\EnumTranslation;
+
+enum Roles: string
 {
-    case ADMIN;
-    case MANAGER;
-    case SOCIAL_ASSISTANT;
+    use EnumTranslation;
 
-    public static function getCasesNameValues(): array
-    {
-        return array_column(self::cases(), 'name');
-    }
-
-    public static function trans(string $value): string
-    {
-        return __('enums.roles.'.$value);
-    }
+    case ADMIN = 'admin';
+    case MANAGER = 'manager';
+    case SOCIAL_ASSISTANT = 'social_assistant';
 }
