@@ -14,7 +14,7 @@ class CityTest extends TestCase
     public function testCityBelongsToState()
     {
         $state = State::factory()->createOneQuietly();
-        $city = City::factory()->createOneQuietly(['state_id' => $state->id]);
+        $city = City::factory()->for($state)->createOneQuietly();
 
         $this->assertEquals($state->id, $city->state->id);
     }

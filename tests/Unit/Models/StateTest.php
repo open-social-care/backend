@@ -15,8 +15,8 @@ class StateTest extends TestCase
     public function testStateHasManyAddresses()
     {
         $state = State::factory()->createOneQuietly();
-        $address1 = Address::factory()->createOneQuietly(['state_id' => $state->id]);
-        $address2 = Address::factory()->createOneQuietly(['state_id' => $state->id]);
+        $address1 = Address::factory()->for($state)->createOneQuietly();
+        $address2 = Address::factory()->for($state)->createOneQuietly();
 
         $this->assertTrue($state->addresses->contains($address1));
         $this->assertTrue($state->addresses->contains($address2));
@@ -25,8 +25,8 @@ class StateTest extends TestCase
     public function testStateHasManyCities()
     {
         $state = State::factory()->createOneQuietly();
-        $city1 = City::factory()->createOneQuietly(['state_id' => $state->id]);
-        $city2 = City::factory()->createOneQuietly(['state_id' => $state->id]);
+        $city1 = City::factory()->for($state)->createOneQuietly();
+        $city2 = City::factory()->for($state)->createOneQuietly();
 
         $this->assertTrue($state->cities->contains($city1));
         $this->assertTrue($state->cities->contains($city2));

@@ -15,7 +15,7 @@ class AddressTest extends TestCase
     public function testStateBelongsToAddress()
     {
         $state = State::factory()->createOneQuietly();
-        $address = Address::factory()->createOneQuietly(['state_id' => $state->id]);
+        $address = Address::factory()->for($state)->createOneQuietly();
 
         $this->assertEquals($state->id, $address->state->id);
     }
@@ -23,7 +23,7 @@ class AddressTest extends TestCase
     public function testCityBelongsToAddress()
     {
         $city = City::factory()->createOneQuietly();
-        $address = Address::factory()->createOneQuietly(['city_id' => $city->id]);
+        $address = Address::factory()->for($city)->createOneQuietly();
 
         $this->assertEquals($city->id, $address->city->id);
     }
