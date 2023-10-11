@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -44,17 +45,17 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function organizationUsers(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function organizationUsers(): HasMany
     {
         return $this->hasMany(OrganizationUser::class);
     }
 
-    public function roleUsers(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function roleUsers(): HasMany
     {
         return $this->hasMany(RoleUser::class);
     }
 
-    public function formAnswers(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function formAnswers(): HasMany
     {
         return $this->hasMany(FormAnswer::class);
     }

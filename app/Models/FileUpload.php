@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class FileUpload extends Model
 {
@@ -23,7 +24,7 @@ class FileUpload extends Model
         'updated_at',
     ];
 
-    public function formAnswer(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function formAnswer(): BelongsTo
     {
         return $this->belongsTo(FormAnswer::class, 'form_answer_id');
     }

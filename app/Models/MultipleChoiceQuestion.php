@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class MultipleChoiceQuestion extends Model
 {
@@ -24,17 +26,17 @@ class MultipleChoiceQuestion extends Model
         'updated_at',
     ];
 
-    public function formTemplate(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function formTemplate(): BelongsTo
     {
         return $this->belongsTo(FormTemplate::class, 'form_template_id');
     }
 
-    public function multipleChoiceOptions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function multipleChoiceOptions(): HasMany
     {
         return $this->hasMany(MultipleChoiceOption::class);
     }
 
-    public function multipleChoiceAnswers(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function multipleChoiceAnswers(): HasMany
     {
         return $this->hasMany(MultipleChoiceAnswer::class);
     }

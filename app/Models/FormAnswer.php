@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class FormAnswer extends Model
 {
@@ -23,37 +25,37 @@ class FormAnswer extends Model
         'updated_at',
     ];
 
-    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function subject(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function subject(): BelongsTo
     {
         return $this->belongsTo(Subject::class, 'subject_id');
     }
 
-    public function formTemplate(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function formTemplate(): BelongsTo
     {
         return $this->belongsTo(FormTemplate::class, 'form_template_id');
     }
 
-    public function shortAnswers(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function shortAnswers(): HasMany
     {
         return $this->hasMany(ShortAnswer::class);
     }
 
-    public function multipleChoiceAnswers(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function multipleChoiceAnswers(): HasMany
     {
         return $this->hasMany(MultipleChoiceAnswer::class);
     }
 
-    public function fileUploads(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function fileUploads(): HasMany
     {
         return $this->hasMany(FileUpload::class);
     }
 
-    public function postAnswerNotes(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function postAnswerNotes(): HasMany
     {
         return $this->hasMany(PostAnswerNote::class);
     }

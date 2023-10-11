@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ShortAnswer extends Model
 {
@@ -23,17 +24,17 @@ class ShortAnswer extends Model
         'updated_at',
     ];
 
-    public function shortQuestion(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function shortQuestion(): BelongsTo
     {
         return $this->belongsTo(ShortQuestion::class, 'short_question_id');
     }
 
-    public function formAnswer(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function formAnswer(): BelongsTo
     {
         return $this->belongsTo(FormAnswer::class, 'form_answer_id');
     }
 
-    public function subject(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function subject(): BelongsTo
     {
         return $this->belongsTo(Subject::class, 'subject_id');
     }

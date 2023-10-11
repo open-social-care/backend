@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Organization extends Model
 {
@@ -25,17 +26,17 @@ class Organization extends Model
         'updated_at',
     ];
 
-    public function organizationAddresses(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function addresses(): HasMany
     {
-        return $this->hasMany(OrganizationAddress::class);
+        return $this->hasMany(Address::class);
     }
 
-    public function organizationUsers(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function organizationUsers(): HasMany
     {
         return $this->hasMany(OrganizationUser::class);
     }
 
-    public function organizationFormTemplates(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function organizationFormTemplates(): HasMany
     {
         return $this->hasMany(OrganizationFormTemplate::class);
     }

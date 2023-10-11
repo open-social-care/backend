@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class MultipleChoiceOption extends Model
 {
@@ -22,7 +23,7 @@ class MultipleChoiceOption extends Model
         'updated_at',
     ];
 
-    public function multipleChoiceQuestion(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function multipleChoiceQuestion(): BelongsTo
     {
         return $this->belongsTo(MultipleChoiceQuestion::class, 'multiple_choice_question_id');
     }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Subject extends Model
 {
@@ -36,7 +37,7 @@ class Subject extends Model
         'birth_date' => 'datetime',
     ];
 
-    public function formAnswers(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function formAnswers(): HasMany
     {
         return $this->hasMany(FormAnswer::class);
     }

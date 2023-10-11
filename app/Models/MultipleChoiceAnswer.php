@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class MultipleChoiceAnswer extends Model
 {
@@ -21,17 +22,17 @@ class MultipleChoiceAnswer extends Model
         'subject_id',
     ];
 
-    public function formAnswer(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function formAnswer(): BelongsTo
     {
         return $this->belongsTo(FormAnswer::class, 'form_answer_id');
     }
 
-    public function multipleChoiceQuestion(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function multipleChoiceQuestion(): BelongsTo
     {
         return $this->belongsTo(MultipleChoiceQuestion::class, 'multiple_choice_question_id');
     }
 
-    public function subject(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function subject(): BelongsTo
     {
         return $this->belongsTo(Subject::class, 'subject_id');
     }
