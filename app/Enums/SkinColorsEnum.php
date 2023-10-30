@@ -4,7 +4,7 @@ namespace App\Enums;
 
 use App\Traits\EnumTranslation;
 
-enum SkinColors: string
+enum SkinColorsEnum: string
 {
     use EnumTranslation;
 

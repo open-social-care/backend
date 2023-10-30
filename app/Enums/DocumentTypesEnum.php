@@ -4,7 +4,7 @@ namespace App\Enums;
 
 use App\Traits\EnumTranslation;
 
-enum DocumentTypes: string
+enum DocumentTypesEnum: string
 {
     use EnumTranslation;
 

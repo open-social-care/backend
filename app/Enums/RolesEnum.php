@@ -4,7 +4,7 @@ namespace App\Enums;
 
 use App\Traits\EnumTranslation;
 
-enum Roles: string
+enum RolesEnum: string
 {
     use EnumTranslation;
 
