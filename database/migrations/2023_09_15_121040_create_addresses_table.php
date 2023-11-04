@@ -17,10 +17,10 @@ return new class extends Migration
             $table->string('street');
             $table->string('number');
             $table->string('district');
-            $table->string('complement');
+            $table->string('complement')->nullable();
             $table->foreignId('state_id')->constrained('states');
             $table->foreignId('city_id')->constrained('cities');
-            $table->boolean('is_secondary_address');
+            $table->boolean('is_secondary_address')->default(false);
             $table->timestamps();
         });
     }

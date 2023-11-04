@@ -17,13 +17,17 @@ class Subject extends Model
      */
     protected $fillable = [
         'name',
-        'relative_name',
-        'relative_relation',
         'birth_date',
-        'contact_phone',
+        'nationality',
+        'phone',
+        'father_name',
+        'mother_name',
         'cpf',
         'rg',
         'skin_color',
+        'relative_relation_type',
+        'relative_name',
+        'relative_phone',
         'created_at',
         'updated_at',
     ];

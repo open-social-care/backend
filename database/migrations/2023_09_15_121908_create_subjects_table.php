@@ -15,13 +15,17 @@ return new class extends Migration
         Schema::create('subjects', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('relative_name');
-            $table->string('relative_relation');
             $table->date('birth_date');
-            $table->string('contact_phone');
-            $table->string('cpf');
-            $table->string('rg');
-            $table->enum('skin_color', array_column(SkinColorsEnum::cases(), 'value'));
+            $table->string('nationality')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('father_name')->nullable();
+            $table->string('mother_name')->nullable();
+            $table->string('cpf')->nullable();
+            $table->string('rg')->nullable();
+            $table->enum('skin_color', array_column(SkinColorsEnum::cases(), 'value'))->nullable();
+            $table->string('relative_relation_type')->nullable();
+            $table->string('relative_name')->nullable();
+            $table->string('relative_phone')->nullable();
             $table->timestamps();
         });
     }
