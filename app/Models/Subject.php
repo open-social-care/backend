@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Subject extends Model
 {
@@ -44,5 +45,10 @@ class Subject extends Model
     public function formAnswers(): HasMany
     {
         return $this->hasMany(FormAnswer::class);
+    }
+
+    public function addresses(): MorphMany
+    {
+        return $this->morphMany(Address::class, 'model');
     }
 }

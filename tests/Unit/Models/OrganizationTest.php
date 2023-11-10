@@ -13,7 +13,7 @@ class OrganizationTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testOrganizationHasManyMultipleAddresses()
+    public function testOrganizationMorphManyAddresses()
     {
         $organization = Organization::factory()->createOneQuietly();
 
