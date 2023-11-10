@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Enums\SkinColorsEnum;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,17 +16,9 @@ class SubjectFactory extends Factory
      */
     public function definition(): array
     {
-        $skinColors = array_column(SkinColorsEnum::cases(), 'value');
-
         return [
             'name' => fake()->name,
-            'relative_name' => fake()->name,
-            'relative_relation' => fake()->name,
             'birth_date' => fake()->dateTimeThisDecade,
-            'contact_phone' => fake()->phoneNumber,
-            'cpf' => fake()->unique()->numerify('###.###.###-##'),
-            'rg' => fake()->unique()->numerify('##.###.###-#'),
-            'skin_color' => $this->faker->randomElement($skinColors),
         ];
     }
 }
