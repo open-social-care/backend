@@ -20,26 +20,30 @@ class NewPasswordController extends Controller
      */
     public function store(NewPasswordRequest $request): JsonResponse
     {
-        $request->validated();
+        try {
+            $request->validated();
 
-        $status = Password::reset(
-            $request->only('email', 'password', 'password_confirmation', 'token'),
-            function ($user) use ($request) {
-                $user->forceFill([
-                    'password' => Hash::make($request->password),
-                    'remember_token' => Str::random(60),
-                ])->save();
+            $status = Password::reset(
+                $request->only('email', 'password', 'password_confirmation', 'token'),
+                function ($user) use ($request) {
+                    $user->forceFill([
+                        'password' => Hash::make($request->password),
+                        'remember_token' => Str::random(60),
+                    ])->save();
 
-                event(new PasswordReset($user));
+                    event(new PasswordReset($user));
+                }
+            );
+
+            if ($status != Password::PASSWORD_RESET) {
+                throw ValidationException::withMessages([
+                    'email' => [__($status)],
+                ]);
             }
-        );
 
-        if ($status != Password::PASSWORD_RESET) {
-            throw ValidationException::withMessages([
-                'email' => [__($status)],
-            ]);
+            return response()->json(['status' => __($status)]);
+        } catch (ValidationException $e) {
+            return response()->json(['message' => $e->getMessage()], $e->status);
         }
-
-        return response()->json(['status' => __($status)]);
     }
 }
