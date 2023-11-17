@@ -6,7 +6,7 @@ use App\Enums\RolesEnum;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Seeder;
-
+use Illuminate\Support\Facades\Hash;
 class UsersTableSeeder extends Seeder
 {
     /**
@@ -25,7 +25,7 @@ class UsersTableSeeder extends Seeder
             [
                 'name' => 'Admin Social Care',
                 'email' => 'admin@socialcare.com',
-                'password' => bcrypt('12345678'),
+                'password' => Hash::make('12345678'),
             ],
         ];
 
@@ -38,7 +38,7 @@ class UsersTableSeeder extends Seeder
             [
                 'name' => 'Manager Social Care',
                 'email' => 'manager@socialcare.com',
-                'password' => bcrypt('12345678'),
+                'password' => Hash::make('12345678'),
             ],
         ];
 
@@ -51,7 +51,7 @@ class UsersTableSeeder extends Seeder
             [
                 'name' => 'Social Assistant Social Care',
                 'email' => 'social_assistant@socialcare.com',
-                'password' => bcrypt('12345678'),
+                'password' => Hash::make('12345678'),
             ],
         ];
 
