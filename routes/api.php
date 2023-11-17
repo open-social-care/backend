@@ -1,9 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,12 +17,12 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 */
 
 // Auth routes
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/reset-password', [NewPasswordController::class, 'store']);
-Route::post('/forgot-password', [PasswordResetLinkController::class, 'store']);
+Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/reset-password', [NewPasswordController::class, 'store'])->name('reset-password');
+Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])->name('forgot-password');
 
 Route::middleware(['auth:sanctum'])
     ->group(function () {
         // Auth routes
-        Route::post('/logout', [AuthController::class, 'logout']);
+        Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     });

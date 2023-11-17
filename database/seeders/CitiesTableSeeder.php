@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\DB;
 
 class CitiesTableSeeder extends Seeder
 {
-
     /**
      * Run the Cities seeds.
      *
@@ -6031,7 +6030,7 @@ class CitiesTableSeeder extends Seeder
             ], [
                 'state_id' => '5',
                 'name' => 'Itabela',
-            ]
+            ],
         ]);
 
         DB::table('cities')->insert([
