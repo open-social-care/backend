@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Controllers\Auth;
 
-use App\Models\PasswordResetTokens;
+use App\Models\PasswordResetToken;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -19,7 +19,7 @@ class ResetPasswordControllerTest extends TestCase
         $user = User::factory()->createOneQuietly();
         $token = (string) mt_rand(100000, 999999);
 
-        PasswordResetTokens::create([
+        PasswordResetToken::create([
             'email' => $user->email,
             'token' => $token,
             'created_at' => now()->addMinutes(20),

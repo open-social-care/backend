@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PasswordResetTokens extends Model
+class PasswordResetToken extends Model
 {
+    use HasFactory;
+
     protected $primaryKey = 'email';
 
     public $incrementing = false;
@@ -29,10 +32,8 @@ class PasswordResetTokens extends Model
 
     /**
      * check if the code is expire then delete
-     *
-     * @return bool
      */
-    public function isExpire()
+    public function isExpire(): bool
     {
         if ($this->created_at < now()) {
             $this->delete();

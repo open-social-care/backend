@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\ResetPasswordRequest;
-use App\Models\PasswordResetTokens;
+use App\Models\PasswordResetToken;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
@@ -21,9 +21,12 @@ class ResetPasswordController extends Controller
      * tags={"Auth"},
      * summary="User reset password",
      * description="User reset password",
+     *
      *     @OA\RequestBody(
+     *
      *          @OA\JsonContent(
      *              type="object",
+     *
      *              @OA\Property(
      *                  type="string",
      *                  default="123456",
@@ -43,17 +46,21 @@ class ResetPasswordController extends Controller
      *                  property="password_confirmation"
      *              ),
      *          ),
+     *
      *         @OA\MediaType(
      *            mediaType="multipart/form-data",
+     *
      *            @OA\Schema(
      *               type="object",
      *               required={"token", "password", "password_confirmation"},
+     *
      *               @OA\Property(property="token", type="text"),
      *               @OA\Property(property="password", type="password"),
      *               @OA\Property(property="password_confirmation", type="password"),
      *            ),
      *        ),
      *    ),
+     *
      *      @OA\Response(
      *          response=200,
      *          description="Password reset Successfully",
@@ -69,7 +76,7 @@ class ResetPasswordController extends Controller
     public function __invoke(ResetPasswordRequest $request): JsonResponse
     {
         try {
-            $passwordReset = PasswordResetTokens::firstWhere('token', $request->token);
+            $passwordReset = PasswordResetToken::firstWhere('token', $request->token);
 
             if ($passwordReset->isExpire()) {
                 return response()->json([
