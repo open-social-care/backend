@@ -4,13 +4,12 @@ namespace Tests\Feature\Controllers\Auth;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Tests\TestCase;
 
 class AuthControllerTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
 
     /**
      * Test user login with valid credentials.
@@ -45,7 +44,7 @@ class AuthControllerTest extends TestCase
     public function test_user_can_logout(): void
     {
         $user = User::factory()->create();
-        $token = $user->createToken('auth-token')->plainTextToken;
+        $user->createToken('auth-token')->plainTextToken;
 
         $response = $this->actingAs($user)
             ->postJson(route('logout'));

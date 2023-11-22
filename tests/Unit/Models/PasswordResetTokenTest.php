@@ -19,7 +19,7 @@ class PasswordResetTokenTest extends TestCase
     public function testIsExpiredWhenTrue()
     {
         $passwordResetToken = PasswordResetToken::factory()->createOneQuietly();
-        $passwordResetToken->update(['created_at' => now()->startOfDay()]);
+        $passwordResetToken->update(['created_at' => now()->subMinutes(30)]);
         $this->assertTrue($passwordResetToken->isExpired());
     }
 }
