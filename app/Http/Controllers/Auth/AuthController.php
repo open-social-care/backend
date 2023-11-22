@@ -17,9 +17,12 @@ class AuthController extends Controller
      * tags={"Auth"},
      * summary="User Login",
      * description="User Login",
+     *
      *     @OA\RequestBody(
+     *
      *          @OA\JsonContent(
      *              type="object",
+     *
      *              @OA\Property(
      *                  type="string",
      *                  default="example@example.com",
@@ -33,16 +36,20 @@ class AuthController extends Controller
      *                  property="password"
      *              )
      *          ),
+     *
      *         @OA\MediaType(
      *            mediaType="multipart/form-data",
+     *
      *            @OA\Schema(
      *               type="object",
      *               required={"email", "password"},
+     *
      *               @OA\Property(property="email", type="text"),
      *               @OA\Property(property="password", type="password"),
      *            ),
      *        ),
      *    ),
+     *
      *      @OA\Response(
      *          response=200,
      *          description="Login Successfully",
@@ -75,6 +82,7 @@ class AuthController extends Controller
      * tags={"Auth"},
      * summary="User Logout",
      * description="User Logout",
+     *
      *      @OA\SecurityScheme(
      *          securityScheme="bearerAuth",
      *          in="header",
@@ -84,6 +92,7 @@ class AuthController extends Controller
      *          bearerFormat="JWT",
      *       ),
      * security={{"bearer_token":{}}},
+     *
      *      @OA\Response(
      *          response=200,
      *          description="Logout Successfully",
