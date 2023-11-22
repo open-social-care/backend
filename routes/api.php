@@ -1,9 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +18,7 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 
 // Auth routes
 Route::post('/login', [AuthController::class, 'login'])->name('login');
-Route::post('password/email',  ForgotPasswordController::class)->name('password.send-email');
+Route::post('password/email', ForgotPasswordController::class)->name('password.send-email');
 Route::post('password/reset', ResetPasswordController::class)->name('password.reset');
 
 Route::middleware(['auth:sanctum'])
