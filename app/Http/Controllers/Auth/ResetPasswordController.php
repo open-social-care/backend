@@ -78,7 +78,7 @@ class ResetPasswordController extends Controller
         try {
             $passwordReset = PasswordResetToken::firstWhere('token', $request->token);
 
-            if ($passwordReset->isExpire()) {
+            if ($passwordReset->isExpired()) {
                 return response()->json([
                     'message' => __('passwords.token_is_invalid'),
                 ], HttpResponse::HTTP_UNPROCESSABLE_ENTITY);

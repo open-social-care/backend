@@ -31,9 +31,9 @@ class PasswordResetToken extends Model
     ];
 
     /**
-     * check if the code is expire then delete
+     * check if the code is expired then delete
      */
-    public function isExpire(): bool
+    public function isExpired(): bool
     {
         if ($this->created_at < now()) {
             $this->delete();
