@@ -7,7 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class PasswordResetTokens extends Model
 {
     protected $primaryKey = 'email';
+
     public $incrementing = false;
+
     public $timestamps = false;
 
     /**
@@ -22,7 +24,7 @@ class PasswordResetTokens extends Model
     ];
 
     protected $casts = [
-        'created_at' => 'datetime'
+        'created_at' => 'datetime',
     ];
 
     /**
@@ -34,6 +36,7 @@ class PasswordResetTokens extends Model
     {
         if ($this->created_at < now()) {
             $this->delete();
+
             return true;
         }
 

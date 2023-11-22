@@ -7,8 +7,8 @@ return [
         'logout_success' => 'Usurário deslogado com sucesso.',
 
         'password' => [
-            'password_reset_success' => 'Senha redefinida com sucesso.'
-        ]
+            'password_reset_success' => 'Senha redefinida com sucesso.',
+        ],
     ],
 
     'email' => [
@@ -20,7 +20,7 @@ return [
             'title' => 'Open Social Care: Recuperação de senha',
             'message' => 'Você solicitou a recuperação da sua senha de acesso a plataforma Open Social Care.',
             'token_message' => 'Seu código de recuperação é:',
-            'observation_message' => 'Observação: O código de recuperação tem um limite de 15 minutos para ser utilizado, após isso, é necessário solicitar um novo.'
-        ]
-    ]
+            'observation_message' => 'Observação: O código de recuperação tem um limite de 15 minutos para ser utilizado, após isso, é necessário solicitar um novo.',
+        ],
+    ],
 ];

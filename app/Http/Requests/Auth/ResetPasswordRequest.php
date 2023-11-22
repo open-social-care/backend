@@ -37,7 +37,7 @@ class ResetPasswordRequest extends FormRequest
     public function messages()
     {
         return [
-            'token.exists' => __('passwords.token_is_invalid')
+            'token.exists' => __('passwords.token_is_invalid'),
         ];
     }
 }
