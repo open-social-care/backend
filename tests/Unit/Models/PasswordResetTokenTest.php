@@ -10,16 +10,16 @@ class PasswordResetTokenTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testIsExpireWhenFalse()
+    public function testIsExpiredWhenFalse()
     {
         $passwordResetToken = PasswordResetToken::factory()->createOneQuietly();
-        $this->assertNotTrue($passwordResetToken->isExpire());
+        $this->assertNotTrue($passwordResetToken->isExpired());
     }
 
-    public function testIsExpireWhenTrue()
+    public function testIsExpiredWhenTrue()
     {
         $passwordResetToken = PasswordResetToken::factory()->createOneQuietly();
         $passwordResetToken->update(['created_at' => now()->startOfDay()]);
-        $this->assertTrue($passwordResetToken->isExpire());
+        $this->assertTrue($passwordResetToken->isExpired());
     }
 }
