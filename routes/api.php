@@ -18,11 +18,6 @@ use Illuminate\Support\Facades\Route;
 
 // Auth routes
 Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware(['auth:sanctum']);
 Route::post('password/email', ForgotPasswordController::class)->name('password.send-email');
 Route::post('password/reset', ResetPasswordController::class)->name('password.reset');
-
-Route::middleware(['auth:sanctum'])
-    ->group(function () {
-        // Auth routes
-        Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    });
