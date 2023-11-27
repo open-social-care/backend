@@ -58,4 +58,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(FormAnswer::class);
     }
+
+    public function hasRole(string $roleName): bool
+    {
+        $roles = Role::query()->where('name', $roleName)->pluck('id');
+        $userHasRole = $this->roleUsers()->whereIn('role_id', $roles);
+
+        return $userHasRole->get()->isNotEmpty();
+    }
 }

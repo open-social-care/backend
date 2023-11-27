@@ -9,6 +9,8 @@ return [
         'password' => [
             'password_reset_success' => 'Senha redefinida com sucesso.',
         ],
+
+        'access_denied' => 'Acesso não autorizado.'
     ],
 
     'email' => [
