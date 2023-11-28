@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\Auth\ForgotPasswordController;
-use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\Auth\ForgotPasswordController;
+use App\Http\Controllers\Api\Auth\ResetPasswordController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,6 +23,8 @@ Route::post('password/email', ForgotPasswordController::class)->name('password.s
 Route::post('password/reset', ResetPasswordController::class)->name('password.reset');
 
 Route::middleware(['auth:sanctum', 'only_admin_user'])
+    ->prefix('admin')
+    ->name('admin.')
     ->group(function () {
-
+        Route::resource('users',  \App\Http\Controllers\Api\Admin\UserController::class);
     });
