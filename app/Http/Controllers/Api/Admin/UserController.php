@@ -22,4 +22,9 @@ class UserController extends Controller
             return response()->json(["Error" => $e], HttpResponse::HTTP_BAD_REQUEST);
         }
     }
+
+    public function store()
+    {
+
+    }
 }

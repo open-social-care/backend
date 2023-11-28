@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\ResetPasswordRequest;
+use App\Http\Requests\Api\Auth\ResetPasswordRequest;
 use App\Models\PasswordResetToken;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\JsonResponse;
