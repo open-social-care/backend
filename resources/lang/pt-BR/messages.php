@@ -1,6 +1,10 @@
 <?php
 
 return [
+    'common' => [
+      'success_create' => 'Registro criado com sucesso.',
+    ],
+
     'auth' => [
         'login_success' => 'Usurário logado com sucesso.',
         'login_invalid' => 'Credenciais de login inválidas.',

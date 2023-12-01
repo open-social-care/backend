@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Scout\Searchable;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
 {
@@ -64,9 +65,19 @@ class User extends Authenticatable
         return $this->hasMany(OrganizationUser::class);
     }
 
+    public function organizations(): BelongsToMany
+    {
+        return $this->belongsToMany(Organization::class, 'organization_users')->withTimestamps();
+    }
+
     public function roleUsers(): HasMany
     {
         return $this->hasMany(RoleUser::class);
+    }
+
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(Role::class, 'role_users')->withTimestamps();
     }
 
     public function formAnswers(): HasMany

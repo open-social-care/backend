@@ -25,24 +25,12 @@ class UserRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email',
             'password' => 'required|string|min:6|confirmed',
             'roles' => 'required|array',
             'roles.*' => 'required|exists:roles,id',
             'organizations' => 'required|array',
             'organizations.*' => 'required|exists:organizations,id',
-        ];
-    }
-
-    /**
-     * messages
-     *
-     * @return array
-     */
-    public function messages(): array
-    {
-        return [
-            'token.exists' => __('passwords.token_is_invalid'),
         ];
     }
 }
