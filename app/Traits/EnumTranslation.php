@@ -6,9 +6,6 @@ trait EnumTranslation
 {
     /**
      * Return translated value of enum
-     *
-     * @param $value
-     * @return string
      */
     public static function trans($value): string
     {
@@ -19,8 +16,6 @@ trait EnumTranslation
 
     /**
      * Return the name of the enum class to filter by key in enums lang
-     *
-     * @return string
      */
     private static function classNameToSnakeCase(): string
     {

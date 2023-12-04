@@ -21,9 +21,12 @@ class ResetPasswordController extends Controller
      *     tags={"Auth"},
      *     summary="User reset password",
      *     description="User reset password",
+     *
      *     @OA\RequestBody(
+     *
      *          @OA\JsonContent(
      *              type="object",
+     *
      *              @OA\Property(
      *                  type="string",
      *                  default="123456",
@@ -44,6 +47,7 @@ class ResetPasswordController extends Controller
      *              ),
      *          ),
      *     ),
+     *
      *      @OA\Response(
      *          response=200,
      *          description="Password reset Successfully",

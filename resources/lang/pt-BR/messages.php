@@ -2,8 +2,9 @@
 
 return [
     'common' => [
-      'success_create' => 'Registro criado com sucesso.',
-      'success_update' => 'Registro atualizado com sucesso.',
+        'success_create' => 'Registro criado com sucesso.',
+        'success_update' => 'Registro atualizado com sucesso.',
+        'success_destroy' => 'Registro apagado com sucesso.',
     ],
 
     'auth' => [
@@ -15,7 +16,7 @@ return [
             'password_reset_success' => 'Senha redefinida com sucesso.',
         ],
 
-        'access_denied' => 'Acesso não autorizado.'
+        'access_denied' => 'Acesso não autorizado.',
     ],
 
     'email' => [

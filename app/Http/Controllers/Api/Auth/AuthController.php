@@ -17,9 +17,12 @@ class AuthController extends Controller
      *     tags={"Auth"},
      *     summary="User Login",
      *     description="User Login",
+     *
      *     @OA\RequestBody(
+     *
      *          @OA\JsonContent(
      *              type="object",
+     *
      *              @OA\Property(
      *                  type="string",
      *                  default="example@example.com",
@@ -34,6 +37,7 @@ class AuthController extends Controller
      *              )
      *          ),
      *      ),
+     *
      *      @OA\Response(
      *          response=200,
      *          description="Login Successfully",
@@ -67,6 +71,7 @@ class AuthController extends Controller
      *      summary="User Logout",
      *      description="User Logout",
      *      security={{"sanctum":{}}},
+     *
      *      @OA\Response(
      *          response=200,
      *          description="Logout Successfully",

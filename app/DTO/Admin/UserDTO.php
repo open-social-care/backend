@@ -5,15 +5,17 @@ namespace App\DTO\Admin;
 class UserDTO
 {
     public string $name;
+
     public string $email;
+
     public string $password;
+
     public array $roles;
+
     public array $organizations;
 
     /**
      * Construct class set DTO attributes
-     *
-     * @param array $data
      */
     public function __construct(array $data)
     {
@@ -26,8 +28,6 @@ class UserDTO
 
     /**
      * Returns array of DTO attributes
-     *
-     * @return array
      */
     public function toArray(): array
     {

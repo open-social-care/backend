@@ -110,7 +110,7 @@ class UsersTableSeeder extends Seeder
                 ->where('user_id', $userId)
                 ->first();
 
-            if (!$existingEntry) {
+            if (! $existingEntry) {
                 $organization->organizationUsers()->create(['user_id' => $userId]);
             }
         }

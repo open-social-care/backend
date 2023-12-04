@@ -10,9 +10,6 @@ class UserCreateAction
 {
     /**
      * Execute create of user with roles and organizations
-     *
-     * @param UserDTO $userDTO
-     * @return void
      */
     public static function execute(UserDTO $userDTO): void
     {

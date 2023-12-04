@@ -12,7 +12,7 @@
                 ],
                 "summary": "Get a list of users",
                 "description": "Retrieve a list of users.",
-                "operationId": "GetUsers",
+                "operationId": "AdminGetUsers",
                 "parameters": [
                     {
                         "name": "q",
@@ -103,9 +103,9 @@
                 "tags": [
                     "Admin/User"
                 ],
-                "summary": "Update a new admin user",
+                "summary": "Update user",
                 "description": "Update user with the provided information.",
-                "operationId": "UpdateAdminUser",
+                "operationId": "AdminUpdateUser",
                 "parameters": [
                     {
                         "name": "id",
@@ -196,9 +196,9 @@
                 "tags": [
                     "Admin/User"
                 ],
-                "summary": "Create a new admin user",
+                "summary": "Create a new user",
                 "description": "Create a new admin user with the provided information.",
-                "operationId": "CreateAdminUser",
+                "operationId": "AdminCreateUser",
                 "requestBody": {
                     "description": "User data",
                     "required": true,
@@ -239,6 +239,62 @@
                 "responses": {
                     "200": {
                         "description": "User created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Admin/User"
+                ],
+                "summary": "Destroy user",
+                "description": "Destroy user with the provided id.",
+                "operationId": "AdminDestroyUser",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The user id for destroy",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User destroy successfully",
                         "content": {
                             "application/json": {
                                 "schema": {

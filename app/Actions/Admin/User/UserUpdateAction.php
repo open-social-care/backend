@@ -10,10 +10,6 @@ class UserUpdateAction
 {
     /**
      * Execute update of user with sync roles and organizations
-     *
-     * @param UserDTO $userDTO
-     * @param User $user
-     * @return void
      */
     public static function execute(UserDTO $userDTO, User $user): void
     {

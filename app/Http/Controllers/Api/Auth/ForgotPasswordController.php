@@ -19,9 +19,12 @@ class ForgotPasswordController extends Controller
      *     tags={"Auth"},
      *     summary="User password send recuperation email",
      *     description="User password send recuperation email",
+     *
      *     @OA\RequestBody(
+     *
      *          @OA\JsonContent(
      *              type="object",
+     *
      *              @OA\Property(
      *                  type="string",
      *                  default="example@example.com",
@@ -30,6 +33,7 @@ class ForgotPasswordController extends Controller
      *              ),
      *          ),
      *      ),
+     *
      *      @OA\Response(
      *          response=200,
      *          description="Password recuperation send Successfully",

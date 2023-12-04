@@ -20,25 +20,30 @@ class UserController extends Controller
     /**
      * @OA\Get(
      * path="/api/admin/users",
-     * operationId="GetUsers",
+     * operationId="AdminGetUsers",
      * tags={"Admin/User"},
      * summary="Get a list of users",
      * description="Retrieve a list of users.",
      * security={{"sanctum":{}}},
+     *
      *     @OA\Parameter(
      *         name="q",
      *         in="query",
      *         description="The search query parameter",
      *         required=false,
+     *
      *         @OA\Schema(
      *             type="string"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=200,
      *         description="Successful response",
+     *
      *         @OA\JsonContent(
      *             type="object",
+     *
      *             @OA\Property(property="data", type="array", @OA\Items(
      *                 @OA\Property(property="name", type="string"),
      *                 @OA\Property(property="email", type="string"),
@@ -53,10 +58,13 @@ class UserController extends Controller
      *             @OA\Property(property="to", type="integer"))
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=400,
      *         description="Bad Request",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="message", type="string")
      *         )
      *     ),
@@ -80,16 +88,19 @@ class UserController extends Controller
     /**
      * @OA\Post(
      *     path="/api/admin/users",
-     *     operationId="CreateAdminUser",
+     *     operationId="AdminCreateUser",
      *     tags={"Admin/User"},
-     *     summary="Create a new admin user",
+     *     summary="Create a new user",
      *     description="Create a new admin user with the provided information.",
      *     security={{"sanctum":{}}},
+     *
      *     @OA\RequestBody(
      *         required=true,
      *         description="User data",
+     *
      *         @OA\JsonContent(
      *             type="object",
+     *
      *             @OA\Property(property="name", type="string"),
      *             @OA\Property(property="email", type="string"),
      *             @OA\Property(property="password", type="string"),
@@ -98,17 +109,23 @@ class UserController extends Controller
      *             @OA\Property(property="organizations", type="array", @OA\Items(type="integer"))
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=200,
      *         description="User created successfully",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="message", type="string")
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=400,
      *         description="Bad Request",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="message", type="string")
      *         )
      *     ),
@@ -131,25 +148,30 @@ class UserController extends Controller
     /**
      * @OA\Put(
      *     path="/api/admin/users",
-     *     operationId="UpdateAdminUser",
+     *     operationId="AdminUpdateUser",
      *     tags={"Admin/User"},
-     *     summary="Update a new admin user",
+     *     summary="Update user",
      *     description="Update user with the provided information.",
      *     security={{"sanctum":{}}},
+     *
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
      *         description="The user id for update",
      *         required=true,
+     *
      *         @OA\Schema(
      *             type="integer"
      *         )
      *     ),
+     *
      *     @OA\RequestBody(
      *         required=true,
      *         description="User data",
+     *
      *         @OA\JsonContent(
      *             type="object",
+     *
      *             @OA\Property(property="name", type="string"),
      *             @OA\Property(property="email", type="string"),
      *             @OA\Property(property="password", type="string"),
@@ -158,17 +180,23 @@ class UserController extends Controller
      *             @OA\Property(property="organizations", type="array", @OA\Items(type="integer"))
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=200,
      *         description="User updated successfully",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="message", type="string")
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=400,
      *         description="Bad Request",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="message", type="string")
      *         )
      *     ),
@@ -183,6 +211,58 @@ class UserController extends Controller
             UserUpdateAction::execute($userDto, $user);
 
             return response()->json(['message' => __('messages.common.success_update')], HttpResponse::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
+        }
+    }
+
+    /**
+     * @OA\Delete(
+     *     path="/api/admin/users",
+     *     operationId="AdminDestroyUser",
+     *     tags={"Admin/User"},
+     *     summary="Destroy user",
+     *     description="Destroy user with the provided id.",
+     *     security={{"sanctum":{}}},
+     *
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="The user id for destroy",
+     *         required=true,
+     *
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=200,
+     *         description="User destroy successfully",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="message", type="string")
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad Request",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="message", type="string")
+     *         )
+     *     ),
+     * )
+     */
+    public function destroy(User $user): JsonResponse
+    {
+        try {
+            $user->delete();
+
+            return response()->json(['message' => __('messages.common.success_destroy')], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
         }

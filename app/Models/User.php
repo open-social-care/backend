@@ -3,13 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Scout\Searchable;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
 {
@@ -48,8 +48,6 @@ class User extends Authenticatable
 
     /**
      * Converts the model to an array that will be indexed for the search.
-     *
-     * @return array
      */
     public function toSearchableArray(): array
     {
@@ -58,6 +56,18 @@ class User extends Authenticatable
             'name' => $this->name,
             'email' => $this->email,
         ];
+    }
+
+    /**
+     * Override Model boot function
+     */
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::deleting(function ($user) {
+            $user->organizationUsers()->delete();
+        });
     }
 
     public function organizationUsers(): HasMany

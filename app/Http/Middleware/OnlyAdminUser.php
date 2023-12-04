@@ -12,8 +12,6 @@ class OnlyAdminUser
     /**
      * Handle an incoming request.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \Closure $next
      * @return mixed
      */
     public function handle(Request $request, Closure $next)
@@ -23,7 +21,7 @@ class OnlyAdminUser
         }
 
         return response()->json([
-            'message' => __('messages.auth.access_denied')
+            'message' => __('messages.auth.access_denied'),
         ], HttpResponse::HTTP_FORBIDDEN);
     }
 }

@@ -26,5 +26,5 @@ Route::middleware(['auth:sanctum', 'only_admin_user'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
-        Route::resource('users',  \App\Http\Controllers\Api\Admin\UserController::class);
+        Route::resource('users', \App\Http\Controllers\Api\Admin\UserController::class);
     });
