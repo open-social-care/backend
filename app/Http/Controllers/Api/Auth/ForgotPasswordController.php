@@ -14,17 +14,14 @@ class ForgotPasswordController extends Controller
 {
     /**
      * @OA\Post(
-     * path="/api/password/email",
-     * operationId="Password send recuperation email",
-     * tags={"Auth"},
-     * summary="User password send recuperation email",
-     * description="User password send recuperation email",
-     *
+     *     path="/api/password/email",
+     *     operationId="Password send recuperation email",
+     *     tags={"Auth"},
+     *     summary="User password send recuperation email",
+     *     description="User password send recuperation email",
      *     @OA\RequestBody(
-     *
      *          @OA\JsonContent(
      *              type="object",
-     *
      *              @OA\Property(
      *                  type="string",
      *                  default="example@example.com",
@@ -32,27 +29,15 @@ class ForgotPasswordController extends Controller
      *                  property="email"
      *              ),
      *          ),
-     *
-     *         @OA\MediaType(
-     *            mediaType="multipart/form-data",
-     *
-     *            @OA\Schema(
-     *               type="object",
-     *               required={"email"},
-     *
-     *               @OA\Property(property="email", type="text"),
-     *            ),
-     *        ),
-     *    ),
-     *
+     *      ),
      *      @OA\Response(
      *          response=200,
      *          description="Password recuperation send Successfully",
-     *       ),
+     *      ),
      *      @OA\Response(
      *          response=422,
      *          description="Unprocessable Entity",
-     *       ),
+     *      ),
      *      @OA\Response(response=400, description="Bad request"),
      *      @OA\Response(response=404, description="Resource Not Found"),
      * )
