@@ -76,6 +76,15 @@ class UserController extends Controller
         }
     }
 
+//    public function create()
+//    {
+//        try {
+//
+//        } catch (\Exception $e) {
+//            return response()->json(['message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
+//        }
+//    }
+
     /**
      * @OA\Post(
      *     path="/api/admin/users",
