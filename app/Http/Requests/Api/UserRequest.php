@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Api;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UserRequest extends FormRequest
 {
@@ -23,14 +24,27 @@ class UserRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $rules = [
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email',
+            'email' => ['required', 'string', 'email', 'max:255'],
             'password' => 'required|string|min:6|confirmed',
             'roles' => 'required|array',
             'roles.*' => 'required|exists:roles,id',
             'organizations' => 'required|array',
             'organizations.*' => 'required|exists:organizations,id',
         ];
+
+        if ($this->method() === 'PUT' && $this->user) {
+            $rules['email'][] = Rule::unique('users')
+                ->whereNot('id', $this->user->id)
+                ->whereNull('deleted_at');
+
+            $rules['password'] = 'nullable|string|min:6|confirmed';
+        } else {
+            $rules['email'][] = Rule::unique('users')
+                ->whereNull('deleted_at');
+        }
+
+        return $rules;
     }
 }

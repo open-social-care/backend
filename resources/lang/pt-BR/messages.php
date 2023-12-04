@@ -3,6 +3,7 @@
 return [
     'common' => [
       'success_create' => 'Registro criado com sucesso.',
+      'success_update' => 'Registro atualizado com sucesso.',
     ],
 
     'auth' => [

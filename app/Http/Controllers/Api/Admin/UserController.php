@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Actions\Admin\User\UserCreateAction;
+use App\Actions\Admin\User\UserUpdateAction;
 use App\DTO\Admin\UserDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\UserRequest;
@@ -20,7 +21,7 @@ class UserController extends Controller
      * @OA\Get(
      * path="/api/admin/users",
      * operationId="GetUsers",
-     * tags={"Admin"},
+     * tags={"Admin/User"},
      * summary="Get a list of users",
      * description="Retrieve a list of users.",
      * security={{"sanctum":{}}},
@@ -76,20 +77,11 @@ class UserController extends Controller
         }
     }
 
-//    public function create()
-//    {
-//        try {
-//
-//        } catch (\Exception $e) {
-//            return response()->json(['message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
-//        }
-//    }
-
     /**
      * @OA\Post(
      *     path="/api/admin/users",
      *     operationId="CreateAdminUser",
-     *     tags={"Admin"},
+     *     tags={"Admin/User"},
      *     summary="Create a new admin user",
      *     description="Create a new admin user with the provided information.",
      *     security={{"sanctum":{}}},
@@ -131,6 +123,66 @@ class UserController extends Controller
             UserCreateAction::execute($userDto);
 
             return response()->json(['message' => __('messages.common.success_create')], HttpResponse::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
+        }
+    }
+
+    /**
+     * @OA\Put(
+     *     path="/api/admin/users",
+     *     operationId="UpdateAdminUser",
+     *     tags={"Admin/User"},
+     *     summary="Update a new admin user",
+     *     description="Update user with the provided information.",
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="The user id for update",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="User data",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="name", type="string"),
+     *             @OA\Property(property="email", type="string"),
+     *             @OA\Property(property="password", type="string"),
+     *             @OA\Property(property="password_confirmation", type="string"),
+     *             @OA\Property(property="roles", type="array", @OA\Items(type="integer")),
+     *             @OA\Property(property="organizations", type="array", @OA\Items(type="integer"))
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="User updated successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad Request",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string")
+     *         )
+     *     ),
+     * )
+     */
+    public function update(UserRequest $request, User $user): JsonResponse
+    {
+        try {
+            $data = $request->validated();
+
+            $userDto = new UserDTO($data);
+            UserUpdateAction::execute($userDto, $user);
+
+            return response()->json(['message' => __('messages.common.success_update')], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
         }
