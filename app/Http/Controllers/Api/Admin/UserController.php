@@ -5,10 +5,13 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Actions\Admin\User\UserCreateAction;
 use App\Actions\Admin\User\UserUpdateAction;
 use App\DTO\Admin\UserDTO;
+use App\Enums\RolesEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\UserRequest;
 use App\Http\Resources\Api\Admin\UserListResource;
 use App\Http\Resources\Api\Shared\PaginationResource;
+use App\Models\Organization;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Psr\Container\ContainerExceptionInterface;
@@ -25,7 +28,6 @@ class UserController extends Controller
      * summary="Get a list of users",
      * description="Retrieve a list of users.",
      * security={{"sanctum":{}}},
-     *
      *     @OA\Parameter(
      *         name="q",
      *         in="query",
@@ -36,7 +38,6 @@ class UserController extends Controller
      *             type="string"
      *         )
      *     ),
-     *
      *     @OA\Response(
      *         response=200,
      *         description="Successful response",
@@ -79,8 +80,55 @@ class UserController extends Controller
             return response()->json([
                 'data' => UserListResource::collection($paginate),
                 'pagination' => PaginationResource::make($paginate),
-            ]);
+            ], HttpResponse::HTTP_OK);
         } catch (\Exception|NotFoundExceptionInterface|ContainerExceptionInterface $e) {
+            return response()->json(['message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
+        }
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/admin/users/create",
+     *     operationId="GetAdminUserCreationData",
+     *     tags={"Admin/User"},
+     *     summary="Get admin user creation data",
+     *     description="Retrieve data needed for creating a new user, with organizations and roles available for selection.",
+     *     security={{"sanctum":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Data retrieved successfully",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="organizationsToSelect", type="array", @OA\Items(
+     *                 @OA\Property(property="id", type="integer"),
+     *                 @OA\Property(property="name", type="string")
+     *             )),
+     *             @OA\Property(property="rolesToSelect", type="array", @OA\Items(
+     *                 @OA\Property(property="id", type="integer"),
+     *                 @OA\Property(property="name", type="string")
+     *             ))
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad Request",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string")
+     *         )
+     *     ),
+     * )
+     */
+    public function create(): JsonResponse
+    {
+        try {
+            $organizationsToSelect = to_select(Organization::all());
+            $rolesToSelect = to_select_by_enum(Role::all(), RolesEnum::class);
+
+            return response()->json([
+                'organizationsToSelect' => $organizationsToSelect,
+                'rolesToSelect' => $rolesToSelect
+            ], HttpResponse::HTTP_OK);
+        } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
         }
     }
@@ -146,8 +194,78 @@ class UserController extends Controller
     }
 
     /**
+     * @OA\Get(
+     *     path="/api/admin/users/{user}/edit",
+     *     operationId="GetAdminUserEditData",
+     *     tags={"Admin/User"},
+     *     summary="Get admin user edit data",
+     *     description="Retrieve data needed for editing a user, with organizations, roles available for selection and user options selected.",
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(
+     *          name="id",
+     *          in="path",
+     *          description="The user Id parameter for edit",
+     *          required=true,
+     *
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Data retrieved successfully",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="organizationsToSelect", type="array", @OA\Items(
+     *                 @OA\Property(property="id", type="integer"),
+     *                 @OA\Property(property="name", type="string")
+     *             )),
+     *             @OA\Property(property="rolesToSelect", type="array", @OA\Items(
+     *                 @OA\Property(property="id", type="integer"),
+     *                 @OA\Property(property="name", type="string")
+     *             )),
+     *             @OA\Property(property="organizationsSelected", type="array", @OA\Items(
+     *                 @OA\Property(property="id", type="integer"),
+     *                 @OA\Property(property="name", type="string")
+     *             )),
+     *             @OA\Property(property="rolessSelected", type="array", @OA\Items(
+     *                 @OA\Property(property="id", type="integer"),
+     *                 @OA\Property(property="name", type="string")
+     *             ))
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad Request",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string")
+     *         )
+     *     ),
+     * )
+     */
+    public function edit(User $user): JsonResponse
+    {
+        try {
+            $organizationsToSelect = to_select(Organization::all());
+            $rolesToSelect = to_select_by_enum(Role::all(), RolesEnum::class);
+
+            $organizationsSelected = to_select($user->organizations);
+            $rolesSelected = to_select_by_enum($user->roles, RolesEnum::class);
+
+            return response()->json([
+                'organizationsToSelect' => $organizationsToSelect,
+                'rolesToSelect' => $rolesToSelect,
+                'organizationsSelected' => $organizationsSelected,
+                'rolesSelected' => $rolesSelected,
+            ], HttpResponse::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
+        }
+    }
+
+    /**
      * @OA\Put(
-     *     path="/api/admin/users",
+     *     path="/api/admin/users/{user}",
      *     operationId="AdminUpdateUser",
      *     tags={"Admin/User"},
      *     summary="Update user",
@@ -218,7 +336,7 @@ class UserController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/api/admin/users",
+     *     path="/api/admin/users/{user}",
      *     operationId="AdminDestroyUser",
      *     tags={"Admin/User"},
      *     summary="Destroy user",
