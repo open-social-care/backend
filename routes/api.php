@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Auth\ForgotPasswordController;
 use App\Http\Controllers\Api\Auth\ResetPasswordController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\Admin\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,9 +23,16 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middl
 Route::post('password/email', ForgotPasswordController::class)->name('password.send-email');
 Route::post('password/reset', ResetPasswordController::class)->name('password.reset');
 
+// Admin routes
 Route::middleware(['auth:sanctum', 'only_admin_user'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
-        Route::resource('users', \App\Http\Controllers\Api\Admin\UserController::class);
+
+        // User Routes
+        Route::resource('users', UserController::class)
+            ->except(['create', 'edit', 'show']);
+
+        Route::get('/users/form-infos', [UserController::class, 'formInfos'])->name('users.form-infos');
+        Route::get('/users/{user}', [UserController::class, 'getUser'])->name('users.get-user');
     });

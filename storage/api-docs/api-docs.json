@@ -182,91 +182,19 @@
                 ]
             }
         },
-        "/api/admin/users/create": {
+        "/api/admin/users/{user}": {
             "get": {
                 "tags": [
                     "Admin/User"
                 ],
-                "summary": "Get admin user creation data",
-                "description": "Retrieve data needed for creating a new user, with organizations and roles available for selection.",
-                "operationId": "GetAdminUserCreationData",
-                "responses": {
-                    "200": {
-                        "description": "Data retrieved successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "organizationsToSelect": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "id": {
-                                                        "type": "integer"
-                                                    },
-                                                    "name": {
-                                                        "type": "string"
-                                                    }
-                                                },
-                                                "type": "object"
-                                            }
-                                        },
-                                        "rolesToSelect": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "id": {
-                                                        "type": "integer"
-                                                    },
-                                                    "name": {
-                                                        "type": "string"
-                                                    }
-                                                },
-                                                "type": "object"
-                                            }
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
-            }
-        },
-        "/api/admin/users/{user}/edit": {
-            "get": {
-                "tags": [
-                    "Admin/User"
-                ],
-                "summary": "Get admin user edit data",
-                "description": "Retrieve data needed for editing a user, with organizations, roles available for selection and user options selected.",
-                "operationId": "GetAdminUserEditData",
+                "summary": "Get user infos",
+                "description": "Get user infos",
+                "operationId": "AdminGetUser",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "The user Id parameter for edit",
+                        "description": "The user id for get",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -275,66 +203,13 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Data retrieved successfully",
+                        "description": "Get user successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "organizationsToSelect": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "id": {
-                                                        "type": "integer"
-                                                    },
-                                                    "name": {
-                                                        "type": "string"
-                                                    }
-                                                },
-                                                "type": "object"
-                                            }
-                                        },
-                                        "rolesToSelect": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "id": {
-                                                        "type": "integer"
-                                                    },
-                                                    "name": {
-                                                        "type": "string"
-                                                    }
-                                                },
-                                                "type": "object"
-                                            }
-                                        },
-                                        "organizationsSelected": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "id": {
-                                                        "type": "integer"
-                                                    },
-                                                    "name": {
-                                                        "type": "string"
-                                                    }
-                                                },
-                                                "type": "object"
-                                            }
-                                        },
-                                        "rolessSelected": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "id": {
-                                                        "type": "integer"
-                                                    },
-                                                    "name": {
-                                                        "type": "string"
-                                                    }
-                                                },
-                                                "type": "object"
-                                            }
+                                        "message": {
+                                            "type": "string"
                                         }
                                     },
                                     "type": "object"
@@ -363,9 +238,7 @@
                         "sanctum": []
                     }
                 ]
-            }
-        },
-        "/api/admin/users/{user}": {
+            },
             "put": {
                 "tags": [
                     "Admin/User"
@@ -486,6 +359,78 @@
                                     "properties": {
                                         "message": {
                                             "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/users/form-infos": {
+            "get": {
+                "tags": [
+                    "Admin/User"
+                ],
+                "summary": "Get form data info for user creation and updation",
+                "description": "Retrieve data needed for creating and updation a user, with organizations and roles available for selection.",
+                "operationId": "GetAdminUserFormData",
+                "responses": {
+                    "200": {
+                        "description": "Data retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "organizationsToSelect": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "rolesToSelect": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
                                         }
                                     },
                                     "type": "object"

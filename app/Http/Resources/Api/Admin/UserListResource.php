@@ -17,10 +17,6 @@ class UserListResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'roles' => $this->getRoles(),
-
-            'links' => [
-
-            ],
         ];
     }
 
