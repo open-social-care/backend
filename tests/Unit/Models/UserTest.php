@@ -3,7 +3,9 @@
 namespace Tests\Unit\Models;
 
 use App\Models\FormAnswer;
+use App\Models\Organization;
 use App\Models\OrganizationUser;
+use App\Models\Role;
 use App\Models\RoleUser;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -41,5 +43,35 @@ class UserTest extends TestCase
 
         $this->assertTrue($user->formAnswers->contains($formAnswer1));
         $this->assertTrue($user->formAnswers->contains($formAnswer2));
+    }
+
+    public function testUserBelongsToManyOrganizations()
+    {
+        $user = User::factory()->create();
+        $organizations = Organization::factory(3)->create();
+        $user->organizations()->attach($organizations);
+
+        $this->assertEquals(3, $user->organizations()->count());
+
+        $pivotTable = 'organization_users';
+        $this->assertDatabaseHas($pivotTable, [
+            'user_id' => $user->id,
+            'organization_id' => $organizations[0]->id,
+        ]);
+    }
+
+    public function testUserBelongsToManyRoles()
+    {
+        $user = User::factory()->create();
+        $roles = Role::factory(3)->create();
+        $user->roles()->attach($roles);
+
+        $this->assertEquals(3, $user->roles()->count());
+
+        $pivotTable = 'role_users';
+        $this->assertDatabaseHas($pivotTable, [
+            'user_id' => $user->id,
+            'role_id' => $roles[0]->id,
+        ]);
     }
 }

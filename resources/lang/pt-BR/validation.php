@@ -140,5 +140,7 @@ return [
             'state_id' => 'Estado',
             'city_id' => 'Cidade',
         ],
+        'roles' => 'Perfis',
+        'organizations' => 'Organizações',
     ],
 ];

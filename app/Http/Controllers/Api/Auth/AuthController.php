@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
@@ -12,11 +12,11 @@ class AuthController extends Controller
 {
     /**
      * @OA\Post(
-     * path="/api/login",
-     * operationId="Login",
-     * tags={"Auth"},
-     * summary="User Login",
-     * description="User Login",
+     *     path="/api/login",
+     *     operationId="Login",
+     *     tags={"Auth"},
+     *     summary="User Login",
+     *     description="User Login",
      *
      *     @OA\RequestBody(
      *
@@ -36,28 +36,16 @@ class AuthController extends Controller
      *                  property="password"
      *              )
      *          ),
-     *
-     *         @OA\MediaType(
-     *            mediaType="multipart/form-data",
-     *
-     *            @OA\Schema(
-     *               type="object",
-     *               required={"email", "password"},
-     *
-     *               @OA\Property(property="email", type="text"),
-     *               @OA\Property(property="password", type="password"),
-     *            ),
-     *        ),
-     *    ),
+     *      ),
      *
      *      @OA\Response(
      *          response=200,
      *          description="Login Successfully",
-     *       ),
+     *      ),
      *      @OA\Response(
      *          response=422,
      *          description="Unprocessable Entity",
-     *       ),
+     *      ),
      *      @OA\Response(response=400, description="Bad request"),
      *      @OA\Response(response=404, description="Resource Not Found"),
      * )
@@ -77,30 +65,21 @@ class AuthController extends Controller
 
     /**
      * @OA\Post(
-     * path="/api/logout",
-     * operationId="Logout",
-     * tags={"Auth"},
-     * summary="User Logout",
-     * description="User Logout",
-     *
-     *      @OA\SecurityScheme(
-     *          securityScheme="bearerAuth",
-     *          in="header",
-     *          name="bearerAuth",
-     *          type="http",
-     *          scheme="bearer",
-     *          bearerFormat="JWT",
-     *       ),
-     * security={{"bearer_token":{}}},
+     *      path="/api/logout",
+     *      operationId="Logout",
+     *      tags={"Auth"},
+     *      summary="User Logout",
+     *      description="User Logout",
+     *      security={{"sanctum":{}}},
      *
      *      @OA\Response(
      *          response=200,
      *          description="Logout Successfully",
-     *       ),
+     *      ),
      *      @OA\Response(
      *          response=422,
      *          description="Unprocessable Entity",
-     *       ),
+     *      ),
      *      @OA\Response(response=400, description="Bad request"),
      *      @OA\Response(response=404, description="Resource Not Found"),
      * )

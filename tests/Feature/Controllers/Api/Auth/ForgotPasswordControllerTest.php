@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Controllers\Auth;
+namespace Feature\Controllers\Api\Auth;
 
 use App\Mail\SendCodeResetPassword;
 use App\Models\User;
