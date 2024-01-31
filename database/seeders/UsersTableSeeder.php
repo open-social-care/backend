@@ -16,11 +16,9 @@ class UsersTableSeeder extends Seeder
     public function run(): void
     {
         $this->createAdminUsers();
-        $this->createManagerUsers();
-        $this->createSocialAssistantUsers();
     }
 
-    private function createAdminUsers()
+    private function createAdminUsers(): void
     {
         $users = [
             [
@@ -30,38 +28,7 @@ class UsersTableSeeder extends Seeder
             ],
         ];
 
-        $this->createUserByRole($users, RolesEnum::ADMIN);
-    }
-
-    private function createManagerUsers()
-    {
-        $users = [
-            [
-                'name' => 'Manager Social Care',
-                'email' => 'manager@socialcare.com',
-                'password' => Hash::make('12345678'),
-            ],
-        ];
-
-        $this->createUserByRole($users, RolesEnum::MANAGER);
-    }
-
-    private function createSocialAssistantUsers()
-    {
-        $users = [
-            [
-                'name' => 'Social Assistant Social Care',
-                'email' => 'social_assistant@socialcare.com',
-                'password' => Hash::make('12345678'),
-            ],
-        ];
-
-        $this->createUserByRole($users, RolesEnum::SOCIAL_ASSISTANT);
-    }
-
-    private function createUserByRole(array $users, RolesEnum $role)
-    {
-        $role = Role::query()->firstWhere('name', $role);
+        $role = Role::query()->firstWhere('name', RolesEnum::ADMIN);
 
         foreach ($users as $user) {
             $user = User::query()->firstOrCreate([

@@ -1,6 +1,12 @@
 <?php
 
 return [
+    'common' => [
+        'success_create' => 'Registro criado com sucesso.',
+        'success_update' => 'Registro atualizado com sucesso.',
+        'success_destroy' => 'Registro apagado com sucesso.',
+    ],
+
     'auth' => [
         'login_success' => 'Usurário logado com sucesso.',
         'login_invalid' => 'Credenciais de login inválidas.',
@@ -9,6 +15,8 @@ return [
         'password' => [
             'password_reset_success' => 'Senha redefinida com sucesso.',
         ],
+
+        'access_denied' => 'Acesso não autorizado.',
     ],
 
     'email' => [

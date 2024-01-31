@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\ResetPasswordRequest;
+use App\Http\Requests\Api\Auth\ResetPasswordRequest;
 use App\Models\PasswordResetToken;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\JsonResponse;
@@ -16,11 +16,11 @@ class ResetPasswordController extends Controller
 {
     /**
      * @OA\Post(
-     * path="/api/password/reset",
-     * operationId="Password reset password",
-     * tags={"Auth"},
-     * summary="User reset password",
-     * description="User reset password",
+     *     path="/api/password/reset",
+     *     operationId="Password reset password",
+     *     tags={"Auth"},
+     *     summary="User reset password",
+     *     description="User reset password",
      *
      *     @OA\RequestBody(
      *
@@ -46,29 +46,16 @@ class ResetPasswordController extends Controller
      *                  property="password_confirmation"
      *              ),
      *          ),
-     *
-     *         @OA\MediaType(
-     *            mediaType="multipart/form-data",
-     *
-     *            @OA\Schema(
-     *               type="object",
-     *               required={"token", "password", "password_confirmation"},
-     *
-     *               @OA\Property(property="token", type="text"),
-     *               @OA\Property(property="password", type="password"),
-     *               @OA\Property(property="password_confirmation", type="password"),
-     *            ),
-     *        ),
-     *    ),
+     *     ),
      *
      *      @OA\Response(
      *          response=200,
      *          description="Password reset Successfully",
-     *       ),
+     *      ),
      *      @OA\Response(
      *          response=422,
      *          description="Unprocessable Entity",
-     *       ),
+     *      ),
      *      @OA\Response(response=400, description="Bad request"),
      *      @OA\Response(response=404, description="Resource Not Found"),
      * )
