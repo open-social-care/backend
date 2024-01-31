@@ -24,6 +24,7 @@ class Organization extends Model
         'document',
         'created_at',
         'updated_at',
+        'subject_ref',
     ];
 
     public function addresses(): MorphMany
