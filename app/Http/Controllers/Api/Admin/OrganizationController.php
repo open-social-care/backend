@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
+<<<<<<< HEAD
 use App\Actions\Admin\Organization\OrganizationCreateAction;
 use App\Actions\Admin\Organization\OrganizationUpdateAction;
 use App\DTO\Admin\OrganizationDTO;
@@ -14,6 +15,23 @@ use App\Http\Resources\Api\Shared\PaginationResource;
 use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
+=======
+use App\Actions\Admin\User\UserCreateAction;
+use App\Actions\Admin\User\UserUpdateAction;
+use App\DTO\Admin\UserDTO;
+use App\Enums\RolesEnum;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\UserRequest;
+use App\Http\Resources\Api\Admin\UserListResource;
+use App\Http\Resources\Api\Admin\UserResource;
+use App\Http\Resources\Api\Shared\PaginationResource;
+use App\Models\Organization;
+use App\Models\Role;
+use App\Models\User;
+use Illuminate\Http\JsonResponse;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
+>>>>>>> dba9e67 (add subject_ref)
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class OrganizationController extends Controller
