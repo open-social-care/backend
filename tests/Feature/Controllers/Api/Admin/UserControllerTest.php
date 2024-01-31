@@ -53,6 +53,19 @@ class UserControllerTest extends TestCase
             ->assertJsonFragment(['name' => $user->name]);
     }
 
+    public function testIndexMethodWithSearchTermWhenDontHaveContent()
+    {
+        User::factory()->count(10)->createQuietly();
+        $user = User::factory()->createOneQuietly(['name' => 'Test user']);
+
+        $response = $this->getJson(route('admin.users.index', ['q' => 'users']));
+
+        $response->assertStatus(HttpResponse::HTTP_OK)
+            ->assertJsonStructure(['data', 'pagination'])
+            ->assertJsonCount(0, 'data')
+            ->assertJsonMissing(['name' => $user->name]);
+    }
+
     public function testStoreMethod()
     {
         $roles = Role::factory()->count(2)->createQuietly();
