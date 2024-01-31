@@ -1,19 +1,8 @@
 <?php
 
 /**
- * All files in this folder will be included in the application.
+ * Format a collection for selection/array with key and label
  */
-if (! function_exists('current_user')) {
-    /**
-     * Returns an instance of the current user.
-     *
-     * @return \Illuminate\Contracts\Auth\Authenticatable
-     */
-    function current_user(): Illuminate\Contracts\Auth\Authenticatable
-    {
-        return auth()->user();
-    }
-}
 if (! function_exists('to_select')) {
 
     /**
@@ -31,6 +20,9 @@ if (! function_exists('to_select')) {
         })->toArray();
     }
 }
+/**
+ * Format a collection for selection/array with key and label based on enum class
+ */
 if (! function_exists('to_select_by_enum')) {
 
     /**
