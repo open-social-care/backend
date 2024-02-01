@@ -83,8 +83,6 @@ class UserController extends Controller
             $paginate = User::search($search)->paginate(30);
 
             return response()->json([
-                'status' => HttpResponse::HTTP_OK,
-                'message' => __('messages.common.success_view'),
                 'data' => UserListResource::collection($paginate),
                 'pagination' => PaginationResource::make($paginate),
             ], HttpResponse::HTTP_OK);

@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 class UserCreateAction
 {
     /**
-     * Execute create of user with roles and organizations
+     * Exec$organization = ute create of user with roles and organizations
      */
     public static function execute(UserDTO $userDTO): void
     {
