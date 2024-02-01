@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Admin\OrganizationController;
 use App\Http\Controllers\Api\Admin\UserController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Auth\ForgotPasswordController;
@@ -35,4 +36,8 @@ Route::middleware(['auth:sanctum', 'only_admin_user'])
 
         Route::get('/users/form-infos', [UserController::class, 'formInfos'])->name('users.form-infos');
         Route::get('/users/{user}', [UserController::class, 'getUser'])->name('users.get-user');
+
+        // Organization Routes
+        Route::resource('organizations', OrganizationController::class)
+            ->except(['create', 'edit', 'show']);
     });

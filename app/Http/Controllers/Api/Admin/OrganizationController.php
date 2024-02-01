@@ -2,18 +2,14 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
-use App\Actions\Admin\User\UserCreateAction;
-use App\Actions\Admin\User\UserUpdateAction;
-use App\DTO\Admin\UserDTO;
-use App\Enums\RolesEnum;
+use App\Actions\Admin\Organization\OrganizationCreateAction;
+use App\Actions\Admin\Organization\OrganizationUpdateAction;
+use App\DTO\Admin\OrganizationDTO;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\UserRequest;
-use App\Http\Resources\Api\Admin\UserListResource;
-use App\Http\Resources\Api\Admin\UserResource;
+use App\Http\Requests\Api\OrganizationRequest;
+use App\Http\Resources\Api\Admin\OrganizationListResource;
 use App\Http\Resources\Api\Shared\PaginationResource;
 use App\Models\Organization;
-use App\Models\Role;
-use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -23,12 +19,13 @@ class OrganizationController extends Controller
 {
     /**
      * @OA\Get(
-     * path="/api/admin/users",
-     * operationId="AdminGetUsers",
-     * tags={"Admin/User"},
-     * summary="Get a list of users",
-     * description="Retrieve a list of users.",
+     * path="/api/admin/organizations",
+     * operationId="AdminGetOrganizations",
+     * tags={"Admin/Organization"},
+     * summary="Get a list of organizations",
+     * description="Retrieve a list of organizations.",
      * security={{"sanctum":{}}},
+     *
      *     @OA\Parameter(
      *         name="q",
      *         in="query",
@@ -39,6 +36,7 @@ class OrganizationController extends Controller
      *             type="string"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=200,
      *         description="Successful response",
@@ -47,8 +45,10 @@ class OrganizationController extends Controller
      *             type="object",
      *
      *             @OA\Property(property="data", type="array", @OA\Items(
+     *                 @OA\Property(property="id", type="integer"),
      *                 @OA\Property(property="name", type="string"),
-     *                 @OA\Property(property="email", type="string")
+     *                 @OA\Property(property="document_type", type="string"),
+     *                 @OA\Property(property="document", type="string")
      *             )),
      *             @OA\Property(property="pagination", type="object",
      *             @OA\Property(property="total", type="integer"),
@@ -75,10 +75,10 @@ class OrganizationController extends Controller
     {
         try {
             $search = request()->get('q', null);
-            $paginate = User::search($search)->paginate(30);
+            $paginate = Organization::search($search)->paginate(30);
 
             return response()->json([
-                'data' => UserListResource::collection($paginate),
+                'data' => OrganizationListResource::collection($paginate),
                 'pagination' => PaginationResource::make($paginate),
             ], HttpResponse::HTTP_OK);
         } catch (\Exception|NotFoundExceptionInterface|ContainerExceptionInterface $e) {
@@ -88,32 +88,30 @@ class OrganizationController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/admin/users",
-     *     operationId="AdminCreateUser",
-     *     tags={"Admin/User"},
-     *     summary="Create a new user",
-     *     description="Create a new admin user with the provided information.",
+     *     path="/api/admin/organizations",
+     *     operationId="AdminCreateOrganization",
+     *     tags={"Admin/Organization"},
+     *     summary="Create a new Organization",
+     *     description="Create a new Organization with the provided information.",
      *     security={{"sanctum":{}}},
      *
      *     @OA\RequestBody(
      *         required=true,
-     *         description="User data",
+     *         description="Organization data",
      *
      *         @OA\JsonContent(
      *             type="object",
      *
      *             @OA\Property(property="name", type="string"),
-     *             @OA\Property(property="email", type="string"),
-     *             @OA\Property(property="password", type="string"),
-     *             @OA\Property(property="password_confirmation", type="string"),
-     *             @OA\Property(property="roles", type="array", @OA\Items(type="integer")),
-     *             @OA\Property(property="organizations", type="array", @OA\Items(type="integer"))
+     *             @OA\Property(property="phone", type="string", description="(00) 0000-0000"),
+     *             @OA\Property(property="document_type", type="string", description="CNPJ/CPF"),
+     *             @OA\Property(property="document", type="string", description="00.000.000/0000-00 / 000.000.000-00"),
      *         )
      *     ),
      *
      *     @OA\Response(
      *         response=200,
-     *         description="User created successfully",
+     *         description="Organization created successfully",
      *
      *         @OA\JsonContent(
      *
@@ -132,13 +130,13 @@ class OrganizationController extends Controller
      *     ),
      * )
      */
-    public function store(UserRequest $request): JsonResponse
+    public function store(OrganizationRequest $request): JsonResponse
     {
         try {
             $data = $request->validated();
 
-            $userDto = new UserDTO($data);
-            UserCreateAction::execute($userDto);
+            $dto = new OrganizationDTO($data);
+            OrganizationCreateAction::execute($dto);
 
             return response()->json(['message' => __('messages.common.success_create')], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
@@ -148,17 +146,17 @@ class OrganizationController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/api/admin/users/{user}",
-     *     operationId="AdminUpdateUser",
-     *     tags={"Admin/User"},
-     *     summary="Update user",
-     *     description="Update user with the provided information.",
+     *     path="/api/admin/organizations/{organization}",
+     *     operationId="AdminUpdateOrganization",
+     *     tags={"Admin/Organization"},
+     *     summary="Update Organization",
+     *     description="Update Organization with the provided information.",
      *     security={{"sanctum":{}}},
      *
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
-     *         description="The user id for update",
+     *         description="The organization id for update",
      *         required=true,
      *
      *         @OA\Schema(
@@ -168,23 +166,21 @@ class OrganizationController extends Controller
      *
      *     @OA\RequestBody(
      *         required=true,
-     *         description="User data",
+     *         description="Organization data",
      *
      *         @OA\JsonContent(
-     *             type="object",
-     *
-     *             @OA\Property(property="name", type="string"),
-     *             @OA\Property(property="email", type="string"),
-     *             @OA\Property(property="password", type="string"),
-     *             @OA\Property(property="password_confirmation", type="string"),
-     *             @OA\Property(property="roles", type="array", @OA\Items(type="integer")),
-     *             @OA\Property(property="organizations", type="array", @OA\Items(type="integer"))
-     *         )
+     * *             type="object",
+     * *
+     * *             @OA\Property(property="name", type="string"),
+     * *             @OA\Property(property="phone", type="string", description="(00) 0000-0000"),
+     * *             @OA\Property(property="document_type", type="string", description="CNPJ/CPF"),
+     * *             @OA\Property(property="document", type="string", description="00.000.000/0000-00 / 000.000.000-00"),
+     * *         )
      *     ),
      *
      *     @OA\Response(
      *         response=200,
-     *         description="User updated successfully",
+     *         description="Organization updated successfully",
      *
      *         @OA\JsonContent(
      *
@@ -203,13 +199,13 @@ class OrganizationController extends Controller
      *     ),
      * )
      */
-    public function update(UserRequest $request, User $user): JsonResponse
+    public function update(OrganizationRequest $request, Organization $organization): JsonResponse
     {
         try {
             $data = $request->validated();
 
-            $userDto = new UserDTO($data);
-            UserUpdateAction::execute($userDto, $user);
+            $dto = new OrganizationDTO($data);
+            OrganizationUpdateAction::execute($dto, $organization);
 
             return response()->json(['message' => __('messages.common.success_update')], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
@@ -219,17 +215,17 @@ class OrganizationController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/api/admin/users/{user}",
-     *     operationId="AdminDestroyUser",
-     *     tags={"Admin/User"},
-     *     summary="Destroy user",
-     *     description="Destroy user with the provided id.",
+     *     path="/api/admin/organizations/{organization}",
+     *     operationId="AdminDestroyOrganization",
+     *     tags={"Admin/Organization"},
+     *     summary="Destroy organization",
+     *     description="Destroy organization with the provided id.",
      *     security={{"sanctum":{}}},
      *
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
-     *         description="The user id for destroy",
+     *         description="The organization id for destroy",
      *         required=true,
      *
      *         @OA\Schema(
@@ -239,9 +235,10 @@ class OrganizationController extends Controller
      *
      *     @OA\Response(
      *         response=200,
-     *         description="User destroy successfully",
+     *         description="Organization destroy successfully",
      *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="message", type="string")
      *         )
      *     ),
@@ -251,111 +248,18 @@ class OrganizationController extends Controller
      *         description="Bad Request",
      *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="message", type="string")
      *         )
      *     ),
      * )
      */
-    public function destroy(User $user): JsonResponse
+    public function destroy(Organization $organization): JsonResponse
     {
         try {
-            $user->delete();
+            $organization->delete();
 
             return response()->json(['message' => __('messages.common.success_destroy')], HttpResponse::HTTP_OK);
-        } catch (\Exception $e) {
-            return response()->json(['message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
-        }
-    }
-
-    /**
-     * @OA\Get(
-     *     path="/api/admin/users/form-infos",
-     *     operationId="GetAdminUserFormData",
-     *     tags={"Admin/User"},
-     *     summary="Get form data info for user creation and updation",
-     *     description="Retrieve data needed for creating and updation a user, with organizations and roles available for selection.",
-     *     security={{"sanctum":{}}},
-     *     @OA\Response(
-     *         response=200,
-     *         description="Data retrieved successfully",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="organizationsToSelect", type="array", @OA\Items(
-     *                 @OA\Property(property="id", type="integer"),
-     *                 @OA\Property(property="name", type="string")
-     *             )),
-     *             @OA\Property(property="rolesToSelect", type="array", @OA\Items(
-     *                 @OA\Property(property="id", type="integer"),
-     *                 @OA\Property(property="name", type="string")
-     *             ))
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=400,
-     *         description="Bad Request",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="message", type="string")
-     *         )
-     *     ),
-     * )
-     */
-    public function formInfos(): JsonResponse
-    {
-        try {
-            $organizationsToSelect = to_select(Organization::all());
-            $rolesToSelect = to_select_by_enum(Role::all(), RolesEnum::class);
-
-            return response()->json([
-                'organizationsToSelect' => $organizationsToSelect,
-                'rolesToSelect' => $rolesToSelect
-            ], HttpResponse::HTTP_OK);
-        } catch (\Exception $e) {
-            return response()->json(['message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
-        }
-    }
-
-    /**
-     * @OA\Get(
-     *     path="/api/admin/users/{user}",
-     *     operationId="AdminGetUser",
-     *     tags={"Admin/User"},
-     *     summary="Get user infos",
-     *     description="Get user infos",
-     *     security={{"sanctum":{}}},
-     *
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         description="The user id for get",
-     *         required=true,
-     *
-     *         @OA\Schema(
-     *             type="integer"
-     *         )
-     *     ),
-     *
-     *     @OA\Response(
-     *         response=200,
-     *         description="Get user successfully",
-     *
-     *         @OA\JsonContent(
-     *             @OA\Property(property="message", type="string")
-     *         )
-     *     ),
-     *
-     *     @OA\Response(
-     *         response=400,
-     *         description="Bad Request",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="message", type="string")
-     *         )
-     *     ),
-     * )
-     */
-    public function getUser(User $user): JsonResponse
-    {
-        try {
-            return response()->json(['user' => UserResource::make($user)], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
         }
