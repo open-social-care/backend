@@ -335,16 +335,16 @@ class OrganizationController extends Controller
     /**
      * @OA\Get(
      * path="/api/admin/organizations/{organization}/get-users-by-role/{role}",
-     * operationId="AdminGetOrganizations",
+     * operationId="AdminGetOrganizationUsersByRole",
      * tags={"Admin/Organization"},
-     * summary="Get a list of organizations",
-     * description="Retrieve a list of organizations.",
+     * summary="Get a list of organization users by role",
+     * description="Retrieve a list of organization users by role.",
      * security={{"sanctum":{}}},
      *
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
-     *         description="The organization id for destroy",
+     *         description="The organization id for list users",
      *         required=true,
      *
      *         @OA\Schema(
@@ -354,8 +354,8 @@ class OrganizationController extends Controller
      *
      *     @OA\Parameter(
      *         name="role",
-     *         in="role",
-     *         description="The role for filter users",
+     *         in="path",
+     *         description="The role for filter users (manager or social_assistant)",
      *         required=true,
      *
      *         @OA\Schema(
