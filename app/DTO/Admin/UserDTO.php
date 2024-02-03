@@ -12,7 +12,7 @@ class UserDTO
 
     public array $roles;
 
-    public array $organizations;
+    public ?array $organizations;
 
     /**
      * Construct class set DTO attributes
