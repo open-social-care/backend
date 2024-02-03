@@ -7,7 +7,7 @@ use App\Actions\Admin\User\UserUpdateAction;
 use App\DTO\Admin\UserDTO;
 use App\Enums\RolesEnum;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\UserRequest;
+use App\Http\Requests\Api\Admin\UserRequest;
 use App\Http\Resources\Api\Admin\UserListResource;
 use App\Http\Resources\Api\Admin\UserResource;
 use App\Http\Resources\Api\Shared\PaginationResource;
