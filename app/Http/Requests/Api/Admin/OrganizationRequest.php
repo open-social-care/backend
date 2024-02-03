@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Api;
+namespace App\Http\Requests\Api\Admin;
 
 use App\Enums\DocumentTypesEnum;
 use App\Support\DocumentValidator;

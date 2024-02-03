@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Api;
+namespace App\Http\Requests\Api\Admin;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
@@ -46,8 +46,8 @@ class UserRequest extends FormRequest
             'password' => 'required|string|min:6|confirmed',
             'roles' => 'required|array',
             'roles.*' => 'required|exists:roles,id',
-            'organizations' => 'required|array',
-            'organizations.*' => 'required|exists:organizations,id',
+            'organizations' => 'sometimes|nullable|array',
+            'organizations.*' => 'sometimes|nullable|exists:organizations,id',
         ];
 
         if ($this->method() === 'PUT' && $this->user) {

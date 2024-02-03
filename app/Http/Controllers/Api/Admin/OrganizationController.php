@@ -6,10 +6,13 @@ use App\Actions\Admin\Organization\OrganizationCreateAction;
 use App\Actions\Admin\Organization\OrganizationUpdateAction;
 use App\DTO\Admin\OrganizationDTO;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\OrganizationRequest;
+use App\Http\Requests\Api\Admin\OrganizationAssociateUsersRequest;
+use App\Http\Requests\Api\Admin\OrganizationRequest;
 use App\Http\Resources\Api\Admin\OrganizationListResource;
+use App\Http\Resources\Api\Admin\UserListResource;
 use App\Http\Resources\Api\Shared\PaginationResource;
 use App\Models\Organization;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -261,6 +264,153 @@ class OrganizationController extends Controller
 
             return response()->json(['message' => __('messages.common.success_destroy')], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
+        }
+    }
+
+    /**
+     * @OA\Put(
+     *     path="/api/admin/organizations/{organization}/associate-users",
+     *     operationId="AdminOrganizationAssociateUsers",
+     *     tags={"Admin/Organization"},
+     *     summary="Associate users to organization",
+     *     description="Associate users to organization with the provided information.",
+     *     security={{"sanctum":{}}},
+     *
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="The organization id for associate users",
+     *         required=true,
+     *
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Organization associate data",
+     *
+     *         @OA\JsonContent(
+     * *             type="object",
+     * *
+     *             @OA\Property(property="users", type="array", @OA\Items(type="integer")),
+     * *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=200,
+     *         description="Updated successfully",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="message", type="string")
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad Request",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="message", type="string")
+     *         )
+     *     ),
+     * )
+     */
+    public function associateUsersToOrganization(OrganizationAssociateUsersRequest $request, Organization $organization): JsonResponse
+    {
+        try {
+            $data = $request->validated();
+            $organization->users()->sync($data['users']);
+
+            return response()->json(['message' => __('messages.common.success_update')], HttpResponse::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
+        }
+    }
+
+    /**
+     * @OA\Get(
+     * path="/api/admin/organizations/{organization}/get-users-by-role/{role}",
+     * operationId="AdminGetOrganizations",
+     * tags={"Admin/Organization"},
+     * summary="Get a list of organizations",
+     * description="Retrieve a list of organizations.",
+     * security={{"sanctum":{}}},
+     *
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="The organization id for destroy",
+     *         required=true,
+     *
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *
+     *     @OA\Parameter(
+     *         name="role",
+     *         in="role",
+     *         description="The role for filter users",
+     *         required=true,
+     *
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful response",
+     *
+     *         @OA\JsonContent(
+     *             type="object",
+     *
+     *             @OA\Property(property="data", type="array", @OA\Items(
+     *                 @OA\Property(property="name", type="string"),
+     *                 @OA\Property(property="email", type="string")
+     *             )),
+     *             @OA\Property(property="pagination", type="object",
+     *             @OA\Property(property="total", type="integer"),
+     *             @OA\Property(property="per_page", type="integer"),
+     *             @OA\Property(property="current_page", type="integer"),
+     *             @OA\Property(property="last_page", type="integer"),
+     *             @OA\Property(property="from", type="integer"),
+     *             @OA\Property(property="to", type="integer"))
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad Request",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="message", type="string")
+     *         )
+     *     ),
+     * )
+     */
+    public function getOrganizationUsersListByRole(Organization $organization, string $role): JsonResponse
+    {
+        try {
+            $paginate = User::whereHas('organizations', function ($query) use ($organization) {
+                    return $query->where('organizations.id', $organization->id);
+                })
+                ->whereHas('roles', function ($query) use ($role) {
+                    return $query->where('roles.name', $role);
+                })
+                ->paginate(30);
+
+            return response()->json([
+                'data' => UserListResource::collection($paginate),
+                'pagination' => PaginationResource::make($paginate),
+            ], HttpResponse::HTTP_OK);
+        } catch (\Exception|NotFoundExceptionInterface|ContainerExceptionInterface $e) {
             return response()->json(['message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
         }
     }

@@ -40,4 +40,10 @@ Route::middleware(['auth:sanctum', 'only_admin_user'])
         // Organization Routes
         Route::resource('organizations', OrganizationController::class)
             ->except(['create', 'edit', 'show']);
+
+        Route::post('/organizations/{organization}/associate-users', [OrganizationController::class, 'associateUsersToOrganization'])
+            ->name('organizations.associate-users');
+
+        Route::get('/organizations/{organization}/get-users-by-role/{role}', [OrganizationController::class, 'getOrganizationUsersListByRole'])
+            ->name('organizations.get-users-by-role');
     });
