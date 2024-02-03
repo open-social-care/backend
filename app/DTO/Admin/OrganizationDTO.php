@@ -12,7 +12,7 @@ class OrganizationDTO
 
     public string $document;
 
-    public string $subjectRef;
+    public ?string $subjectRef;
 
     /**
      * Construct class set DTO attributes

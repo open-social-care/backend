@@ -57,4 +57,9 @@ class Organization extends Model
             'document' => $this->document,
         ];
     }
+
+    public function setSubjectRefAttribute($value): void
+    {
+        $this->attributes['subject_ref'] = is_null($value) ? __('common.subject_ref') : $value;
+    }
 }
