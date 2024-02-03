@@ -487,9 +487,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "200"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "success"
                                         },
                                         "message": {
                                             "type": "string",
@@ -507,9 +507,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "422"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
                                         },
                                         "message": {
                                             "type": "string",
@@ -541,9 +541,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "400"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
                                         },
                                         "message": {
                                             "type": "string",
@@ -598,9 +598,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "200"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "success"
                                         },
                                         "message": {
                                             "type": "string",
@@ -668,9 +668,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "400"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
                                         },
                                         "message": {
                                             "type": "string",
