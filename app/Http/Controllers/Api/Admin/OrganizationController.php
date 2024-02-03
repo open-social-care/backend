@@ -399,8 +399,8 @@ class OrganizationController extends Controller
     {
         try {
             $paginate = User::whereHas('organizations', function ($query) use ($organization) {
-                    return $query->where('organizations.id', $organization->id);
-                })
+                return $query->where('organizations.id', $organization->id);
+            })
                 ->whereHas('roles', function ($query) use ($role) {
                     return $query->where('roles.name', $role);
                 })
