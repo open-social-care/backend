@@ -470,8 +470,7 @@
                                     "users": {
                                         "type": "array",
                                         "items": {
-                                            "type": "integer",
-                                            "example": "1"
+                                            "type": "integer"
                                         }
                                     }
                                 },
@@ -487,47 +486,8 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "success"
-                                        },
                                         "message": {
-                                            "type": "string",
-                                            "example": "Updated successfully"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "error"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unprocessable Entity"
-                                        },
-                                        "errors": {
-                                            "properties": {
-                                                "users": {
-                                                    "description": "field with errors",
-                                                    "type": "array",
-                                                    "items": {
-                                                        "description": "message error",
-                                                        "type": "string",
-                                                        "example": "The field users is required"
-                                                    }
-                                                }
-                                            },
-                                            "type": "object"
+                                            "type": "string"
                                         }
                                     },
                                     "type": "object"
@@ -541,13 +501,8 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "error"
-                                        },
                                         "message": {
-                                            "type": "string",
-                                            "example": "Bad Request"
+                                            "type": "string"
                                         }
                                     },
                                     "type": "object"
@@ -598,36 +553,15 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "success"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Successful response"
-                                        },
                                         "data": {
                                             "type": "array",
                                             "items": {
                                                 "properties": {
-                                                    "id": {
-                                                        "type": "integer",
-                                                        "example": "1"
-                                                    },
                                                     "name": {
-                                                        "type": "string",
-                                                        "example": "Teste"
+                                                        "type": "string"
                                                     },
                                                     "email": {
-                                                        "type": "string",
-                                                        "example": "teste@teste.com"
-                                                    },
-                                                    "roles": {
-                                                        "type": "array",
-                                                        "items": {
-                                                            "type": "string",
-                                                            "example": "Gestor(a)"
-                                                        }
+                                                        "type": "string"
                                                     }
                                                 },
                                                 "type": "object"
@@ -655,88 +589,6 @@
                                                 }
                                             },
                                             "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "error"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Bad Request"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
-            }
-        },
-        "/api/admin/organizations/{organization}/associate-users": {
-            "put": {
-                "tags": [
-                    "Admin/Organization"
-                ],
-                "summary": "Associate users to organization",
-                "description": "Associate users to organization with the provided information.",
-                "operationId": "AdminOrganizationAssociateUsers",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "The organization id for associate users",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "description": "Organization associate data",
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "users": {
-                                        "type": "array",
-                                        "items": {
-                                            "type": "integer"
-                                        }
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Updated successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string"
                                         }
                                     },
                                     "type": "object"
