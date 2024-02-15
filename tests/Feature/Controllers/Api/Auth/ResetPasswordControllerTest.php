@@ -44,16 +44,18 @@ class ResetPasswordControllerTest extends TestCase
 
     public function test_reset_password_with_invalid_token()
     {
+        $password = $this->faker->password;
+
         $response = $this->postJson(route('password.reset'), [
             'token' => 'invalid_token',
-            'password' => $this->faker->password,
-            'password_confirmation' => $this->faker->password,
+            'password' => $password,
+            'password_confirmation' => $password,
         ]);
 
         $response->assertStatus(HttpResponse::HTTP_UNPROCESSABLE_ENTITY);
 
         $responseData = $response->json();
-        $this->assertArrayHasKey('message', $responseData);
-        $this->assertStringContainsString(__('passwords.token_is_invalid'), $responseData['message']);
+        $this->assertArrayHasKey('errors', $responseData);
+        $this->assertStringContainsString(__('passwords.token_is_invalid'), $responseData['errors']['token'][0]);
     }
 }
