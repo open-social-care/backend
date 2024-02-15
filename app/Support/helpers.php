@@ -8,10 +8,7 @@ if (! function_exists('to_select')) {
     /**
      * Returns array for to select options for model
      *
-     * @param \Illuminate\Database\Eloquent\Collection $collection
-     * @param $key
-     * @param $value
-     * @return array
+     * @param  \Illuminate\Database\Eloquent\Collection  $collection
      */
     function to_select(Illuminate\Database\Eloquent\Collection $collection, $key = 'id', $value = 'name'): array
     {
@@ -28,11 +25,7 @@ if (! function_exists('to_select_by_enum')) {
     /**
      * Returns array for to select options for model by trans enum
      *
-     * @param \Illuminate\Database\Eloquent\Collection $collection
-     * @param string $enumClass
-     * @param $key
-     * @param $value
-     * @return array
+     * @param  \Illuminate\Database\Eloquent\Collection  $collection
      */
     function to_select_by_enum(Illuminate\Database\Eloquent\Collection $collection, string $enumClass, $key = 'id', $value = 'name'): array
     {

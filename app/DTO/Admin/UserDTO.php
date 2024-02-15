@@ -8,7 +8,7 @@ class UserDTO
 
     public string $email;
 
-    public string|null $password;
+    public ?string $password;
 
     public array $roles;
 

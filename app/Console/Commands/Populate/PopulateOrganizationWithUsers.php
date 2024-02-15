@@ -9,8 +9,8 @@ use App\Models\Role;
 use App\Models\RoleUser;
 use App\Models\User;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class PopulateOrganizationWithUsers extends Command
 {
@@ -129,7 +129,7 @@ class PopulateOrganizationWithUsers extends Command
                 ->where('user_id', $userId)
                 ->first();
 
-            if (!$existingEntry) {
+            if (! $existingEntry) {
                 $organization->organizationUsers()->create(['user_id' => $userId]);
             }
         }

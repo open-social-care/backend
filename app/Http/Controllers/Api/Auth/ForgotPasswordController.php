@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Auth\ForgotPasswordRequest;
 use App\Mail\SendCodeResetPassword;
 use App\Models\PasswordResetToken;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class ForgotPasswordController extends Controller
@@ -37,16 +37,27 @@ class ForgotPasswordController extends Controller
      *      @OA\Response(
      *          response=200,
      *          description="Password recuperation send Successfully",
+     *
+     *          @OA\JsonContent(
+     *
+     *              @OA\Property(property="status", type="integer", example="200"),
+     *              @OA\Property(property="message", type="string", example="Password recuperation send Successfully")
+     *          )
      *      ),
+     *
      *      @OA\Response(
-     *          response=422,
-     *          description="Unprocessable Entity",
+     *          response=400,
+     *          description="Bad request",
+     *
+     *          @OA\JsonContent(
+     *
+     *              @OA\Property(property="status", type="integer", example="400"),
+     *              @OA\Property(property="message", type="string", example="Bad request")
+     *          )
      *      ),
-     *      @OA\Response(response=400, description="Bad request"),
-     *      @OA\Response(response=404, description="Resource Not Found"),
      * )
      */
-    public function __invoke(ForgotPasswordRequest $request): \Illuminate\Http\JsonResponse
+    public function __invoke(ForgotPasswordRequest $request): JsonResponse
     {
         try {
             PasswordResetToken::where('email', $request->email)->delete();
@@ -55,9 +66,9 @@ class ForgotPasswordController extends Controller
 
             Mail::to($request->email)->send(new SendCodeResetPassword($codeData->token));
 
-            return response()->json(['message' => __('passwords.sent')], HttpResponse::HTTP_OK);
-        } catch (ValidationException $e) {
-            return response()->json(['message' => $e->getMessage()], $e->status);
+            return response()->json(['status' => HttpResponse::HTTP_OK, 'message' => __('passwords.sent')], HttpResponse::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json(['status' => HttpResponse::HTTP_BAD_REQUEST, 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
         }
     }
 }

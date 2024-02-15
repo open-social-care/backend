@@ -15,8 +15,6 @@ use App\Models\Organization;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class UserController extends Controller
@@ -29,6 +27,7 @@ class UserController extends Controller
      * summary="Get a list of users",
      * description="Retrieve a list of users.",
      * security={{"sanctum":{}}},
+     *
      *     @OA\Parameter(
      *         name="q",
      *         in="query",
@@ -39,6 +38,7 @@ class UserController extends Controller
      *             type="string"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=200,
      *         description="Successful response",
@@ -46,18 +46,22 @@ class UserController extends Controller
      *         @OA\JsonContent(
      *             type="object",
      *
+     *             @OA\Property(property="status", type="integer"),
+     *             @OA\Property(property="message", type="string"),
      *             @OA\Property(property="data", type="array", @OA\Items(
-     *                 @OA\Property(property="name", type="string"),
-     *                 @OA\Property(property="email", type="string")
+     *                 @OA\Property(property="id", type="integer", example="1"),
+     *                 @OA\Property(property="name", type="string", example="Teste"),
+     *                 @OA\Property(property="email", type="string", example="teste@teste.com"),
+     *                 @OA\Property(property="roles", type="array", @OA\Items(type="string", example="Gestor(a)")),
      *             )),
      *             @OA\Property(property="pagination", type="object",
-     *             @OA\Property(property="total", type="integer"),
-     *             @OA\Property(property="per_page", type="integer"),
-     *             @OA\Property(property="current_page", type="integer"),
-     *             @OA\Property(property="last_page", type="integer"),
-     *             @OA\Property(property="from", type="integer"),
-     *             @OA\Property(property="to", type="integer"))
-     *         )
+     *                 @OA\Property(property="total", type="integer"),
+     *                 @OA\Property(property="per_page", type="integer"),
+     *                 @OA\Property(property="current_page", type="integer"),
+     *                 @OA\Property(property="last_page", type="integer"),
+     *                 @OA\Property(property="from", type="integer"),
+     *                 @OA\Property(property="to", type="integer"))
+     *             )
      *     ),
      *
      *     @OA\Response(
@@ -66,6 +70,7 @@ class UserController extends Controller
      *
      *         @OA\JsonContent(
      *
+     *             @OA\Property(property="status", type="integer"),
      *             @OA\Property(property="message", type="string")
      *         )
      *     ),
@@ -78,11 +83,13 @@ class UserController extends Controller
             $paginate = User::search($search)->paginate(30);
 
             return response()->json([
+                'status' => HttpResponse::HTTP_OK,
+                'message' => __('messages.common.success_view'),
                 'data' => UserListResource::collection($paginate),
                 'pagination' => PaginationResource::make($paginate),
             ], HttpResponse::HTTP_OK);
-        } catch (\Exception|NotFoundExceptionInterface|ContainerExceptionInterface $e) {
-            return response()->json(['message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
+        } catch (\Exception $e) {
+            return response()->json(['status' => HttpResponse::HTTP_BAD_REQUEST, 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
         }
     }
 
@@ -102,12 +109,12 @@ class UserController extends Controller
      *         @OA\JsonContent(
      *             type="object",
      *
-     *             @OA\Property(property="name", type="string"),
-     *             @OA\Property(property="email", type="string"),
-     *             @OA\Property(property="password", type="string"),
-     *             @OA\Property(property="password_confirmation", type="string"),
-     *             @OA\Property(property="roles", type="array", @OA\Items(type="integer")),
-     *             @OA\Property(property="organizations", type="array", @OA\Items(type="integer"))
+     *             @OA\Property(property="name", type="string", example="Teste"),
+     *             @OA\Property(property="email", type="string", example="teste@teste.com"),
+     *             @OA\Property(property="password", type="string", example="12345678"),
+     *             @OA\Property(property="password_confirmation", type="string", example="12345678"),
+     *             @OA\Property(property="roles", type="array", @OA\Items(type="integer", description="id of roles", example="2")),
+     *             @OA\Property(property="organizations", type="array", @OA\Items(type="integer", description="id of organizations", example="3"))
      *         )
      *     ),
      *
@@ -117,7 +124,8 @@ class UserController extends Controller
      *
      *         @OA\JsonContent(
      *
-     *             @OA\Property(property="message", type="string")
+     *             @OA\Property(property="status", type="integer", example="200"),
+     *             @OA\Property(property="message", type="string", example="User created successfully")
      *         )
      *     ),
      *
@@ -127,7 +135,25 @@ class UserController extends Controller
      *
      *         @OA\JsonContent(
      *
-     *             @OA\Property(property="message", type="string")
+     *             @OA\Property(property="status", type="integer", example="400"),
+     *             @OA\Property(property="message", type="string", example="Bad Request")
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=422,
+     *         description="Unprocessable Entity",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="status", type="integer", example="422"),
+     *             @OA\Property(property="message", type="string", example="Unprocessable Entity"),
+     *             @OA\Property(property="errors", type="object",
+     *               @OA\Property(property="email", type="array", description="field with errors",
+     *
+     *                  @OA\Items(type="string", description="message error", example="Email is already in use")
+     *            )
+     *          ),
      *         )
      *     ),
      * )
@@ -140,9 +166,9 @@ class UserController extends Controller
             $userDto = new UserDTO($data);
             UserCreateAction::execute($userDto);
 
-            return response()->json(['message' => __('messages.common.success_create')], HttpResponse::HTTP_OK);
+            return response()->json(['status' => HttpResponse::HTTP_OK, 'message' => __('messages.common.success_create')], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
-            return response()->json(['message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
+            return response()->json(['status' => HttpResponse::HTTP_BAD_REQUEST, 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
         }
     }
 
@@ -173,22 +199,23 @@ class UserController extends Controller
      *         @OA\JsonContent(
      *             type="object",
      *
-     *             @OA\Property(property="name", type="string"),
-     *             @OA\Property(property="email", type="string"),
-     *             @OA\Property(property="password", type="string"),
-     *             @OA\Property(property="password_confirmation", type="string"),
-     *             @OA\Property(property="roles", type="array", @OA\Items(type="integer")),
-     *             @OA\Property(property="organizations", type="array", @OA\Items(type="integer"))
+     *             @OA\Property(property="name", type="string", example="Teste"),
+     *             @OA\Property(property="email", type="string", example="teste@teste.com"),
+     *             @OA\Property(property="password", type="string", example="12345678"),
+     *             @OA\Property(property="password_confirmation", type="string", example="12345678"),
+     *             @OA\Property(property="roles", type="array", @OA\Items(type="integer", description="id of roles", example="2")),
+     *             @OA\Property(property="organizations", type="array", @OA\Items(type="integer", description="id of organizations", example="3"))
      *         )
      *     ),
      *
      *     @OA\Response(
      *         response=200,
-     *         description="User updated successfully",
+     *         description="Data updated successfully",
      *
      *         @OA\JsonContent(
      *
-     *             @OA\Property(property="message", type="string")
+     *             @OA\Property(property="status", type="integer", example="200"),
+     *             @OA\Property(property="message", type="string", example="Data updated successfully")
      *         )
      *     ),
      *
@@ -198,7 +225,25 @@ class UserController extends Controller
      *
      *         @OA\JsonContent(
      *
-     *             @OA\Property(property="message", type="string")
+     *             @OA\Property(property="status", type="integer", example="400"),
+     *             @OA\Property(property="message", type="string", example="Bad Request")
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=422,
+     *         description="Unprocessable Entity",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="status", type="integer", example="422"),
+     *             @OA\Property(property="message", type="string", example="Unprocessable Entity"),
+     *             @OA\Property(property="errors", type="object",
+     *               @OA\Property(property="email", type="array", description="field with errors",
+     *
+     *                  @OA\Items(type="string", description="message error", example="Email is already in use")
+     *            )
+     *          ),
      *         )
      *     ),
      * )
@@ -211,9 +256,9 @@ class UserController extends Controller
             $userDto = new UserDTO($data);
             UserUpdateAction::execute($userDto, $user);
 
-            return response()->json(['message' => __('messages.common.success_update')], HttpResponse::HTTP_OK);
+            return response()->json(['status' => HttpResponse::HTTP_OK, 'message' => __('messages.common.success_update')], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
-            return response()->json(['message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
+            return response()->json(['status' => HttpResponse::HTTP_BAD_REQUEST, 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
         }
     }
 
@@ -239,10 +284,12 @@ class UserController extends Controller
      *
      *     @OA\Response(
      *         response=200,
-     *         description="User destroy successfully",
+     *         description="Data destroy successfully",
      *
      *         @OA\JsonContent(
-     *             @OA\Property(property="message", type="string")
+     *
+     *             @OA\Property(property="status", type="integer", example="200"),
+     *             @OA\Property(property="message", type="string", example="Data destroy successfully")
      *         )
      *     ),
      *
@@ -251,7 +298,9 @@ class UserController extends Controller
      *         description="Bad Request",
      *
      *         @OA\JsonContent(
-     *             @OA\Property(property="message", type="string")
+     *
+     *             @OA\Property(property="status", type="integer", example="400"),
+     *             @OA\Property(property="message", type="string", example="Bad Request")
      *         )
      *     ),
      * )
@@ -261,9 +310,9 @@ class UserController extends Controller
         try {
             $user->delete();
 
-            return response()->json(['message' => __('messages.common.success_destroy')], HttpResponse::HTTP_OK);
+            return response()->json(['status' => HttpResponse::HTTP_OK, 'message' => __('messages.common.success_destroy')], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
-            return response()->json(['message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
+            return response()->json(['status' => HttpResponse::HTTP_BAD_REQUEST, 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
         }
     }
 
@@ -275,26 +324,36 @@ class UserController extends Controller
      *     summary="Get form data info for user creation and updation",
      *     description="Retrieve data needed for creating and updation a user, with organizations and roles available for selection.",
      *     security={{"sanctum":{}}},
+     *
      *     @OA\Response(
      *         response=200,
-     *         description="Data retrieved successfully",
+     *         description="Get data successfully",
+     *
      *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="organizationsToSelect", type="array", @OA\Items(
-     *                 @OA\Property(property="id", type="integer"),
-     *                 @OA\Property(property="name", type="string")
-     *             )),
-     *             @OA\Property(property="rolesToSelect", type="array", @OA\Items(
-     *                 @OA\Property(property="id", type="integer"),
-     *                 @OA\Property(property="name", type="string")
-     *             ))
+     *
+     *             @OA\Property(property="status", type="integer", example="200"),
+     *             @OA\Property(property="message", type="string", example="Get data successfully"),
+     *             @OA\Property(property="data", type="array", @OA\Items(
+     *                 @OA\Property(property="organizationsToSelect", type="array", @OA\Items(
+     *                      @OA\Property(property="id", type="integer", example="1"),
+     *                      @OA\Property(property="name", type="string", example="Social Care")
+     *                 )),
+     *                 @OA\Property(property="rolesToSelect", type="array", @OA\Items(
+     *                     @OA\Property(property="id", type="integer", example="2"),
+     *                     @OA\Property(property="name", type="string", example="Gestor(a)")
+     *                 )),
+     *         )),
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=400,
      *         description="Bad Request",
+     *
      *         @OA\JsonContent(
-     *             @OA\Property(property="message", type="string")
+     *
+     *             @OA\Property(property="status", type="integer", example="400"),
+     *             @OA\Property(property="message", type="string", example="Bad Request")
      *         )
      *     ),
      * )
@@ -306,11 +365,15 @@ class UserController extends Controller
             $rolesToSelect = to_select_by_enum(Role::all(), RolesEnum::class);
 
             return response()->json([
-                'organizationsToSelect' => $organizationsToSelect,
-                'rolesToSelect' => $rolesToSelect
+                'status' => HttpResponse::HTTP_OK,
+                'message' => __('messages.common.success_view'),
+                'data' => [
+                    'organizationsToSelect' => $organizationsToSelect,
+                    'rolesToSelect' => $rolesToSelect,
+                ],
             ], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
-            return response()->json(['message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
+            return response()->json(['status' => HttpResponse::HTTP_BAD_REQUEST, 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
         }
     }
 
@@ -336,18 +399,36 @@ class UserController extends Controller
      *
      *     @OA\Response(
      *         response=200,
-     *         description="Get user successfully",
+     *         description="Get data successfully",
      *
      *         @OA\JsonContent(
-     *             @OA\Property(property="message", type="string")
+     *
+     *             @OA\Property(property="status", type="integer", example="200"),
+     *             @OA\Property(property="message", type="string", example="Get data successfully"),
+     *             @OA\Property(property="data", type="array", @OA\Items(
+     *                 @OA\Property(property="id", type="integer", example="1"),
+     *                 @OA\Property(property="name", type="string", example="Teste"),
+     *                 @OA\Property(property="email", type="string", example="teste@teste.com"),
+     *                 @OA\Property(property="roles_selected", type="array", @OA\Items(
+     *                     @OA\Property(property="id", type="integer", example="1"),
+     *                     @OA\Property(property="name", type="string", example="Gestor(a)")
+     *                 )),
+     *                 @OA\Property(property="organizations_selected", type="array", @OA\Items(
+     *                     @OA\Property(property="id", type="integer", example="2"),
+     *                     @OA\Property(property="name", type="string", example="Social Care")
+     *                 )),
+     *             )),
      *         )
      *     ),
      *
      *     @OA\Response(
      *         response=400,
      *         description="Bad Request",
+     *
      *         @OA\JsonContent(
-     *             @OA\Property(property="message", type="string")
+     *
+     *             @OA\Property(property="status", type="integer", example="400"),
+     *             @OA\Property(property="message", type="string", example="Bad Request")
      *         )
      *     ),
      * )
@@ -355,9 +436,13 @@ class UserController extends Controller
     public function getUser(User $user): JsonResponse
     {
         try {
-            return response()->json(['user' => UserResource::make($user)], HttpResponse::HTTP_OK);
+            return response()->json([
+                'status' => HttpResponse::HTTP_OK,
+                'message' => __('messages.common.success_view'),
+                'data' => UserResource::make($user),
+            ], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
-            return response()->json(['message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
+            return response()->json(['status' => HttpResponse::HTTP_BAD_REQUEST, 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
         }
     }
 }

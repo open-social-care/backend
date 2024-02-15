@@ -2,9 +2,11 @@
 
 return [
     'common' => [
+        'success_view' => 'Registro carregado com sucesso.',
         'success_create' => 'Registro criado com sucesso.',
         'success_update' => 'Registro atualizado com sucesso.',
         'success_destroy' => 'Registro apagado com sucesso.',
+        'error_validation_request' => 'Verifique os erros nos campos!',
     ],
 
     'auth' => [
