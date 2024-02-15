@@ -36,7 +36,7 @@ class ForgotPasswordControllerTest extends TestCase
     public function test_forgot_password_controller_validation_exception()
     {
         $payload = [
-            'email' => fake()->unique()->safeEmail(),
+            'email' => 'teste@teste.com',
         ];
 
         $response = $this->postJson(route('password.send-email'), $payload);
@@ -44,7 +44,7 @@ class ForgotPasswordControllerTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_UNPROCESSABLE_ENTITY);
 
         $responseData = $response->json();
-        $this->assertArrayHasKey('message', $responseData);
-        $this->assertEquals(__('validation.exists', ['attribute' => 'Email']), $responseData['message']);
+        $this->assertArrayHasKey('errors', $responseData);
+        $this->assertEquals(__('validation.exists', ['attribute' => 'Email']), $responseData['errors']['email'][0]);
     }
 }

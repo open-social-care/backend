@@ -75,9 +75,9 @@ class UserControllerTest extends TestCase
             'name' => 'Nome do Usuário',
             'email' => 'usuario@example.com',
             'password' => 'senha123',
-            'password_confirmation' => "senha123",
-        	'roles' => $roles->pluck('id')->toArray(),
-	        'organizations' => $organizations->pluck('id')->toArray()
+            'password_confirmation' => 'senha123',
+            'roles' => $roles->pluck('id')->toArray(),
+            'organizations' => $organizations->pluck('id')->toArray(),
         ];
 
         $response = $this->postJson(route('admin.users.store'), $userData);
@@ -117,7 +117,7 @@ class UserControllerTest extends TestCase
         $updatedUserData = [
             'name' => 'New name test',
             'roles' => $roles->pluck('id')->toArray(),
-            'organizations' => $organizations->pluck('id')->toArray()
+            'organizations' => $organizations->pluck('id')->toArray(),
         ];
 
         $updatedUserData = array_merge($user->toArray(), $updatedUserData);
@@ -173,8 +173,10 @@ class UserControllerTest extends TestCase
 
         $response->assertStatus(HttpResponse::HTTP_OK)
             ->assertJsonStructure([
-                'organizationsToSelect',
-                'rolesToSelect',
+                'data' => [
+                    'organizationsToSelect',
+                    'rolesToSelect',
+                ],
             ]);
 
         $response->assertJsonFragment(['organizationsToSelect' => to_select(Organization::all())]);
@@ -188,9 +190,17 @@ class UserControllerTest extends TestCase
         $response = $this->getJson(route('admin.users.get-user', $user->id));
 
         $response->assertStatus(HttpResponse::HTTP_OK)
-            ->assertJsonStructure(['user']);
+            ->assertJsonStructure([
+                'data' => [
+                    'id',
+                    'name',
+                    'email',
+                    'roles_selected',
+                    'organizations_selected',
+                ],
+            ]);
 
         $expectedUserData = UserResource::make($user)->jsonSerialize();
-        $response->assertJsonFragment(['user' => $expectedUserData]);
+        $response->assertJsonFragment(['data' => $expectedUserData]);
     }
 }
