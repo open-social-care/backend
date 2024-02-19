@@ -98,10 +98,6 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "error"
-                                        },
                                         "message": {
                                             "type": "string",
                                             "example": "Bad Request"
@@ -598,14 +594,6 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "success"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Successful response"
-                                        },
                                         "data": {
                                             "type": "array",
                                             "items": {
@@ -668,10 +656,6 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "error"
-                                        },
                                         "message": {
                                             "type": "string",
                                             "example": "Bad Request"
