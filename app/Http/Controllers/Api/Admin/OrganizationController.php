@@ -14,8 +14,6 @@ use App\Http\Resources\Api\Shared\PaginationResource;
 use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class OrganizationController extends Controller
@@ -47,11 +45,13 @@ class OrganizationController extends Controller
      *         @OA\JsonContent(
      *             type="object",
      *
+     *             @OA\Property(property="type", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Successful response"),
      *             @OA\Property(property="data", type="array", @OA\Items(
-     *                 @OA\Property(property="id", type="integer"),
-     *                 @OA\Property(property="name", type="string"),
-     *                 @OA\Property(property="document_type", type="string"),
-     *                 @OA\Property(property="document", type="string")
+     *                 @OA\Property(property="id", type="integer", example="1"),
+     *                 @OA\Property(property="name", type="string", example="Social Care"),
+     *                 @OA\Property(property="document_type", type="string", example="cpf"),
+     *                 @OA\Property(property="document", type="string", example="123.456.789-0")
      *             )),
      *             @OA\Property(property="pagination", type="object",
      *             @OA\Property(property="total", type="integer"),
@@ -69,7 +69,8 @@ class OrganizationController extends Controller
      *
      *         @OA\JsonContent(
      *
-     *             @OA\Property(property="message", type="string")
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Bad Request")
      *         )
      *     ),
      * )
@@ -81,11 +82,13 @@ class OrganizationController extends Controller
             $paginate = Organization::search($search)->paginate(30);
 
             return response()->json([
+                'type' => 'success',
+                'message' => __('messages.common.success_view'),
                 'data' => OrganizationListResource::collection($paginate),
                 'pagination' => PaginationResource::make($paginate),
             ], HttpResponse::HTTP_OK);
-        } catch (\Exception|NotFoundExceptionInterface|ContainerExceptionInterface $e) {
-            return response()->json(['message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
+        } catch (\Exception $e) {
+            return response()->json(['type' => 'error', 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
         }
     }
 
@@ -105,10 +108,10 @@ class OrganizationController extends Controller
      *         @OA\JsonContent(
      *             type="object",
      *
-     *             @OA\Property(property="name", type="string"),
-     *             @OA\Property(property="phone", type="string", description="(00) 0000-0000"),
-     *             @OA\Property(property="document_type", type="string", description="CNPJ/CPF"),
-     *             @OA\Property(property="document", type="string", description="00.000.000/0000-00 / 000.000.000-00"),
+     *             @OA\Property(property="name", type="string", example="Social Care"),
+     *             @OA\Property(property="phone", type="string", example="(42) 91234-5789", description="(00) 00000-0000"),
+     *             @OA\Property(property="document_type", type="string", example="CPF", description="CNPJ or CPF"),
+     *             @OA\Property(property="document", type="string", example="123.456.789-0", description="00.000.000/0000-00 / 000.000.000-00"),
      *         )
      *     ),
      *
@@ -118,9 +121,27 @@ class OrganizationController extends Controller
      *
      *         @OA\JsonContent(
      *
-     *             @OA\Property(property="message", type="string")
+     *             @OA\Property(property="type", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Organization created successfully")
      *         )
      *     ),
+     *
+     *     @OA\Response(
+     *         response=422,
+     *         description="Unprocessable Entity",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Unprocessable Entity"),
+     *             @OA\Property(property="errors", type="object",
+     *                @OA\Property(property="name", type="array", description="field with errors",
+     *
+     *                  @OA\Items(type="string", description="message error", example="The field name is required")
+     *             )
+     *           ),
+     *         )
+     *      ),
      *
      *     @OA\Response(
      *         response=400,
@@ -128,7 +149,8 @@ class OrganizationController extends Controller
      *
      *         @OA\JsonContent(
      *
-     *             @OA\Property(property="message", type="string")
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Bad Request")
      *         )
      *     ),
      * )
@@ -141,9 +163,9 @@ class OrganizationController extends Controller
             $dto = new OrganizationDTO($data);
             OrganizationCreateAction::execute($dto);
 
-            return response()->json(['message' => __('messages.common.success_create')], HttpResponse::HTTP_OK);
+            return response()->json(['type' => 'success', 'message' => __('messages.common.success_create')], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
-            return response()->json(['message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
+            return response()->json(['type' => 'error', 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
         }
     }
 
@@ -172,13 +194,13 @@ class OrganizationController extends Controller
      *         description="Organization data",
      *
      *         @OA\JsonContent(
-     * *             type="object",
-     * *
-     * *             @OA\Property(property="name", type="string"),
-     * *             @OA\Property(property="phone", type="string", description="(00) 0000-0000"),
-     * *             @OA\Property(property="document_type", type="string", description="CNPJ/CPF"),
-     * *             @OA\Property(property="document", type="string", description="00.000.000/0000-00 / 000.000.000-00"),
-     * *         )
+     *             type="object",
+     *
+     *             @OA\Property(property="name", type="string", example="Social Care"),
+     *             @OA\Property(property="phone", type="string", example="(42) 91234-5789", description="(00) 00000-0000"),
+     *             @OA\Property(property="document_type", type="string", example="CPF", description="CNPJ or CPF"),
+     *             @OA\Property(property="document", type="string", example="123.456.789-0", description="00.000.000/0000-00 / 000.000.000-00"),
+     *         )
      *     ),
      *
      *     @OA\Response(
@@ -187,9 +209,27 @@ class OrganizationController extends Controller
      *
      *         @OA\JsonContent(
      *
-     *             @OA\Property(property="message", type="string")
+     *             @OA\Property(property="type", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Organization updated successfully")
      *         )
      *     ),
+     *
+     *     @OA\Response(
+     *         response=422,
+     *         description="Unprocessable Entity",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Unprocessable Entity"),
+     *             @OA\Property(property="errors", type="object",
+     *                @OA\Property(property="name", type="array", description="field with errors",
+     *
+     *                  @OA\Items(type="string", description="message error", example="The field name is required")
+     *             )
+     *           ),
+     *         )
+     *      ),
      *
      *     @OA\Response(
      *         response=400,
@@ -197,7 +237,8 @@ class OrganizationController extends Controller
      *
      *         @OA\JsonContent(
      *
-     *             @OA\Property(property="message", type="string")
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Bad Request")
      *         )
      *     ),
      * )
@@ -210,9 +251,9 @@ class OrganizationController extends Controller
             $dto = new OrganizationDTO($data);
             OrganizationUpdateAction::execute($dto, $organization);
 
-            return response()->json(['message' => __('messages.common.success_update')], HttpResponse::HTTP_OK);
+            return response()->json(['type' => 'success', 'message' => __('messages.common.success_update')], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
-            return response()->json(['message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
+            return response()->json(['type' => 'error', 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
         }
     }
 
@@ -242,7 +283,8 @@ class OrganizationController extends Controller
      *
      *         @OA\JsonContent(
      *
-     *             @OA\Property(property="message", type="string")
+     *             @OA\Property(property="type", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Organization destroy successfully")
      *         )
      *     ),
      *
@@ -252,7 +294,8 @@ class OrganizationController extends Controller
      *
      *         @OA\JsonContent(
      *
-     *             @OA\Property(property="message", type="string")
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Bad Request")
      *         )
      *     ),
      * )
@@ -262,9 +305,9 @@ class OrganizationController extends Controller
         try {
             $organization->delete();
 
-            return response()->json(['message' => __('messages.common.success_destroy')], HttpResponse::HTTP_OK);
+            return response()->json(['type' => 'success', 'message' => __('messages.common.success_destroy')], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
-            return response()->json(['message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
+            return response()->json(['type' => 'error', 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
         }
     }
 
@@ -295,7 +338,7 @@ class OrganizationController extends Controller
      *         @OA\JsonContent(
      * *             type="object",
      * *
-     *             @OA\Property(property="users", type="array", @OA\Items(type="integer")),
+     *             @OA\Property(property="users", type="array", @OA\Items(type="integer", example="1")),
      * *         )
      *     ),
      *
@@ -305,9 +348,27 @@ class OrganizationController extends Controller
      *
      *         @OA\JsonContent(
      *
-     *             @OA\Property(property="message", type="string")
+     *             @OA\Property(property="type", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Updated successfully")
      *         )
      *     ),
+     *
+     *     @OA\Response(
+     *         response=422,
+     *         description="Unprocessable Entity",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Unprocessable Entity"),
+     *             @OA\Property(property="errors", type="object",
+     *                @OA\Property(property="users", type="array", description="field with errors",
+     *
+     *                  @OA\Items(type="string", description="message error", example="The field users is required")
+     *             )
+     *           ),
+     *         )
+     *      ),
      *
      *     @OA\Response(
      *         response=400,
@@ -315,7 +376,8 @@ class OrganizationController extends Controller
      *
      *         @OA\JsonContent(
      *
-     *             @OA\Property(property="message", type="string")
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Bad Request")
      *         )
      *     ),
      * )
@@ -326,9 +388,9 @@ class OrganizationController extends Controller
             $data = $request->validated();
             $organization->users()->sync($data['users']);
 
-            return response()->json(['message' => __('messages.common.success_update')], HttpResponse::HTTP_OK);
+            return response()->json(['type' => 'success', 'message' => __('messages.common.success_update')], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
-            return response()->json(['message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
+            return response()->json(['type' => 'error', 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
         }
     }
 
@@ -370,9 +432,13 @@ class OrganizationController extends Controller
      *         @OA\JsonContent(
      *             type="object",
      *
+     *             @OA\Property(property="type", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Successful response"),
      *             @OA\Property(property="data", type="array", @OA\Items(
-     *                 @OA\Property(property="name", type="string"),
-     *                 @OA\Property(property="email", type="string")
+     *                 @OA\Property(property="id", type="integer", example="1"),
+     *                 @OA\Property(property="name", type="string", example="Teste"),
+     *                 @OA\Property(property="email", type="string", example="teste@teste.com"),
+     *                 @OA\Property(property="roles", type="array", @OA\Items(type="string", example="Gestor(a)")),
      *             )),
      *             @OA\Property(property="pagination", type="object",
      *             @OA\Property(property="total", type="integer"),
@@ -390,7 +456,8 @@ class OrganizationController extends Controller
      *
      *         @OA\JsonContent(
      *
-     *             @OA\Property(property="message", type="string")
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Bad Request"),
      *         )
      *     ),
      * )
@@ -407,11 +474,13 @@ class OrganizationController extends Controller
                 ->paginate(30);
 
             return response()->json([
+                'type' => 'success',
+                'message' => __('messages.common.success_view'),
                 'data' => UserListResource::collection($paginate),
                 'pagination' => PaginationResource::make($paginate),
             ], HttpResponse::HTTP_OK);
-        } catch (\Exception|NotFoundExceptionInterface|ContainerExceptionInterface $e) {
-            return response()->json(['message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
+        } catch (\Exception $e) {
+            return response()->json(['type' => 'error', 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
         }
     }
 }

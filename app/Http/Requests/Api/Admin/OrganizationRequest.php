@@ -5,14 +5,33 @@ namespace App\Http\Requests\Api\Admin;
 use App\Enums\DocumentTypesEnum;
 use App\Support\DocumentValidator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class OrganizationRequest extends FormRequest
 {
     public function __construct()
     {
         $this->registerCustomValidations();
+    }
+
+    /**
+     * Handle a failed validation attempt.
+     *
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator): void
+    {
+        $response = response()->json([
+            'type' => 'error',
+            'message' => __('messages.common.error_validation_request'),
+            'errors' => $validator->errors(),
+        ], HttpResponse::HTTP_UNPROCESSABLE_ENTITY);
+
+        throw new HttpResponseException($response);
     }
 
     /**

@@ -31,21 +31,33 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "200"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Successful response"
+                                        },
                                         "data": {
                                             "type": "array",
                                             "items": {
                                                 "properties": {
                                                     "id": {
-                                                        "type": "integer"
+                                                        "type": "integer",
+                                                        "example": "1"
                                                     },
                                                     "name": {
-                                                        "type": "string"
+                                                        "type": "string",
+                                                        "example": "Social Care"
                                                     },
                                                     "document_type": {
-                                                        "type": "string"
+                                                        "type": "string",
+                                                        "example": "cpf"
                                                     },
                                                     "document": {
-                                                        "type": "string"
+                                                        "type": "string",
+                                                        "example": "123.456.789-0"
                                                     }
                                                 },
                                                 "type": "object"
@@ -86,8 +98,13 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "400"
+                                        },
                                         "message": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "example": "Bad Request"
                                         }
                                     },
                                     "type": "object"
@@ -117,19 +134,23 @@
                             "schema": {
                                 "properties": {
                                     "name": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "example": "Social Care"
                                     },
                                     "phone": {
-                                        "description": "(00) 0000-0000",
-                                        "type": "string"
+                                        "description": "(00) 00000-0000",
+                                        "type": "string",
+                                        "example": "(42) 91234-5789"
                                     },
                                     "document_type": {
-                                        "description": "CNPJ/CPF",
-                                        "type": "string"
+                                        "description": "CNPJ or CPF",
+                                        "type": "string",
+                                        "example": "CPF"
                                     },
                                     "document": {
                                         "description": "00.000.000/0000-00 / 000.000.000-00",
-                                        "type": "string"
+                                        "type": "string",
+                                        "example": "123.456.789-0"
                                     }
                                 },
                                 "type": "object"
@@ -144,8 +165,47 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "200"
+                                        },
                                         "message": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "example": "Organization created successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "422"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unprocessable Entity"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "name": {
+                                                    "description": "field with errors",
+                                                    "type": "array",
+                                                    "items": {
+                                                        "description": "message error",
+                                                        "type": "string",
+                                                        "example": "The field name is required"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
                                         }
                                     },
                                     "type": "object"
@@ -159,8 +219,13 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "200"
+                                        },
                                         "message": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "example": "Bad Request"
                                         }
                                     },
                                     "type": "object"
@@ -203,19 +268,23 @@
                             "schema": {
                                 "properties": {
                                     "name": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "example": "Social Care"
                                     },
                                     "phone": {
-                                        "description": "(00) 0000-0000",
-                                        "type": "string"
+                                        "description": "(00) 00000-0000",
+                                        "type": "string",
+                                        "example": "(42) 91234-5789"
                                     },
                                     "document_type": {
-                                        "description": "CNPJ/CPF",
-                                        "type": "string"
+                                        "description": "CNPJ or CPF",
+                                        "type": "string",
+                                        "example": "CPF"
                                     },
                                     "document": {
                                         "description": "00.000.000/0000-00 / 000.000.000-00",
-                                        "type": "string"
+                                        "type": "string",
+                                        "example": "123.456.789-0"
                                     }
                                 },
                                 "type": "object"
@@ -230,8 +299,47 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "200"
+                                        },
                                         "message": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "example": "Organization updated successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "422"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unprocessable Entity"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "name": {
+                                                    "description": "field with errors",
+                                                    "type": "array",
+                                                    "items": {
+                                                        "description": "message error",
+                                                        "type": "string",
+                                                        "example": "The field name is required"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
                                         }
                                     },
                                     "type": "object"
@@ -245,8 +353,13 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "400"
+                                        },
                                         "message": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "example": "Bad Request"
                                         }
                                     },
                                     "type": "object"
@@ -286,8 +399,13 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "400"
+                                        },
                                         "message": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "example": "Organization destroy successfully"
                                         }
                                     },
                                     "type": "object"
@@ -301,8 +419,13 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "400"
+                                        },
                                         "message": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "example": "Bad Request"
                                         }
                                     },
                                     "type": "object"
@@ -347,7 +470,8 @@
                                     "users": {
                                         "type": "array",
                                         "items": {
-                                            "type": "integer"
+                                            "type": "integer",
+                                            "example": "1"
                                         }
                                     }
                                 },
@@ -363,8 +487,47 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "200"
+                                        },
                                         "message": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "example": "Updated successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "422"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unprocessable Entity"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "users": {
+                                                    "description": "field with errors",
+                                                    "type": "array",
+                                                    "items": {
+                                                        "description": "message error",
+                                                        "type": "string",
+                                                        "example": "The field users is required"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
                                         }
                                     },
                                     "type": "object"
@@ -378,8 +541,13 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "400"
+                                        },
                                         "message": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "example": "Bad Request"
                                         }
                                     },
                                     "type": "object"
@@ -430,15 +598,36 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "200"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Successful response"
+                                        },
                                         "data": {
                                             "type": "array",
                                             "items": {
                                                 "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": "1"
+                                                    },
                                                     "name": {
-                                                        "type": "string"
+                                                        "type": "string",
+                                                        "example": "Teste"
                                                     },
                                                     "email": {
-                                                        "type": "string"
+                                                        "type": "string",
+                                                        "example": "teste@teste.com"
+                                                    },
+                                                    "roles": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "string",
+                                                            "example": "Gestor(a)"
+                                                        }
                                                     }
                                                 },
                                                 "type": "object"
@@ -479,8 +668,13 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "400"
+                                        },
                                         "message": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "example": "Bad Request"
                                         }
                                     },
                                     "type": "object"
