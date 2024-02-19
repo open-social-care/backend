@@ -98,6 +98,10 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "400"
+                                        },
                                         "message": {
                                             "type": "string",
                                             "example": "Bad Request"
@@ -161,9 +165,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "success"
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "200"
                                         },
                                         "message": {
                                             "type": "string",
@@ -181,9 +185,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "error"
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "422"
                                         },
                                         "message": {
                                             "type": "string",
@@ -215,9 +219,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "error"
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "200"
                                         },
                                         "message": {
                                             "type": "string",
@@ -295,9 +299,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "success"
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "200"
                                         },
                                         "message": {
                                             "type": "string",
@@ -315,9 +319,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "error"
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "422"
                                         },
                                         "message": {
                                             "type": "string",
@@ -349,9 +353,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "error"
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "400"
                                         },
                                         "message": {
                                             "type": "string",
@@ -395,9 +399,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "success"
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "400"
                                         },
                                         "message": {
                                             "type": "string",
@@ -415,9 +419,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "error"
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "400"
                                         },
                                         "message": {
                                             "type": "string",
@@ -483,9 +487,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "success"
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "200"
                                         },
                                         "message": {
                                             "type": "string",
@@ -503,9 +507,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "error"
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "422"
                                         },
                                         "message": {
                                             "type": "string",
@@ -537,9 +541,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "error"
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "400"
                                         },
                                         "message": {
                                             "type": "string",
@@ -594,115 +598,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "id": {
-                                                        "type": "integer",
-                                                        "example": "1"
-                                                    },
-                                                    "name": {
-                                                        "type": "string",
-                                                        "example": "Teste"
-                                                    },
-                                                    "email": {
-                                                        "type": "string",
-                                                        "example": "teste@teste.com"
-                                                    },
-                                                    "roles": {
-                                                        "type": "array",
-                                                        "items": {
-                                                            "type": "string",
-                                                            "example": "Gestor(a)"
-                                                        }
-                                                    }
-                                                },
-                                                "type": "object"
-                                            }
-                                        },
-                                        "pagination": {
-                                            "properties": {
-                                                "total": {
-                                                    "type": "integer"
-                                                },
-                                                "per_page": {
-                                                    "type": "integer"
-                                                },
-                                                "current_page": {
-                                                    "type": "integer"
-                                                },
-                                                "last_page": {
-                                                    "type": "integer"
-                                                },
-                                                "from": {
-                                                    "type": "integer"
-                                                },
-                                                "to": {
-                                                    "type": "integer"
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Bad Request"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
-            }
-        },
-        "/api/admin/users": {
-            "get": {
-                "tags": [
-                    "Admin/User"
-                ],
-                "summary": "Get a list of users",
-                "description": "Retrieve a list of users.",
-                "operationId": "AdminGetUsers",
-                "parameters": [
-                    {
-                        "name": "q",
-                        "in": "query",
-                        "description": "The search query parameter",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful response",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "success"
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "200"
                                         },
                                         "message": {
                                             "type": "string",
@@ -770,13 +668,127 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "error"
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "400"
                                         },
                                         "message": {
                                             "type": "string",
                                             "example": "Bad Request"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/users": {
+            "get": {
+                "tags": [
+                    "Admin/User"
+                ],
+                "summary": "Get a list of users",
+                "description": "Retrieve a list of users.",
+                "operationId": "AdminGetUsers",
+                "parameters": [
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "description": "The search query parameter",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "integer"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": "1"
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Teste"
+                                                    },
+                                                    "email": {
+                                                        "type": "string",
+                                                        "example": "teste@teste.com"
+                                                    },
+                                                    "roles": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "string",
+                                                            "example": "Gestor(a)"
+                                                        }
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "pagination": {
+                                            "properties": {
+                                                "total": {
+                                                    "type": "integer"
+                                                },
+                                                "per_page": {
+                                                    "type": "integer"
+                                                },
+                                                "current_page": {
+                                                    "type": "integer"
+                                                },
+                                                "last_page": {
+                                                    "type": "integer"
+                                                },
+                                                "from": {
+                                                    "type": "integer"
+                                                },
+                                                "to": {
+                                                    "type": "integer"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "integer"
+                                        },
+                                        "message": {
+                                            "type": "string"
                                         }
                                     },
                                     "type": "object"
@@ -850,9 +862,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "success"
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "200"
                                         },
                                         "message": {
                                             "type": "string",
@@ -870,9 +882,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "error"
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "400"
                                         },
                                         "message": {
                                             "type": "string",
@@ -890,9 +902,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "error"
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "422"
                                         },
                                         "message": {
                                             "type": "string",
@@ -952,9 +964,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "success"
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "200"
                                         },
                                         "message": {
                                             "type": "string",
@@ -1024,9 +1036,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "error"
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "400"
                                         },
                                         "message": {
                                             "type": "string",
@@ -1115,9 +1127,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "success"
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "200"
                                         },
                                         "message": {
                                             "type": "string",
@@ -1135,9 +1147,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "error"
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "400"
                                         },
                                         "message": {
                                             "type": "string",
@@ -1155,9 +1167,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "error"
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "422"
                                         },
                                         "message": {
                                             "type": "string",
@@ -1215,9 +1227,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "success"
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "200"
                                         },
                                         "message": {
                                             "type": "string",
@@ -1235,9 +1247,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "error"
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "400"
                                         },
                                         "message": {
                                             "type": "string",
@@ -1272,9 +1284,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "success"
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "200"
                                         },
                                         "message": {
                                             "type": "string",
@@ -1332,9 +1344,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "error"
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "400"
                                         },
                                         "message": {
                                             "type": "string",
@@ -1390,9 +1402,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "success"
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "200"
                                         },
                                         "message": {
                                             "type": "string",
@@ -1414,9 +1426,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "error"
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "401"
                                         },
                                         "message": {
                                             "type": "string",
@@ -1434,9 +1446,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "error"
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "400"
                                         },
                                         "message": {
                                             "type": "string",
@@ -1466,9 +1478,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "success"
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "200"
                                         },
                                         "message": {
                                             "type": "string",
@@ -1486,9 +1498,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "error"
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "400"
                                         },
                                         "message": {
                                             "type": "string",
@@ -1539,9 +1551,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "success"
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "200"
                                         },
                                         "message": {
                                             "type": "string",
@@ -1559,9 +1571,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "error"
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "400"
                                         },
                                         "message": {
                                             "type": "string",
@@ -1617,9 +1629,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "success"
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "200"
                                         },
                                         "message": {
                                             "type": "string",
@@ -1637,9 +1649,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "error"
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "422"
                                         },
                                         "message": {
                                             "type": "string",
@@ -1657,9 +1669,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "error"
+                                        "status": {
+                                            "type": "integer",
+                                            "example": "400"
                                         },
                                         "message": {
                                             "type": "string",
@@ -1686,4 +1698,3 @@
         }
     }
 }
-
