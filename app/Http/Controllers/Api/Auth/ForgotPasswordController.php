@@ -40,7 +40,7 @@ class ForgotPasswordController extends Controller
      *
      *          @OA\JsonContent(
      *
-     *              @OA\Property(property="status", type="integer", example="200"),
+     *              @OA\Property(property="type", type="string", example="success"),
      *              @OA\Property(property="message", type="string", example="Password recuperation send Successfully")
      *          )
      *      ),
@@ -51,7 +51,7 @@ class ForgotPasswordController extends Controller
      *
      *          @OA\JsonContent(
      *
-     *              @OA\Property(property="status", type="integer", example="400"),
+     *              @OA\Property(property="type", type="string", example="error"),
      *              @OA\Property(property="message", type="string", example="Bad request")
      *          )
      *      ),
@@ -66,9 +66,9 @@ class ForgotPasswordController extends Controller
 
             Mail::to($request->email)->send(new SendCodeResetPassword($codeData->token));
 
-            return response()->json(['status' => HttpResponse::HTTP_OK, 'message' => __('passwords.sent')], HttpResponse::HTTP_OK);
+            return response()->json(['type' => 'success', 'message' => __('passwords.sent')], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
-            return response()->json(['status' => HttpResponse::HTTP_BAD_REQUEST, 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
+            return response()->json(['type' => 'error', 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
         }
     }
 }

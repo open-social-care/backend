@@ -44,7 +44,7 @@ class AuthController extends Controller
      *
      *          @OA\JsonContent(
      *
-     *              @OA\Property(property="status", type="integer", example="200"),
+     *              @OA\Property(property="type", type="string", example="success"),
      *              @OA\Property(property="message", type="string", example="Login Successfully"),
      *              @OA\Property(property="token", type="string", example="1|Lkhuda45dajdanfi45")
      *          )
@@ -56,7 +56,7 @@ class AuthController extends Controller
      *
      *          @OA\JsonContent(
      *
-     *              @OA\Property(property="status", type="integer", example="401"),
+     *              @OA\Property(property="type", type="string", example="error"),
      *              @OA\Property(property="message", type="string", example="Unauthorized")
      *          )
      *      ),
@@ -67,7 +67,7 @@ class AuthController extends Controller
      *
      *          @OA\JsonContent(
      *
-     *              @OA\Property(property="status", type="integer", example="400"),
+     *              @OA\Property(property="type", type="string", example="error"),
      *              @OA\Property(property="message", type="string", example="Bad request")
      *          )
      *      ),
@@ -82,19 +82,19 @@ class AuthController extends Controller
                 $token = $request->user()->createToken('auth-token')->plainTextToken;
 
                 return response()->json([
-                    'status' => HttpResponse::HTTP_OK,
+                    'type' => 'success',
                     'message' => __('messages.auth.login_success'),
                     'token' => $token,
                 ], HttpResponse::HTTP_OK);
             }
 
             return response()->json([
-                'status' => HttpResponse::HTTP_UNAUTHORIZED,
+                'type' => 'error',
                 'message' => __('messages.auth.login_invalid'),
             ], HttpResponse::HTTP_UNAUTHORIZED);
         } catch (\Exception $e) {
             return response()->json([
-                'status' => HttpResponse::HTTP_BAD_REQUEST,
+                'type' => 'error',
                 'message' => $e->getMessage(),
             ], HttpResponse::HTTP_BAD_REQUEST);
         }
@@ -115,7 +115,7 @@ class AuthController extends Controller
      *
      *          @OA\JsonContent(
      *
-     *              @OA\Property(property="status", type="integer", example="200"),
+     *              @OA\Property(property="type", type="string", example="success"),
      *              @OA\Property(property="message", type="string", example="Logout Successfully")
      *          )
      *      ),
@@ -126,7 +126,7 @@ class AuthController extends Controller
      *
      *          @OA\JsonContent(
      *
-     *              @OA\Property(property="status", type="integer", example="400"),
+     *              @OA\Property(property="type", type="string", example="error"),
      *              @OA\Property(property="message", type="string", example="Bad request")
      *          )
      *      ),
@@ -138,12 +138,12 @@ class AuthController extends Controller
             $request->user()->tokens()->delete();
 
             return response()->json([
-                'status' => HttpResponse::HTTP_OK,
+                'type' => 'success',
                 'message' => __('messages.auth.logout_success'),
             ], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
             return response()->json([
-                'status' => HttpResponse::HTTP_BAD_REQUEST,
+                'type' => 'error',
                 'message' => $e->getMessage(),
             ], HttpResponse::HTTP_BAD_REQUEST);
         }

@@ -53,7 +53,7 @@ class ResetPasswordController extends Controller
      *
      *          @OA\JsonContent(
      *
-     *              @OA\Property(property="status", type="integer", example="200"),
+     *              @OA\Property(property="type", type="string", example="success"),
      *              @OA\Property(property="message", type="string", example="Password reset Successfully")
      *          )
      *      ),
@@ -64,7 +64,7 @@ class ResetPasswordController extends Controller
      *
      *          @OA\JsonContent(
      *
-     *              @OA\Property(property="status", type="integer", example="422"),
+     *              @OA\Property(property="type", type="string", example="error"),
      *              @OA\Property(property="message", type="string", example="Unprocessable Entity")
      *          )
      *      ),
@@ -75,7 +75,7 @@ class ResetPasswordController extends Controller
      *
      *          @OA\JsonContent(
      *
-     *              @OA\Property(property="status", type="integer", example="400"),
+     *              @OA\Property(property="type", type="string", example="error"),
      *              @OA\Property(property="message", type="string", example="Bad request")
      *          )
      *      )
@@ -88,7 +88,7 @@ class ResetPasswordController extends Controller
 
             if ($passwordReset->isExpired()) {
                 return response()->json([
-                    'status' => HttpResponse::HTTP_UNPROCESSABLE_ENTITY,
+                    'type' => 'error',
                     'message' => __('passwords.token_is_invalid'),
                 ], HttpResponse::HTTP_UNPROCESSABLE_ENTITY);
             }
@@ -103,11 +103,11 @@ class ResetPasswordController extends Controller
             $passwordReset->delete();
 
             return response()->json([
-                'status' => HttpResponse::HTTP_OK,
+                'type' => 'success',
                 'message' => __('messages.auth.password.password_reset_success'),
             ], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
-            return response()->json(['status' => HttpResponse::HTTP_BAD_REQUEST, 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
+            return response()->json(['type' => 'error', 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
         }
     }
 }

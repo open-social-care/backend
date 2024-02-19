@@ -46,8 +46,8 @@ class UserController extends Controller
      *         @OA\JsonContent(
      *             type="object",
      *
-     *             @OA\Property(property="status", type="integer"),
-     *             @OA\Property(property="message", type="string"),
+     *             @OA\Property(property="type", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Successful response"),
      *             @OA\Property(property="data", type="array", @OA\Items(
      *                 @OA\Property(property="id", type="integer", example="1"),
      *                 @OA\Property(property="name", type="string", example="Teste"),
@@ -70,8 +70,8 @@ class UserController extends Controller
      *
      *         @OA\JsonContent(
      *
-     *             @OA\Property(property="status", type="integer"),
-     *             @OA\Property(property="message", type="string")
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Bad Request")
      *         )
      *     ),
      * )
@@ -83,13 +83,13 @@ class UserController extends Controller
             $paginate = User::search($search)->paginate(30);
 
             return response()->json([
-                'status' => HttpResponse::HTTP_OK,
+                'type' => 'success',
                 'message' => __('messages.common.success_view'),
                 'data' => UserListResource::collection($paginate),
                 'pagination' => PaginationResource::make($paginate),
             ], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
-            return response()->json(['status' => HttpResponse::HTTP_BAD_REQUEST, 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
+            return response()->json(['type' => 'error', 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
         }
     }
 
@@ -124,7 +124,7 @@ class UserController extends Controller
      *
      *         @OA\JsonContent(
      *
-     *             @OA\Property(property="status", type="integer", example="200"),
+     *             @OA\Property(property="type", type="string", example="success"),
      *             @OA\Property(property="message", type="string", example="User created successfully")
      *         )
      *     ),
@@ -135,7 +135,7 @@ class UserController extends Controller
      *
      *         @OA\JsonContent(
      *
-     *             @OA\Property(property="status", type="integer", example="400"),
+     *             @OA\Property(property="type", type="string", example="error"),
      *             @OA\Property(property="message", type="string", example="Bad Request")
      *         )
      *     ),
@@ -146,7 +146,7 @@ class UserController extends Controller
      *
      *         @OA\JsonContent(
      *
-     *             @OA\Property(property="status", type="integer", example="422"),
+     *             @OA\Property(property="type", type="string", example="error"),
      *             @OA\Property(property="message", type="string", example="Unprocessable Entity"),
      *             @OA\Property(property="errors", type="object",
      *               @OA\Property(property="email", type="array", description="field with errors",
@@ -166,9 +166,9 @@ class UserController extends Controller
             $userDto = new UserDTO($data);
             UserCreateAction::execute($userDto);
 
-            return response()->json(['status' => HttpResponse::HTTP_OK, 'message' => __('messages.common.success_create')], HttpResponse::HTTP_OK);
+            return response()->json(['type' => 'success', 'message' => __('messages.common.success_create')], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
-            return response()->json(['status' => HttpResponse::HTTP_BAD_REQUEST, 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
+            return response()->json(['type' => 'error', 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
         }
     }
 
@@ -214,7 +214,7 @@ class UserController extends Controller
      *
      *         @OA\JsonContent(
      *
-     *             @OA\Property(property="status", type="integer", example="200"),
+     *             @OA\Property(property="type", type="string", example="success"),
      *             @OA\Property(property="message", type="string", example="Data updated successfully")
      *         )
      *     ),
@@ -225,7 +225,7 @@ class UserController extends Controller
      *
      *         @OA\JsonContent(
      *
-     *             @OA\Property(property="status", type="integer", example="400"),
+     *             @OA\Property(property="type", type="string", example="error"),
      *             @OA\Property(property="message", type="string", example="Bad Request")
      *         )
      *     ),
@@ -236,7 +236,7 @@ class UserController extends Controller
      *
      *         @OA\JsonContent(
      *
-     *             @OA\Property(property="status", type="integer", example="422"),
+     *             @OA\Property(property="type", type="string", example="error"),
      *             @OA\Property(property="message", type="string", example="Unprocessable Entity"),
      *             @OA\Property(property="errors", type="object",
      *               @OA\Property(property="email", type="array", description="field with errors",
@@ -256,9 +256,9 @@ class UserController extends Controller
             $userDto = new UserDTO($data);
             UserUpdateAction::execute($userDto, $user);
 
-            return response()->json(['status' => HttpResponse::HTTP_OK, 'message' => __('messages.common.success_update')], HttpResponse::HTTP_OK);
+            return response()->json(['type' => 'success', 'message' => __('messages.common.success_update')], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
-            return response()->json(['status' => HttpResponse::HTTP_BAD_REQUEST, 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
+            return response()->json(['type' => 'error', 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
         }
     }
 
@@ -288,7 +288,7 @@ class UserController extends Controller
      *
      *         @OA\JsonContent(
      *
-     *             @OA\Property(property="status", type="integer", example="200"),
+     *             @OA\Property(property="type", type="string", example="success"),
      *             @OA\Property(property="message", type="string", example="Data destroy successfully")
      *         )
      *     ),
@@ -299,7 +299,7 @@ class UserController extends Controller
      *
      *         @OA\JsonContent(
      *
-     *             @OA\Property(property="status", type="integer", example="400"),
+     *             @OA\Property(property="type", type="string", example="error"),
      *             @OA\Property(property="message", type="string", example="Bad Request")
      *         )
      *     ),
@@ -310,9 +310,9 @@ class UserController extends Controller
         try {
             $user->delete();
 
-            return response()->json(['status' => HttpResponse::HTTP_OK, 'message' => __('messages.common.success_destroy')], HttpResponse::HTTP_OK);
+            return response()->json(['type' => 'success', 'message' => __('messages.common.success_destroy')], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
-            return response()->json(['status' => HttpResponse::HTTP_BAD_REQUEST, 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
+            return response()->json(['type' => 'error', 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
         }
     }
 
@@ -331,7 +331,7 @@ class UserController extends Controller
      *
      *         @OA\JsonContent(
      *
-     *             @OA\Property(property="status", type="integer", example="200"),
+     *             @OA\Property(property="type", type="string", example="success"),
      *             @OA\Property(property="message", type="string", example="Get data successfully"),
      *             @OA\Property(property="data", type="array", @OA\Items(
      *                 @OA\Property(property="organizationsToSelect", type="array", @OA\Items(
@@ -352,7 +352,7 @@ class UserController extends Controller
      *
      *         @OA\JsonContent(
      *
-     *             @OA\Property(property="status", type="integer", example="400"),
+     *             @OA\Property(property="type", type="string", example="error"),
      *             @OA\Property(property="message", type="string", example="Bad Request")
      *         )
      *     ),
@@ -365,7 +365,7 @@ class UserController extends Controller
             $rolesToSelect = to_select_by_enum(Role::all(), RolesEnum::class);
 
             return response()->json([
-                'status' => HttpResponse::HTTP_OK,
+                'type' => 'success',
                 'message' => __('messages.common.success_view'),
                 'data' => [
                     'organizationsToSelect' => $organizationsToSelect,
@@ -373,7 +373,7 @@ class UserController extends Controller
                 ],
             ], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
-            return response()->json(['status' => HttpResponse::HTTP_BAD_REQUEST, 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
+            return response()->json(['type' => 'error', 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
         }
     }
 
@@ -403,7 +403,7 @@ class UserController extends Controller
      *
      *         @OA\JsonContent(
      *
-     *             @OA\Property(property="status", type="integer", example="200"),
+     *             @OA\Property(property="type", type="string", example="success"),
      *             @OA\Property(property="message", type="string", example="Get data successfully"),
      *             @OA\Property(property="data", type="array", @OA\Items(
      *                 @OA\Property(property="id", type="integer", example="1"),
@@ -427,7 +427,7 @@ class UserController extends Controller
      *
      *         @OA\JsonContent(
      *
-     *             @OA\Property(property="status", type="integer", example="400"),
+     *             @OA\Property(property="type", type="string", example="error"),
      *             @OA\Property(property="message", type="string", example="Bad Request")
      *         )
      *     ),
@@ -437,12 +437,12 @@ class UserController extends Controller
     {
         try {
             return response()->json([
-                'status' => HttpResponse::HTTP_OK,
+                'type' => 'success',
                 'message' => __('messages.common.success_view'),
                 'data' => UserResource::make($user),
             ], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
-            return response()->json(['status' => HttpResponse::HTTP_BAD_REQUEST, 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
+            return response()->json(['type' => 'error', 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
         }
     }
 }
