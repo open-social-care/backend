@@ -19,7 +19,7 @@ class UserRequest extends FormRequest
     protected function failedValidation(Validator $validator): void
     {
         $response = response()->json([
-            'status' => HttpResponse::HTTP_UNPROCESSABLE_ENTITY,
+            'type' => 'error',
             'message' => __('messages.common.error_validation_request'),
             'errors' => $validator->errors(),
         ], HttpResponse::HTTP_UNPROCESSABLE_ENTITY);
