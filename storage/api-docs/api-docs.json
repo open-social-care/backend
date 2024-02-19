@@ -31,9 +31,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "200"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "success"
                                         },
                                         "message": {
                                             "type": "string",
@@ -98,9 +98,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "400"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
                                         },
                                         "message": {
                                             "type": "string",
@@ -165,9 +165,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "200"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "success"
                                         },
                                         "message": {
                                             "type": "string",
@@ -185,9 +185,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "422"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
                                         },
                                         "message": {
                                             "type": "string",
@@ -219,9 +219,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "200"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
                                         },
                                         "message": {
                                             "type": "string",
@@ -299,9 +299,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "200"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "success"
                                         },
                                         "message": {
                                             "type": "string",
@@ -319,9 +319,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "422"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
                                         },
                                         "message": {
                                             "type": "string",
@@ -353,9 +353,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "400"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
                                         },
                                         "message": {
                                             "type": "string",
@@ -399,9 +399,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "400"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "success"
                                         },
                                         "message": {
                                             "type": "string",
@@ -419,9 +419,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "400"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
                                         },
                                         "message": {
                                             "type": "string",
@@ -487,9 +487,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "200"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "success"
                                         },
                                         "message": {
                                             "type": "string",
@@ -507,9 +507,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "422"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
                                         },
                                         "message": {
                                             "type": "string",
@@ -541,9 +541,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "400"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
                                         },
                                         "message": {
                                             "type": "string",
@@ -598,9 +598,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "200"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "success"
                                         },
                                         "message": {
                                             "type": "string",
@@ -668,9 +668,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "400"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
                                         },
                                         "message": {
                                             "type": "string",
@@ -716,11 +716,13 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "success"
                                         },
                                         "message": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "example": "Successful response"
                                         },
                                         "data": {
                                             "type": "array",
@@ -784,11 +786,13 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
                                         },
                                         "message": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "example": "Bad Request"
                                         }
                                     },
                                     "type": "object"
@@ -862,9 +866,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "200"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "success"
                                         },
                                         "message": {
                                             "type": "string",
@@ -882,9 +886,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "400"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
                                         },
                                         "message": {
                                             "type": "string",
@@ -902,9 +906,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "422"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
                                         },
                                         "message": {
                                             "type": "string",
@@ -964,9 +968,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "200"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "success"
                                         },
                                         "message": {
                                             "type": "string",
@@ -1036,9 +1040,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "400"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
                                         },
                                         "message": {
                                             "type": "string",
@@ -1127,9 +1131,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "200"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "success"
                                         },
                                         "message": {
                                             "type": "string",
@@ -1147,9 +1151,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "400"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
                                         },
                                         "message": {
                                             "type": "string",
@@ -1167,9 +1171,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "422"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
                                         },
                                         "message": {
                                             "type": "string",
@@ -1227,9 +1231,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "200"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "success"
                                         },
                                         "message": {
                                             "type": "string",
@@ -1247,9 +1251,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "400"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
                                         },
                                         "message": {
                                             "type": "string",
@@ -1284,9 +1288,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "200"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "success"
                                         },
                                         "message": {
                                             "type": "string",
@@ -1344,9 +1348,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "400"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
                                         },
                                         "message": {
                                             "type": "string",
@@ -1402,9 +1406,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "200"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "success"
                                         },
                                         "message": {
                                             "type": "string",
@@ -1426,9 +1430,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "401"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
                                         },
                                         "message": {
                                             "type": "string",
@@ -1446,9 +1450,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "400"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
                                         },
                                         "message": {
                                             "type": "string",
@@ -1478,9 +1482,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "200"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "success"
                                         },
                                         "message": {
                                             "type": "string",
@@ -1498,9 +1502,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "400"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
                                         },
                                         "message": {
                                             "type": "string",
@@ -1551,9 +1555,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "200"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "success"
                                         },
                                         "message": {
                                             "type": "string",
@@ -1571,9 +1575,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "400"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
                                         },
                                         "message": {
                                             "type": "string",
@@ -1629,9 +1633,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "200"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "success"
                                         },
                                         "message": {
                                             "type": "string",
@@ -1649,9 +1653,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "422"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
                                         },
                                         "message": {
                                             "type": "string",
@@ -1669,9 +1673,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": "400"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
                                         },
                                         "message": {
                                             "type": "string",

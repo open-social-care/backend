@@ -16,11 +16,13 @@ class OnlyAdminUser
      */
     public function handle(Request $request, Closure $next)
     {
-        if (auth()->user()->hasRole(RolesEnum::ADMIN->value)) {
+        $user = auth()->user();
+        if ($user->hasRole(RolesEnum::ADMIN->value) && $user->organizations->isEmpty()) {
             return $next($request);
         }
 
         return response()->json([
+            'type' => 'error',
             'message' => __('messages.auth.access_denied'),
         ], HttpResponse::HTTP_FORBIDDEN);
     }

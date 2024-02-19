@@ -78,6 +78,8 @@ class OrganizationController extends Controller
     public function index(): JsonResponse
     {
         try {
+            $this->authorize('viewAny', Organization::class);
+
             $search = request()->get('q', null);
             $paginate = Organization::search($search)->paginate(30);
 
@@ -158,6 +160,8 @@ class OrganizationController extends Controller
     public function store(OrganizationRequest $request): JsonResponse
     {
         try {
+            $this->authorize('create', Organization::class);
+
             $data = $request->validated();
 
             $dto = new OrganizationDTO($data);
@@ -246,6 +250,8 @@ class OrganizationController extends Controller
     public function update(OrganizationRequest $request, Organization $organization): JsonResponse
     {
         try {
+            $this->authorize('update', $organization);
+
             $data = $request->validated();
 
             $dto = new OrganizationDTO($data);
@@ -303,6 +309,8 @@ class OrganizationController extends Controller
     public function destroy(Organization $organization): JsonResponse
     {
         try {
+            $this->authorize('delete', $organization);
+
             $organization->delete();
 
             return response()->json(['type' => 'success', 'message' => __('messages.common.success_destroy')], HttpResponse::HTTP_OK);
@@ -385,6 +393,8 @@ class OrganizationController extends Controller
     public function associateUsersToOrganization(OrganizationAssociateUsersRequest $request, Organization $organization): JsonResponse
     {
         try {
+            $this->authorize('associateUsers', $organization);
+
             $data = $request->validated();
             $organization->users()->sync($data['users']);
 
@@ -465,6 +475,8 @@ class OrganizationController extends Controller
     public function getOrganizationUsersListByRole(Organization $organization, string $role): JsonResponse
     {
         try {
+            $this->authorize('view', $organization);
+
             $paginate = User::whereHas('organizations', function ($query) use ($organization) {
                 return $query->where('organizations.id', $organization->id);
             })

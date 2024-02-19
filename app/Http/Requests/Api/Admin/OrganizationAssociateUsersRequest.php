@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Api\Admin;
 
+use App\Models\Organization;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -31,7 +32,9 @@ class OrganizationAssociateUsersRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        $organization = $this->route('organization');
+
+        return auth()->user()->can('associateUsers', $organization);
     }
 
     /**

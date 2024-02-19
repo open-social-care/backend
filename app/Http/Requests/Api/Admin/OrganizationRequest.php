@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Api\Admin;
 
 use App\Enums\DocumentTypesEnum;
+use App\Models\Organization;
 use App\Support\DocumentValidator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -39,7 +40,11 @@ class OrganizationRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        $organization = $this->route('organization');
+
+        return $organization
+            ? auth()->user()->can('update', $organization)
+            : auth()->user()->can('create', Organization::class);
     }
 
     /**
