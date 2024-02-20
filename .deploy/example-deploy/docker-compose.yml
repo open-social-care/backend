@@ -1,7 +1,7 @@
 version: "3"
 services:
     laravel:
-        image: ghcr.io/open-social-care/backend:image-build-config
+        image: ghcr.io/open-social-care/backend:staging
         ports:
             - "${APP_PORT:-80}:80"
         env_file:
