@@ -1,2 +1,0 @@
-- Gravar APP_KEY em SECRET DA GH action, atualizar o workflow para usar essa key ou gerar uma nova com o artisan (ver workflow caprover)
-- corrigir service postgres, apontar volume para fora
