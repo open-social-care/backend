@@ -470,7 +470,8 @@
                                     "users": {
                                         "type": "array",
                                         "items": {
-                                            "type": "integer"
+                                            "type": "integer",
+                                            "example": "1"
                                         }
                                     }
                                 },
@@ -486,8 +487,47 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
                                         "message": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "example": "Updated successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unprocessable Entity"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "users": {
+                                                    "description": "field with errors",
+                                                    "type": "array",
+                                                    "items": {
+                                                        "description": "message error",
+                                                        "type": "string",
+                                                        "example": "The field users is required"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
                                         }
                                     },
                                     "type": "object"
@@ -501,8 +541,13 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
                                         "message": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "example": "Bad Request"
                                         }
                                     },
                                     "type": "object"
@@ -553,103 +598,13 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string"
-                                                    },
-                                                    "email": {
-                                                        "type": "string"
-                                                    }
-                                                },
-                                                "type": "object"
-                                            }
-                                        },
-                                        "pagination": {
-                                            "properties": {
-                                                "total": {
-                                                    "type": "integer"
-                                                },
-                                                "per_page": {
-                                                    "type": "integer"
-                                                },
-                                                "current_page": {
-                                                    "type": "integer"
-                                                },
-                                                "last_page": {
-                                                    "type": "integer"
-                                                },
-                                                "from": {
-                                                    "type": "integer"
-                                                },
-                                                "to": {
-                                                    "type": "integer"
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
-            }
-        },
-        "/api/admin/users": {
-            "get": {
-                "tags": [
-                    "Admin/User"
-                ],
-                "summary": "Get a list of users",
-                "description": "Retrieve a list of users.",
-                "operationId": "AdminGetUsers",
-                "parameters": [
-                    {
-                        "name": "q",
-                        "in": "query",
-                        "description": "The search query parameter",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful response",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "integer"
+                                        "type": {
+                                            "type": "string",
+                                            "example": "success"
                                         },
                                         "message": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "example": "Successful response"
                                         },
                                         "data": {
                                             "type": "array",
@@ -713,8 +668,131 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
                                         "message": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "example": "Bad Request"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/users": {
+            "get": {
+                "tags": [
+                    "Admin/User"
+                ],
+                "summary": "Get a list of users",
+                "description": "Retrieve a list of users.",
+                "operationId": "AdminGetUsers",
+                "parameters": [
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "description": "The search query parameter",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Successful response"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": "1"
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Teste"
+                                                    },
+                                                    "email": {
+                                                        "type": "string",
+                                                        "example": "teste@teste.com"
+                                                    },
+                                                    "roles": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "string",
+                                                            "example": "Gestor(a)"
+                                                        }
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "pagination": {
+                                            "properties": {
+                                                "total": {
+                                                    "type": "integer"
+                                                },
+                                                "per_page": {
+                                                    "type": "integer"
+                                                },
+                                                "current_page": {
+                                                    "type": "integer"
+                                                },
+                                                "last_page": {
+                                                    "type": "integer"
+                                                },
+                                                "from": {
+                                                    "type": "integer"
+                                                },
+                                                "to": {
+                                                    "type": "integer"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Bad Request"
                                         }
                                     },
                                     "type": "object"
@@ -744,27 +822,35 @@
                             "schema": {
                                 "properties": {
                                     "name": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "example": "Teste"
                                     },
                                     "email": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "example": "teste@teste.com"
                                     },
                                     "password": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "example": "12345678"
                                     },
                                     "password_confirmation": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "example": "12345678"
                                     },
                                     "roles": {
                                         "type": "array",
                                         "items": {
-                                            "type": "integer"
+                                            "description": "id of roles",
+                                            "type": "integer",
+                                            "example": "2"
                                         }
                                     },
                                     "organizations": {
                                         "type": "array",
                                         "items": {
-                                            "type": "integer"
+                                            "description": "id of organizations",
+                                            "type": "integer",
+                                            "example": "3"
                                         }
                                     }
                                 },
@@ -780,8 +866,13 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
                                         "message": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "example": "User created successfully"
                                         }
                                     },
                                     "type": "object"
@@ -795,8 +886,47 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
                                         "message": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "example": "Bad Request"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unprocessable Entity"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "email": {
+                                                    "description": "field with errors",
+                                                    "type": "array",
+                                                    "items": {
+                                                        "description": "message error",
+                                                        "type": "string",
+                                                        "example": "Email is already in use"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
                                         }
                                     },
                                     "type": "object"
@@ -833,13 +963,70 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Get user successfully",
+                        "description": "Get data successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
                                         "message": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "example": "Get data successfully"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": "1"
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Teste"
+                                                    },
+                                                    "email": {
+                                                        "type": "string",
+                                                        "example": "teste@teste.com"
+                                                    },
+                                                    "roles_selected": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "properties": {
+                                                                "id": {
+                                                                    "type": "integer",
+                                                                    "example": "1"
+                                                                },
+                                                                "name": {
+                                                                    "type": "string",
+                                                                    "example": "Gestor(a)"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    },
+                                                    "organizations_selected": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "properties": {
+                                                                "id": {
+                                                                    "type": "integer",
+                                                                    "example": "2"
+                                                                },
+                                                                "name": {
+                                                                    "type": "string",
+                                                                    "example": "Social Care"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
                                         }
                                     },
                                     "type": "object"
@@ -853,8 +1040,13 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
                                         "message": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "example": "Bad Request"
                                         }
                                     },
                                     "type": "object"
@@ -895,27 +1087,35 @@
                             "schema": {
                                 "properties": {
                                     "name": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "example": "Teste"
                                     },
                                     "email": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "example": "teste@teste.com"
                                     },
                                     "password": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "example": "12345678"
                                     },
                                     "password_confirmation": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "example": "12345678"
                                     },
                                     "roles": {
                                         "type": "array",
                                         "items": {
-                                            "type": "integer"
+                                            "description": "id of roles",
+                                            "type": "integer",
+                                            "example": "2"
                                         }
                                     },
                                     "organizations": {
                                         "type": "array",
                                         "items": {
-                                            "type": "integer"
+                                            "description": "id of organizations",
+                                            "type": "integer",
+                                            "example": "3"
                                         }
                                     }
                                 },
@@ -926,13 +1126,18 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "User updated successfully",
+                        "description": "Data updated successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
                                         "message": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "example": "Data updated successfully"
                                         }
                                     },
                                     "type": "object"
@@ -946,8 +1151,47 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
                                         "message": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "example": "Bad Request"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unprocessable Entity"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "email": {
+                                                    "description": "field with errors",
+                                                    "type": "array",
+                                                    "items": {
+                                                        "description": "message error",
+                                                        "type": "string",
+                                                        "example": "Email is already in use"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
                                         }
                                     },
                                     "type": "object"
@@ -982,13 +1226,18 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "User destroy successfully",
+                        "description": "Data destroy successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
                                         "message": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "example": "Data destroy successfully"
                                         }
                                     },
                                     "type": "object"
@@ -1002,8 +1251,13 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
                                         "message": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "example": "Bad Request"
                                         }
                                     },
                                     "type": "object"
@@ -1029,34 +1283,54 @@
                 "operationId": "GetAdminUserFormData",
                 "responses": {
                     "200": {
-                        "description": "Data retrieved successfully",
+                        "description": "Get data successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "organizationsToSelect": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "id": {
-                                                        "type": "integer"
-                                                    },
-                                                    "name": {
-                                                        "type": "string"
-                                                    }
-                                                },
-                                                "type": "object"
-                                            }
+                                        "type": {
+                                            "type": "string",
+                                            "example": "success"
                                         },
-                                        "rolesToSelect": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Get data successfully"
+                                        },
+                                        "data": {
                                             "type": "array",
                                             "items": {
                                                 "properties": {
-                                                    "id": {
-                                                        "type": "integer"
+                                                    "organizationsToSelect": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "properties": {
+                                                                "id": {
+                                                                    "type": "integer",
+                                                                    "example": "1"
+                                                                },
+                                                                "name": {
+                                                                    "type": "string",
+                                                                    "example": "Social Care"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
                                                     },
-                                                    "name": {
-                                                        "type": "string"
+                                                    "rolesToSelect": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "properties": {
+                                                                "id": {
+                                                                    "type": "integer",
+                                                                    "example": "2"
+                                                                },
+                                                                "name": {
+                                                                    "type": "string",
+                                                                    "example": "Gestor(a)"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
                                                     }
                                                 },
                                                 "type": "object"
@@ -1074,8 +1348,13 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
                                         "message": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "example": "Bad Request"
                                         }
                                     },
                                     "type": "object"
@@ -1122,16 +1401,68 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Login Successfully"
+                        "description": "Login Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Login Successfully"
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "example": "1|Lkhuda45dajdanfi45"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity"
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     },
                     "400": {
-                        "description": "Bad request"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Bad request"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -1146,16 +1477,44 @@
                 "operationId": "Logout",
                 "responses": {
                     "200": {
-                        "description": "Logout Successfully"
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity"
+                        "description": "Logout Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Logout Successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     },
                     "400": {
-                        "description": "Bad request"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Bad request"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 },
                 "security": [
@@ -1191,16 +1550,44 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Password recuperation send Successfully"
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity"
+                        "description": "Password recuperation send Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Password recuperation send Successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     },
                     "400": {
-                        "description": "Bad request"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Bad request"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -1241,16 +1628,64 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Password reset Successfully"
+                        "description": "Password reset Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Password reset Successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     },
                     "422": {
-                        "description": "Unprocessable Entity"
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unprocessable Entity"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     },
                     "400": {
-                        "description": "Bad request"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Bad request"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
             }
