@@ -15,6 +15,7 @@ class OrganizationControllerTest extends TestCase
     use RefreshDatabase;
 
     protected Organization $organization;
+
     protected User $userManager;
 
     public function setUp(): void
