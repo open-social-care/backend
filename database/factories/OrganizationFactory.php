@@ -17,13 +17,11 @@ class OrganizationFactory extends Factory
      */
     public function definition(): array
     {
-        $documentType = array_column(DocumentTypesEnum::cases(), 'value');
-
         return [
             'name' => fake()->name,
             'phone' => fake()->phoneNumber,
-            'document_type' => $this->faker->randomElement($documentType),
-            'document' => fake()->unique()->numerify('###.###.###-##'),
+            'document_type' => DocumentTypesEnum::CPF->value,
+            'document' => fake()->cpf,
         ];
     }
 }

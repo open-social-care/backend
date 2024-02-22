@@ -73,7 +73,7 @@ class OrganizationControllerTest extends TestCase
             'name' => 'Teste organization',
             'phone' => '(42) 3035-4135',
             'document_type' => 'cpf',
-            'document' => '014.431.840-71',
+            'document' => '529.982.247-25',
         ];
 
         $response = $this->postJson(route('admin.organizations.store'), $data);
@@ -108,7 +108,7 @@ class OrganizationControllerTest extends TestCase
             'name' => 'New name organization',
             'phone' => '(42) 3035-4135',
             'document_type' => 'cpf',
-            'document' => '014.431.840-71',
+            'document' => '529.982.247-25',
         ];
 
         $response = $this->putJson(route('admin.organizations.update', $organization->id), $updatedData);
