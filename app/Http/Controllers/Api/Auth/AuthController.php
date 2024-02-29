@@ -47,7 +47,15 @@ class AuthController extends Controller
      *
      *              @OA\Property(property="type", type="string", example="success"),
      *              @OA\Property(property="message", type="string", example="Login Successfully"),
-     *              @OA\Property(property="token", type="string", example="1|Lkhuda45dajdanfi45")
+     *              @OA\Property(property="token", type="string", example="1|Lkhuda45dajdanfi45"),
+     *              @OA\Property(property="data", type="array", @OA\Items(
+     *                  @OA\Property(property="id", type="integer", example="1"),
+     *                  @OA\Property(property="name", type="string", example="Test"),
+     *                  @OA\Property(property="email", type="string", example="test@test.com"),
+     *                  @OA\Property(property="roles_ids", type="array", @OA\Items(type="integer", example="1")),
+     *                  @OA\Property(property="organizations_ids", type="array", @OA\Items(type="integer", example="1")),
+     *                  @OA\Property(property="subject_ref_by_organizations", type="array", @OA\Items(type="integer", example="subjects"))
+     *              )),
      *          )
      *      ),
      *

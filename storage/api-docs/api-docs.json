@@ -1417,6 +1417,47 @@
                                         "token": {
                                             "type": "string",
                                             "example": "1|Lkhuda45dajdanfi45"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": "1"
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Test"
+                                                    },
+                                                    "email": {
+                                                        "type": "string",
+                                                        "example": "test@test.com"
+                                                    },
+                                                    "roles_ids": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "integer",
+                                                            "example": "1"
+                                                        }
+                                                    },
+                                                    "organizations_ids": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "integer",
+                                                            "example": "1"
+                                                        }
+                                                    },
+                                                    "subject_ref_by_organizations": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "integer",
+                                                            "example": "subjects"
+                                                        }
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
                                         }
                                     },
                                     "type": "object"
