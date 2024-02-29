@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Actions\Admin\User;
+namespace Tests\Unit\Actions\Admin\Organization;
 
 use App\Actions\Admin\Organization\OrganizationCreateAction;
 use App\DTO\Admin\OrganizationDTO;

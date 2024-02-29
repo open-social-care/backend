@@ -1698,6 +1698,17 @@
                 "summary": "Get organization info",
                 "description": "Retrieve organization info.",
                 "operationId": "ManagerGetOrganization",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The organization id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successful response",
@@ -1754,6 +1765,17 @@
                 "summary": "Update Organization",
                 "description": "Update Organization with the provided information.",
                 "operationId": "ManagerUpdateOrganization",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The organization id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "requestBody": {
                     "description": "Organization data",
                     "required": true,
@@ -1830,6 +1852,15 @@
                 "description": "Retrieve a list of organization users by role.",
                 "operationId": "ManagerGetOrganizationUsersByRole",
                 "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The organization id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
                     {
                         "name": "role",
                         "in": "path",

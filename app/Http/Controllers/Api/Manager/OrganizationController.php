@@ -9,6 +9,7 @@ use App\Http\Requests\Api\Manager\OrganizationRequest;
 use App\Http\Resources\Api\Manager\OrganizationResource;
 use App\Http\Resources\Api\Manager\UserListResource;
 use App\Http\Resources\Api\Shared\PaginationResource;
+use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Psr\Container\ContainerExceptionInterface;
@@ -25,6 +26,17 @@ class OrganizationController extends Controller
      * summary="Get organization info",
      * description="Retrieve organization info.",
      * security={{"sanctum":{}}},
+     *
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="The organization id",
+     *         required=true,
+     *
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
      *
      *     @OA\Response(
      *         response=200,
@@ -51,12 +63,9 @@ class OrganizationController extends Controller
      *     ),
      * )
      */
-    public function getOrganizationInfo(): JsonResponse
+    public function getOrganizationInfo(Organization $organization): JsonResponse
     {
         try {
-            $user = auth()->user();
-            $organization = $user->organizations->first();
-
             return response()->json([
                 'organization' => OrganizationResource::make($organization),
             ], HttpResponse::HTTP_OK);
@@ -73,6 +82,17 @@ class OrganizationController extends Controller
      *     summary="Update Organization",
      *     description="Update Organization with the provided information.",
      *     security={{"sanctum":{}}},
+     *
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="The organization id",
+     *         required=true,
+     *
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
      *
      *     @OA\RequestBody(
      *         required=true,
@@ -109,13 +129,13 @@ class OrganizationController extends Controller
      *     ),
      * )
      */
-    public function update(OrganizationRequest $request): JsonResponse
+    public function update(OrganizationRequest $request, Organization $organization): JsonResponse
     {
         try {
             $data = $request->validated();
 
             $dto = new OrganizationDTO($data);
-            OrganizationUpdateAction::execute($dto);
+            OrganizationUpdateAction::execute($dto, $organization);
 
             return response()->json(['message' => __('messages.common.success_update')], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
@@ -131,6 +151,17 @@ class OrganizationController extends Controller
      * summary="Get a list of organization users by role",
      * description="Retrieve a list of organization users by role.",
      * security={{"sanctum":{}}},
+     *
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="The organization id",
+     *         required=true,
+     *
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
      *
      *     @OA\Parameter(
      *         name="role",
@@ -175,12 +206,9 @@ class OrganizationController extends Controller
      *     ),
      * )
      */
-    public function getOrganizationUsersListByRole(string $role): JsonResponse
+    public function getOrganizationUsersListByRole(Organization $organization, string $role): JsonResponse
     {
         try {
-            $user = auth()->user();
-            $organization = $user->organizations->first();
-
             $paginate = User::whereHas('organizations', function ($query) use ($organization) {
                 return $query->where('organizations.id', $organization->id);
             })

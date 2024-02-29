@@ -56,12 +56,12 @@ Route::middleware(['auth:sanctum', 'only_manager_user'])
     ->group(function () {
 
         // Organization Routes
-        Route::get('/organizations-get-info', [ManagerOrganizationController::class, 'getOrganizationInfo'])
+        Route::get('/organizations/get-info/{organization}', [ManagerOrganizationController::class, 'getOrganizationInfo'])
             ->name('organizations.get-info');
 
-        Route::put('/organizations-update', [ManagerOrganizationController::class, 'update'])
+        Route::put('/organizations/update/{organization}', [ManagerOrganizationController::class, 'update'])
             ->name('organizations.update');
 
-        Route::get('/organizations/get-users-by-role/{role}', [ManagerOrganizationController::class, 'getOrganizationUsersListByRole'])
+        Route::get('/organizations/{organization}/get-users-by-role/{role}', [ManagerOrganizationController::class, 'getOrganizationUsersListByRole'])
             ->name('organizations.get-users-by-role');
     });
