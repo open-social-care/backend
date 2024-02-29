@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests\Unit\Actions\Admin\Organization;
+namespace Tests\Unit\Actions\Manager\Organization;
 
-use App\Actions\Admin\Organization\OrganizationUpdateAction;
-use App\DTO\Admin\OrganizationDTO;
+use App\Actions\Manager\Organization\OrganizationUpdateAction;
+use App\DTO\Manager\OrganizationDTO;
 use App\Enums\DocumentTypesEnum;
 use App\Models\Organization;
 use Illuminate\Foundation\Testing\RefreshDatabase;

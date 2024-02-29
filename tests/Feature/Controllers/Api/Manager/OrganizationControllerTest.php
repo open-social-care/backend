@@ -33,7 +33,7 @@ class OrganizationControllerTest extends TestCase
 
     public function testGetOrganizationInfo()
     {
-        $response = $this->getJson(route('manager.organizations.get-info'));
+        $response = $this->getJson(route('manager.organizations.get-info', $this->organization->id));
 
         $response->assertStatus(HttpResponse::HTTP_OK)
             ->assertJsonStructure(['organization']);
@@ -50,7 +50,7 @@ class OrganizationControllerTest extends TestCase
             'document' => '014.431.840-71',
         ];
 
-        $response = $this->putJson(route('manager.organizations.update'), $updatedData);
+        $response = $this->putJson(route('manager.organizations.update', $this->organization->id), $updatedData);
 
         $response->assertStatus(HttpResponse::HTTP_OK)
             ->assertJson(['message' => __('messages.common.success_update')]);
@@ -61,7 +61,10 @@ class OrganizationControllerTest extends TestCase
 
     public function testGetOrganizationUsersListByRole()
     {
-        $response = $this->getJson(route('manager.organizations.get-users-by-role', ['role' => RolesEnum::MANAGER->value]));
+        $response = $this->getJson(route('manager.organizations.get-users-by-role', [
+            'organization' => $this->organization->id,
+            'role' => RolesEnum::MANAGER->value,
+        ]));
 
         $response->assertStatus(HttpResponse::HTTP_OK)
             ->assertJsonStructure(['data', 'pagination']);
