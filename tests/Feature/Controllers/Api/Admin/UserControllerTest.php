@@ -102,7 +102,6 @@ class UserControllerTest extends TestCase
                     'email',
                     'password',
                     'roles',
-                    'organizations',
                 ],
             ]);
     }

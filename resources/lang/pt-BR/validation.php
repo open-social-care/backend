@@ -142,5 +142,10 @@ return [
         ],
         'roles' => 'Perfis',
         'organizations' => 'Organizações',
+        'phone' => 'Telefone',
+        'document_type' => 'Tipo de documento',
+        'document' => 'Documento',
+        'subject_ref' => 'Referência de sujeito/usuários',
+        'users' => 'Usuários',
     ],
 ];

@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Requests\Api;
+namespace App\Http\Requests\Api\Admin;
 
+use App\Models\Organization;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
-class UserRequest extends FormRequest
+class OrganizationAssociateUsersRequest extends FormRequest
 {
     /**
      * Handle a failed validation attempt.
@@ -32,7 +32,9 @@ class UserRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        $organization = $this->route('organization');
+
+        return auth()->user()->can('associateUsers', $organization);
     }
 
     /**
@@ -40,27 +42,9 @@ class UserRequest extends FormRequest
      */
     public function rules(): array
     {
-        $rules = [
-            'name' => 'required|string|max:255',
-            'email' => ['required', 'string', 'email', 'max:255'],
-            'password' => 'required|string|min:6|confirmed',
-            'roles' => 'required|array',
-            'roles.*' => 'required|exists:roles,id',
-            'organizations' => 'required|array',
-            'organizations.*' => 'required|exists:organizations,id',
+        return [
+            'users' => 'required|array',
+            'users.*' => 'required|exists:users,id',
         ];
-
-        if ($this->method() === 'PUT' && $this->user) {
-            $rules['email'][] = Rule::unique('users')
-                ->whereNot('id', $this->user->id)
-                ->whereNull('deleted_at');
-
-            $rules['password'] = 'nullable|string|min:6|confirmed';
-        } else {
-            $rules['email'][] = Rule::unique('users')
-                ->whereNull('deleted_at');
-        }
-
-        return $rules;
     }
 }
