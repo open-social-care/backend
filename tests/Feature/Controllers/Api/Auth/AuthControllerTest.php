@@ -22,7 +22,7 @@ class AuthControllerTest extends TestCase
         $response = $this->postJson(route('login'), $payload);
 
         $response->assertStatus(HttpResponse::HTTP_OK)
-            ->assertJsonStructure(['token', 'message']);
+            ->assertJsonStructure(['token', 'message', 'data']);
     }
 
     /**
