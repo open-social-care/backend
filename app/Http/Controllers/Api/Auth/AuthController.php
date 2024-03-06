@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Api\Admin\UserLoginResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -46,7 +47,15 @@ class AuthController extends Controller
      *
      *              @OA\Property(property="type", type="string", example="success"),
      *              @OA\Property(property="message", type="string", example="Login Successfully"),
-     *              @OA\Property(property="token", type="string", example="1|Lkhuda45dajdanfi45")
+     *              @OA\Property(property="token", type="string", example="1|Lkhuda45dajdanfi45"),
+     *              @OA\Property(property="data", type="array", @OA\Items(
+     *                   @OA\Property(property="id", type="integer", example="1"),
+     *                   @OA\Property(property="name", type="string", example="Test"),
+     *                   @OA\Property(property="email", type="string", example="test@test.com"),
+     *                   @OA\Property(property="roles_ids", type="array", @OA\Items(type="integer", example="1")),
+     *                   @OA\Property(property="organizations_ids", type="array", @OA\Items(type="integer", example="1")),
+     *                   @OA\Property(property="subject_ref_by_organizations", type="array", @OA\Items(type="integer", example="subjects"))
+     *              )),
      *          )
      *      ),
      *
@@ -85,6 +94,7 @@ class AuthController extends Controller
                     'type' => 'success',
                     'message' => __('messages.auth.login_success'),
                     'token' => $token,
+                    'data' => UserLoginResource::make(auth()->user()),
                 ], HttpResponse::HTTP_OK);
             }
 
