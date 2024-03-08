@@ -34,11 +34,6 @@ class Organization extends Model
         return $this->morphMany(Address::class, 'model');
     }
 
-    public function organizationUsers(): HasMany
-    {
-        return $this->hasMany(OrganizationUser::class);
-    }
-
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'organization_users')->withTimestamps();

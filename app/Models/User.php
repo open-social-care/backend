@@ -66,13 +66,8 @@ class User extends Authenticatable
         parent::boot();
 
         static::deleting(function ($user) {
-            $user->organizationUsers()->delete();
+            $user->organizations()->detach();
         });
-    }
-
-    public function organizationUsers(): HasMany
-    {
-        return $this->hasMany(OrganizationUser::class);
     }
 
     public function organizations(): BelongsToMany

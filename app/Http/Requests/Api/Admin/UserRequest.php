@@ -44,10 +44,6 @@ class UserRequest extends FormRequest
             'name' => 'required|string|max:255',
             'email' => ['required', 'string', 'email', 'max:255'],
             'password' => 'required|string|min:6|confirmed',
-            'roles' => 'required|array',
-            'roles.*' => 'required|exists:roles,id',
-            'organizations' => 'sometimes|nullable|array',
-            'organizations.*' => 'sometimes|nullable|exists:organizations,id',
         ];
 
         if ($this->method() === 'PUT' && $this->user) {

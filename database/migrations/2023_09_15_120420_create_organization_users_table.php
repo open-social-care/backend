@@ -15,8 +15,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('organization_id')->constrained('organizations');
             $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('role_id')->constrained('roles');
             $table->timestamps();
             $table->softDeletes();
+
+            $table->unique(['organization_id', 'user_id', 'role_id']);
         });
     }
 

@@ -21,8 +21,8 @@ class UserTest extends TestCase
         $organizationUser1 = OrganizationUser::factory()->for($user)->createOneQuietly();
         $organizationUser2 = OrganizationUser::factory()->for($user)->createOneQuietly();
 
-        $this->assertTrue($user->organizationUsers->contains($organizationUser1));
-        $this->assertTrue($user->organizationUsers->contains($organizationUser2));
+        $this->assertTrue($user->organizations->contains($organizationUser1));
+        $this->assertTrue($user->organizations->contains($organizationUser2));
     }
 
     public function testUserHasManyRoleUser()

@@ -16,13 +16,9 @@ class UserUpdateAction
         DB::beginTransaction();
 
         $userData = $userDTO->toArray();
-        unset($userData['roles']);
-        unset($userData['organizations']);
 
         $userData['password'] = ! $userData['password'] ? $user->getAuthPassword() : $userData['password'];
         $user->update($userData);
-        $user->roles()->sync($userDTO->roles);
-        $user->organizations()->sync($userDTO->organizations);
 
         DB::commit();
     }
