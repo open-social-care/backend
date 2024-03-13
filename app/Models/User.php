@@ -66,13 +66,21 @@ class User extends Authenticatable
         parent::boot();
 
         static::deleting(function ($user) {
+            $user->handleDetachUserRoleWhenRemoveOrganization();
             $user->organizations()->detach();
         });
     }
 
+    public function handleDetachUserRoleWhenRemoveOrganization(): void
+    {
+        foreach ($this->organizations()->get() as $organization) {
+            $organization->handleDetachUserRoleWhenRemoveOrganization();
+        }
+    }
+
     public function organizations(): BelongsToMany
     {
-        return $this->belongsToMany(Organization::class, 'organization_users')->withTimestamps();
+        return $this->belongsToMany(Organization::class, 'organization_users')->withTimestamps()->withPivot('role_id', 'organization_id');
     }
 
     public function roleUsers(): HasMany

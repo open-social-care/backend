@@ -29,6 +29,35 @@ class Organization extends Model
         'subject_ref',
     ];
 
+    /**
+     * Override Model boot function
+     */
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::deleting(function ($organization) {
+            $organization->handleDetachUserRoleWhenRemoveOrganization();
+            $organization->users()->detach();
+        });
+    }
+
+    public function handleDetachUserRoleWhenRemoveOrganization(): void
+    {
+        foreach ($this->users()->get() as $user) {
+            $userOrganizationRoleId = $user->organizations()->firstWhere('organization_id', $this->id)->pivot->role_id;
+
+            $userHasRoleInOtherOrganization = $user->organizations()
+                ->wherePivot('role_id', $userOrganizationRoleId)
+                ->wherePivot('organization_id', '!=', $this->id)
+                ->exists();
+
+            if (!$userHasRoleInOtherOrganization) {
+                $user->roles()->detach();
+            }
+        }
+    }
+
     public function addresses(): MorphMany
     {
         return $this->morphMany(Address::class, 'model');
@@ -36,7 +65,7 @@ class Organization extends Model
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'organization_users')->withTimestamps();
+        return $this->belongsToMany(User::class, 'organization_users')->withTimestamps()->withPivot('role_id', 'user_id');;
     }
 
     public function organizationFormTemplates(): HasMany
