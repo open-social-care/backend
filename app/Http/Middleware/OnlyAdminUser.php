@@ -17,7 +17,7 @@ class OnlyAdminUser
     public function handle(Request $request, Closure $next)
     {
         $user = auth()->user();
-        if ($user->hasRole(RolesEnum::ADMIN->value) && $user->organizations->isEmpty()) {
+        if ($user->hasRoleByName(RolesEnum::ADMIN->value) && $user->organizations->isEmpty()) {
             return $next($request);
         }
 

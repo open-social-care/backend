@@ -18,7 +18,7 @@ class OnlyManagerUser
     {
         $user = auth()->user();
 
-        if ($user->hasRole(RolesEnum::MANAGER->value) && $user->organizations->isNotEmpty()) {
+        if ($user->hasRoleByName(RolesEnum::MANAGER->value) && $user->organizations->isNotEmpty()) {
             return $next($request);
         }
 

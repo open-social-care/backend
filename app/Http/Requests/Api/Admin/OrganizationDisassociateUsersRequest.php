@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
-class OrganizationAssociateUsersRequest extends FormRequest
+class OrganizationDisassociateUsersRequest extends FormRequest
 {
     /**
      * Handle a failed validation attempt.

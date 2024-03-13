@@ -45,6 +45,9 @@ Route::middleware(['auth:sanctum', 'only_admin_user'])
         Route::post('/organizations/{organization}/associate-users', [AdminOrganizationController::class, 'associateUsersToOrganization'])
             ->name('organizations.associate-users');
 
+        Route::post('/organizations/{organization}/disassociate-users', [AdminOrganizationController::class, 'disassociateUsersToOrganization'])
+            ->name('organizations.disassociate-users');
+
         Route::get('/organizations/{organization}/get-users-by-role/{role}', [AdminOrganizationController::class, 'getOrganizationUsersListByRole'])
             ->name('organizations.get-users-by-role');
     });

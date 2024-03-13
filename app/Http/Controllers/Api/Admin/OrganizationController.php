@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
+use App\Actions\Admin\Organization\OrganizationAssociateUsersWithRolesAction;
 use App\Actions\Admin\Organization\OrganizationCreateAction;
+use App\Actions\Admin\Organization\OrganizationDisassociateUsersWithRolesAction;
 use App\Actions\Admin\Organization\OrganizationUpdateAction;
 use App\DTO\Admin\OrganizationDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Admin\OrganizationAssociateUsersRequest;
+use App\Http\Requests\Api\Admin\OrganizationDisassociateUsersRequest;
 use App\Http\Requests\Api\Admin\OrganizationRequest;
 use App\Http\Resources\Api\Admin\OrganizationListResource;
 use App\Http\Resources\Api\Admin\UserListResource;
@@ -344,10 +347,15 @@ class OrganizationController extends Controller
      *         description="Organization associate data",
      *
      *         @OA\JsonContent(
-     * *             type="object",
-     * *
-     *             @OA\Property(property="users", type="array", @OA\Items(type="integer", example="1")),
-     * *         )
+     *               type="object",
+     *
+     *               @OA\Property(property="data", type="array",
+     *                     @OA\Items(type="object",
+     *                          @OA\Property(property="user_id", type="integer", description="user id", example="1"),
+     *                          @OA\Property(property="role_id", type="integer", description="role id", example="2")
+     *                 )
+     *               )
+     *          )
      *     ),
      *
      *     @OA\Response(
@@ -366,7 +374,6 @@ class OrganizationController extends Controller
      *         description="Unprocessable Entity",
      *
      *         @OA\JsonContent(
-     *
      *             @OA\Property(property="type", type="string", example="error"),
      *             @OA\Property(property="message", type="string", example="Unprocessable Entity"),
      *             @OA\Property(property="errors", type="object",
@@ -396,7 +403,96 @@ class OrganizationController extends Controller
             $this->authorize('associateUsers', $organization);
 
             $data = $request->validated();
-            $organization->users()->sync($data['users']);
+            OrganizationAssociateUsersWithRolesAction::execute($data['data'], $organization);
+
+            return response()->json(['type' => 'success', 'message' => __('messages.common.success_update')], HttpResponse::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json(['type' => 'error', 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
+        }
+    }
+
+    /**
+     * @OA\Put(
+     *     path="/api/admin/organizations/{organization}/disassociate-users",
+     *     operationId="AdminOrganizationDisassociateUsers",
+     *     tags={"Admin/Organization"},
+     *     summary="Disassociate users to organization",
+     *     description="Disassociate users to organization with the provided information.",
+     *     security={{"sanctum":{}}},
+     *
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="The organization id for associate users",
+     *         required=true,
+     *
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Organization disassociate data",
+     *
+     *         @OA\JsonContent(
+     *               type="object",
+     *
+     *               @OA\Property(property="data", type="array",
+     *                     @OA\Items(type="object",
+     *                          @OA\Property(property="user_id", type="integer", description="user id", example="1"),
+     *                          @OA\Property(property="role_id", type="integer", description="role id", example="2")
+     *                 )
+     *               )
+     *          )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=200,
+     *         description="Updated successfully",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="type", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Updated successfully")
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=422,
+     *         description="Unprocessable Entity",
+     *
+     *         @OA\JsonContent(
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Unprocessable Entity"),
+     *             @OA\Property(property="errors", type="object",
+     *                @OA\Property(property="users", type="array", description="field with errors",
+     *
+     *                  @OA\Items(type="string", description="message error", example="The field users is required")
+     *             )
+     *           ),
+     *         )
+     *      ),
+     *
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad Request",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Bad Request")
+     *         )
+     *     ),
+     * )
+     */
+    public function disassociateUsersToOrganization(OrganizationDisassociateUsersRequest $request, Organization $organization): JsonResponse
+    {
+        try {
+            $this->authorize('disassociateUsers', $organization);
+
+            $data = $request->validated();
+            OrganizationDisassociateUsersWithRolesAction::execute($data['data'], $organization);
 
             return response()->json(['type' => 'success', 'message' => __('messages.common.success_update')], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {

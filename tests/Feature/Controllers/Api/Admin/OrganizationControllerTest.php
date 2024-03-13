@@ -157,11 +157,20 @@ class OrganizationControllerTest extends TestCase
     public function testAssociateUsersToOrganization()
     {
         $organization = Organization::factory()->createQuietly();
-        $users = User::factory()->count(3)->createQuietly();
+        $users = User::factory()->count(2)->createQuietly();
+        $roles = Role::factory()->count(2)->createQuietly();
 
-        $usersIds = $users->pluck('id')->toArray();
         $data = [
-            'users' => $usersIds,
+            'data' => [
+                [
+                    'user_id' => $users[0]->id,
+                    'role_id' => $roles[0]->id,
+                ],
+                [
+                    'user_id' => $users[1]->id,
+                    'role_id' => $roles[1]->id,
+                ],
+            ]
         ];
 
         $response = $this->postJson(route('admin.organizations.associate-users', $organization->id), $data);
@@ -169,11 +178,43 @@ class OrganizationControllerTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_OK)
             ->assertJson(['message' => __('messages.common.success_update')]);
 
-        $this->assertEquals($usersIds, $organization->fresh()->users->pluck('id')->toArray());
+        $this->assertEquals(count($data['data']), $organization->fresh()->users->count());
+        $this->assertDatabaseHas('organization_users', ['user_id' => $users[0]->id, 'role_id' => $roles[0]->id]);
+        $this->assertDatabaseHas('organization_users', ['user_id' => $users[1]->id, 'role_id' => $roles[1]->id]);
+    }
 
-        foreach ($usersIds as $userId) {
-            $this->assertDatabaseHas('organization_users', ['user_id' => $userId]);
-        }
+    public function testDissociateUsersToOrganization()
+    {
+        $organization = Organization::factory()->createQuietly();
+        $users = User::factory()->count(2)->createQuietly();
+        $roles = Role::factory()->count(2)->createQuietly();
+
+        $organization->users()->attach($users[0]->id, ['role_id' => $roles[0]->id]);
+        $organization->users()->attach($users[1]->id, ['role_id' => $roles[1]->id]);
+
+        $users[0]->roles()->attach($roles[0]);
+        $users[1]->roles()->attach($roles[1]);
+
+        $data = [
+            'data' => [
+                [
+                    'user_id' => $users[0]->id,
+                    'role_id' => $roles[0]->id,
+                ],
+                [
+                    'user_id' => $users[1]->id,
+                    'role_id' => $roles[1]->id,
+                ],
+            ]
+        ];
+
+        $response = $this->postJson(route('admin.organizations.disassociate-users', $organization->id), $data);
+
+        $response->assertStatus(HttpResponse::HTTP_OK)
+            ->assertJson(['message' => __('messages.common.success_update')]);
+
+        $this->assertDatabaseMissing('organization_users', ['user_id' => $users[0]->id, 'role_id' => $roles[0]->id]);
+        $this->assertDatabaseMissing('organization_users', ['user_id' => $users[1]->id, 'role_id' => $roles[1]->id]);
     }
 
     public function testGetOrganizationUsersListByRole()
@@ -183,12 +224,12 @@ class OrganizationControllerTest extends TestCase
         $userManager = User::factory()->createQuietly();
         $roleManager = Role::factory()->createQuietly(['name' => RolesEnum::MANAGER->value]);
         $userManager->roles()->attach($roleManager);
+        $organization->users()->attach($userManager->id, ['role_id' => $roleManager->id]);
 
         $userSocialAssistant = User::factory()->createQuietly();
         $roleSocialAssistant = Role::factory()->createQuietly(['name' => RolesEnum::SOCIAL_ASSISTANT->value]);
         $userSocialAssistant->roles()->attach($roleSocialAssistant);
-
-        $organization->users()->sync([$userManager->id, $userSocialAssistant->id]);
+        $organization->users()->attach($userSocialAssistant->id, ['role_id' => $roleSocialAssistant->id]);
 
         $response = $this->getJson(route('admin.organizations.get-users-by-role',
             ['organization' => $organization->id, 'role' => RolesEnum::MANAGER->value]));
