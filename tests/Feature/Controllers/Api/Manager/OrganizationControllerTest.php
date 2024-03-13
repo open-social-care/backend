@@ -27,7 +27,7 @@ class OrganizationControllerTest extends TestCase
         $this->userManager = User::factory()->createQuietly();
         $role = Role::factory()->createQuietly(['name' => RolesEnum::MANAGER->value]);
         $this->userManager->roles()->attach($role);
-        $this->userManager->organizations()->attach($this->organization);
+        $this->userManager->organizations()->attach($this->organization, ['role_id' => $role->id]);
         $this->actingAs($this->userManager);
     }
 
