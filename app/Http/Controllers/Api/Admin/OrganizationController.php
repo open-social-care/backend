@@ -570,20 +570,6 @@ class OrganizationController extends Controller
      */
     public function getOrganizationUsersListByRole(Organization $organization, string $role): JsonResponse
     {
-        foreach ($organization->users()->get() as $user) {
-            $userOrganizationRoleId = $user->organizations()->firstWhere('organization_id', $organization->id)->pivot->role_id;
-
-            $userHasRoleInOtherOrganization = $user->organizations()
-                ->wherePivot('role_id', $userOrganizationRoleId)
-                ->wherePivot('organization_id', '!=', $organization->id)
-                ->exists();
-
-            if (!$userHasRoleInOtherOrganization) {
-                $user->roles()->detach();
-            }
-        }
-
-
         try {
             $this->authorize('view', $organization);
 
