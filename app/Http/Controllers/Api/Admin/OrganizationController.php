@@ -15,6 +15,7 @@ use App\Http\Resources\Api\Admin\OrganizationListResource;
 use App\Http\Resources\Api\Admin\UserListResource;
 use App\Http\Resources\Api\Shared\PaginationResource;
 use App\Models\Organization;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
@@ -401,9 +402,14 @@ class OrganizationController extends Controller
     {
         try {
             $this->authorize('associateUsers', $organization);
-
             $data = $request->validated();
-            OrganizationAssociateUsersWithRolesAction::execute($data['data'], $organization);
+
+            foreach ($data['data'] as $datum) {
+                $user = User::query()->find($datum['user_id']);
+                $role = Role::query()->find($datum['role_id']);
+
+                OrganizationAssociateUsersWithRolesAction::execute($user, $role, $organization);
+            }
 
             return response()->json(['type' => 'success', 'message' => __('messages.common.success_update')], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
@@ -490,9 +496,14 @@ class OrganizationController extends Controller
     {
         try {
             $this->authorize('disassociateUsers', $organization);
-
             $data = $request->validated();
-            OrganizationDisassociateUsersWithRolesAction::execute($data['data'], $organization);
+
+            foreach ($data['data'] as $datum) {
+                $user = User::query()->find($datum['user_id']);
+                $role = Role::query()->find($datum['role_id']);
+
+                OrganizationDisassociateUsersWithRolesAction::execute($user, $role, $organization);
+            }
 
             return response()->json(['type' => 'success', 'message' => __('messages.common.success_update')], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {

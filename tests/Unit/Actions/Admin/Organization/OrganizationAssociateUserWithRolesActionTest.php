@@ -16,30 +16,17 @@ class OrganizationAssociateUserWithRolesActionTest extends TestCase
     public function testExecuteAction()
     {
         $organization = Organization::factory()->createQuietly();
-        $users = User::factory()->count(2)->createQuietly();
-        $roles = Role::factory()->count(2)->createQuietly();
+        $user = User::factory()->createOneQuietly();
+        $role = Role::factory()->createOneQuietly();
 
-        $data = [
-            [
-                'user_id' => $users[0]->id,
-                'role_id' => $roles[0]->id,
-            ],
-            [
-                'user_id' => $users[1]->id,
-                'role_id' => $roles[1]->id,
-            ],
-        ];
+        OrganizationAssociateUsersWithRolesAction::execute($user, $role, $organization);
 
-        OrganizationAssociateUsersWithRolesAction::execute($data, $organization);
+        $this->assertDatabaseHas('organization_users', [
+            'organization_id' => $organization->id,
+            'user_id' => $user->id,
+            'role_id' => $role->id,
+        ]);
 
-        foreach ($data as $item) {
-            $this->assertDatabaseHas('organization_users', [
-                'organization_id' => $organization->id,
-                'user_id' => $item['user_id'],
-                'role_id' => $item['role_id'],
-            ]);
-
-            $this->assertTrue(User::find($item['user_id'])->hasRoleById($item['role_id']));
-        }
+        $this->assertTrue($user->hasRoleById($role->id));
     }
 }

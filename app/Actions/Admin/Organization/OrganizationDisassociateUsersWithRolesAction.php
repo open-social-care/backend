@@ -3,6 +3,7 @@
 namespace App\Actions\Admin\Organization;
 
 use App\Models\Organization;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
@@ -11,15 +12,13 @@ class OrganizationDisassociateUsersWithRolesAction
     /**
      * Execute create of organizations
      */
-    public static function execute(array $data, Organization $organization): void
+    public static function execute(User $user, Role $role, Organization $organization): void
     {
 
         DB::beginTransaction();
 
-        foreach ($data as $datum) {
-            self::handleUserOrganizationDetach($datum['user_id'], $datum['role_id'], $organization);
-            self::handleUserRoleDetach($datum['user_id'], $datum['role_id']);
-        }
+        self::handleUserOrganizationDetach($user, $role, $organization);
+        self::handleUserRoleDetach($user, $role);
 
         DB::commit();
     }
@@ -27,20 +26,19 @@ class OrganizationDisassociateUsersWithRolesAction
     /**
      * handle user organization attach with role
      */
-    private static function handleUserOrganizationDetach(int $userId, int $roleId, Organization $organization): void
+    private static function handleUserOrganizationDetach(User $user, Role $role, Organization $organization): void
     {
         $organization->users()
-            ->wherePivot('user_id', $userId)
-            ->wherePivot('role_id', $roleId)
+            ->wherePivot('user_id', $user->id)
+            ->wherePivot('role_id', $role->id)
             ->detach();
     }
 
     /**
      * handle user role attach
      */
-    private static function handleUserRoleDetach(int $userId, int $roleId): void
+    private static function handleUserRoleDetach(User $user, Role $role): void
     {
-        $user = User::query()->find($userId);
-        $user->roles()->wherePivot('role_id', $roleId)->detach();
+        $user->roles()->wherePivot('role_id', $role->id)->detach();
     }
 }

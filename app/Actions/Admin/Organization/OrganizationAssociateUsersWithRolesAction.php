@@ -3,6 +3,7 @@
 namespace App\Actions\Admin\Organization;
 
 use App\Models\Organization;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
@@ -11,15 +12,13 @@ class OrganizationAssociateUsersWithRolesAction
     /**
      * Execute create of organizations
      */
-    public static function execute(array $data, Organization $organization): void
+    public static function execute(User $user, Role $role, Organization $organization): void
     {
 
         DB::beginTransaction();
 
-        foreach ($data as $datum) {
-            self::handleUserOrganizationAttach($datum['user_id'], $datum['role_id'], $organization);
-            self::handleUserRoleAttach($datum['user_id'], $datum['role_id']);
-        }
+        self::handleUserOrganizationAttach($user, $role, $organization);
+        self::handleUserRoleAttach($user, $role);
 
         DB::commit();
     }
@@ -27,27 +26,25 @@ class OrganizationAssociateUsersWithRolesAction
     /**
      * handle user organization attach with role
      */
-    private static function handleUserOrganizationAttach(int $userId, int $roleId, Organization $organization): void
+    private static function handleUserOrganizationAttach(User $user, Role $role, Organization $organization): void
     {
         $hasAttach = $organization->users()
-            ->wherePivot('user_id', $userId)
-            ->wherePivot('role_id', $roleId)
+            ->wherePivot('user_id', $user->id)
+            ->wherePivot('role_id', $role->id)
             ->exists();
 
         if (!$hasAttach) {
-            $organization->users()->attach($userId, ['role_id' => $roleId]);
+            $organization->users()->attach($user->id, ['role_id' => $role->id]);
         }
     }
 
     /**
      * handle user role attach
      */
-    private static function handleUserRoleAttach(int $userId, int $roleId): void
+    private static function handleUserRoleAttach(User $user, Role $role): void
     {
-        $user = User::query()->find($userId);
-
-        if (!$user->hasRoleById($roleId)) {
-            $user->roles()->attach($roleId);
+        if (!$user->hasRoleById($role->id)) {
+            $user->roles()->attach($role->id);
         }
     }
 }
