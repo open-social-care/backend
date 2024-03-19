@@ -66,18 +66,21 @@ class User extends Authenticatable
         parent::boot();
 
         static::deleting(function ($user) {
-            $user->organizationUsers()->delete();
+            $user->handleDetachUserRoleWhenRemoveOrganization();
+            $user->organizations()->detach();
         });
     }
 
-    public function organizationUsers(): HasMany
+    public function handleDetachUserRoleWhenRemoveOrganization(): void
     {
-        return $this->hasMany(OrganizationUser::class);
+        foreach ($this->organizations()->get() as $organization) {
+            $organization->handleDetachUserRoleWhenRemoveOrganization();
+        }
     }
 
     public function organizations(): BelongsToMany
     {
-        return $this->belongsToMany(Organization::class, 'organization_users')->withTimestamps();
+        return $this->belongsToMany(Organization::class, 'organization_users')->withTimestamps()->withPivot('role_id', 'organization_id');
     }
 
     public function roleUsers(): HasMany
@@ -95,11 +98,21 @@ class User extends Authenticatable
         return $this->hasMany(FormAnswer::class);
     }
 
-    public function hasRole(string $roleName): bool
+    public function hasRoleByName(string $roleName): bool
     {
         $roles = Role::query()->where('name', $roleName)->pluck('id');
         $userHasRole = $this->roleUsers()->whereIn('role_id', $roles);
 
         return $userHasRole->get()->isNotEmpty();
+    }
+
+    public function hasRoleById(int $roleId): bool
+    {
+        return $this->roles()->where('role_id', $roleId)->exists();
+    }
+
+    public function hasOrganization(int $organizationId): bool
+    {
+        return $this->organizations()->where('organization_id', $organizationId)->exists();
     }
 }

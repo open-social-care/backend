@@ -18,11 +18,12 @@ class UserTest extends TestCase
     public function testUserHasManyOrganizationUsers()
     {
         $user = User::factory()->createOneQuietly();
+
         $organizationUser1 = OrganizationUser::factory()->for($user)->createOneQuietly();
         $organizationUser2 = OrganizationUser::factory()->for($user)->createOneQuietly();
 
-        $this->assertTrue($user->organizationUsers->contains($organizationUser1));
-        $this->assertTrue($user->organizationUsers->contains($organizationUser2));
+        $this->assertTrue($user->organizations()->where('organization_id', $organizationUser1->organization_id)->exists());
+        $this->assertTrue($user->organizations()->where('organization_id', $organizationUser2->organization_id)->exists());
     }
 
     public function testUserHasManyRoleUser()
@@ -48,15 +49,18 @@ class UserTest extends TestCase
     public function testUserBelongsToManyOrganizations()
     {
         $user = User::factory()->create();
-        $organizations = Organization::factory(3)->create();
-        $user->organizations()->attach($organizations);
+        $organizations = Organization::factory(2)->create();
+        $role = Role::factory()->createOneQuietly();
+        $user->organizations()->attach($organizations[0]->id, ['role_id' => $role->id]);
+        $user->organizations()->attach($organizations[1]->id, ['role_id' => $role->id]);
 
-        $this->assertEquals(3, $user->organizations()->count());
+        $this->assertEquals(2, $user->organizations()->count());
 
         $pivotTable = 'organization_users';
         $this->assertDatabaseHas($pivotTable, [
             'user_id' => $user->id,
             'organization_id' => $organizations[0]->id,
+            'role_id' => $role->id
         ]);
     }
 

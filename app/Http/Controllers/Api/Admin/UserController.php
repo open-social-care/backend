@@ -5,14 +5,11 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Actions\Admin\User\UserCreateAction;
 use App\Actions\Admin\User\UserUpdateAction;
 use App\DTO\Admin\UserDTO;
-use App\Enums\RolesEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Admin\UserRequest;
 use App\Http\Resources\Api\Admin\UserListResource;
 use App\Http\Resources\Api\Admin\UserResource;
 use App\Http\Resources\Api\Shared\PaginationResource;
-use App\Models\Organization;
-use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
@@ -112,9 +109,7 @@ class UserController extends Controller
      *             @OA\Property(property="name", type="string", example="Teste"),
      *             @OA\Property(property="email", type="string", example="teste@teste.com"),
      *             @OA\Property(property="password", type="string", example="12345678"),
-     *             @OA\Property(property="password_confirmation", type="string", example="12345678"),
-     *             @OA\Property(property="roles", type="array", @OA\Items(type="integer", description="id of roles", example="2")),
-     *             @OA\Property(property="organizations", type="array", @OA\Items(type="integer", description="id of organizations", example="3"))
+     *             @OA\Property(property="password_confirmation", type="string", example="12345678")
      *         )
      *     ),
      *
@@ -202,9 +197,7 @@ class UserController extends Controller
      *             @OA\Property(property="name", type="string", example="Teste"),
      *             @OA\Property(property="email", type="string", example="teste@teste.com"),
      *             @OA\Property(property="password", type="string", example="12345678"),
-     *             @OA\Property(property="password_confirmation", type="string", example="12345678"),
-     *             @OA\Property(property="roles", type="array", @OA\Items(type="integer", description="id of roles", example="2")),
-     *             @OA\Property(property="organizations", type="array", @OA\Items(type="integer", description="id of organizations", example="3"))
+     *             @OA\Property(property="password_confirmation", type="string", example="12345678")
      *         )
      *     ),
      *
@@ -318,67 +311,6 @@ class UserController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/admin/users/form-infos",
-     *     operationId="GetAdminUserFormData",
-     *     tags={"Admin/User"},
-     *     summary="Get form data info for user creation and updation",
-     *     description="Retrieve data needed for creating and updation a user, with organizations and roles available for selection.",
-     *     security={{"sanctum":{}}},
-     *
-     *     @OA\Response(
-     *         response=200,
-     *         description="Get data successfully",
-     *
-     *         @OA\JsonContent(
-     *
-     *             @OA\Property(property="type", type="string", example="success"),
-     *             @OA\Property(property="message", type="string", example="Get data successfully"),
-     *             @OA\Property(property="data", type="array", @OA\Items(
-     *                 @OA\Property(property="organizationsToSelect", type="array", @OA\Items(
-     *                      @OA\Property(property="id", type="integer", example="1"),
-     *                      @OA\Property(property="name", type="string", example="Social Care")
-     *                 )),
-     *                 @OA\Property(property="rolesToSelect", type="array", @OA\Items(
-     *                     @OA\Property(property="id", type="integer", example="2"),
-     *                     @OA\Property(property="name", type="string", example="Gestor(a)")
-     *                 )),
-     *         )),
-     *         )
-     *     ),
-     *
-     *     @OA\Response(
-     *         response=400,
-     *         description="Bad Request",
-     *
-     *         @OA\JsonContent(
-     *
-     *             @OA\Property(property="type", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Bad Request")
-     *         )
-     *     ),
-     * )
-     */
-    public function formInfos(): JsonResponse
-    {
-        try {
-            $organizationsToSelect = to_select(Organization::all());
-            $rolesToSelect = to_select_by_enum(Role::all(), RolesEnum::class);
-
-            return response()->json([
-                'type' => 'success',
-                'message' => __('messages.common.success_view'),
-                'data' => [
-                    'organizationsToSelect' => $organizationsToSelect,
-                    'rolesToSelect' => $rolesToSelect,
-                ],
-            ], HttpResponse::HTTP_OK);
-        } catch (\Exception $e) {
-            return response()->json(['type' => 'error', 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
-        }
-    }
-
-    /**
-     * @OA\Get(
      *     path="/api/admin/users/{user}",
      *     operationId="AdminGetUser",
      *     tags={"Admin/User"},
@@ -408,15 +340,7 @@ class UserController extends Controller
      *             @OA\Property(property="data", type="array", @OA\Items(
      *                 @OA\Property(property="id", type="integer", example="1"),
      *                 @OA\Property(property="name", type="string", example="Teste"),
-     *                 @OA\Property(property="email", type="string", example="teste@teste.com"),
-     *                 @OA\Property(property="roles_selected", type="array", @OA\Items(
-     *                     @OA\Property(property="id", type="integer", example="1"),
-     *                     @OA\Property(property="name", type="string", example="Gestor(a)")
-     *                 )),
-     *                 @OA\Property(property="organizations_selected", type="array", @OA\Items(
-     *                     @OA\Property(property="id", type="integer", example="2"),
-     *                     @OA\Property(property="name", type="string", example="Social Care")
-     *                 )),
+     *                 @OA\Property(property="email", type="string", example="teste@teste.com")
      *             )),
      *         )
      *     ),

@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Organization;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -20,10 +21,12 @@ class OrganizationUserFactory extends Factory
     {
         $organization = Organization::factory()->createOneQuietly();
         $user = User::factory()->createOneQuietly();
+        $role = Role::factory()->createOneQuietly();
 
         return [
             'organization_id' => $organization->id,
             'user_id' => $user->id,
+            'role_id' => $role->id,
         ];
     }
 }

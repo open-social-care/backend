@@ -467,11 +467,155 @@
                         "application/json": {
                             "schema": {
                                 "properties": {
-                                    "users": {
+                                    "data": {
                                         "type": "array",
                                         "items": {
-                                            "type": "integer",
-                                            "example": "1"
+                                            "properties": {
+                                                "user_id": {
+                                                    "description": "user id",
+                                                    "type": "integer",
+                                                    "example": "1"
+                                                },
+                                                "role_id": {
+                                                    "description": "role id",
+                                                    "type": "integer",
+                                                    "example": "2"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Updated successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unprocessable Entity"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "users": {
+                                                    "description": "field with errors",
+                                                    "type": "array",
+                                                    "items": {
+                                                        "description": "message error",
+                                                        "type": "string",
+                                                        "example": "The field users is required"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Bad Request"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/organizations/{organization}/disassociate-users": {
+            "put": {
+                "tags": [
+                    "Admin/Organization"
+                ],
+                "summary": "Disassociate users to organization",
+                "description": "Disassociate users to organization with the provided information.",
+                "operationId": "AdminOrganizationDisassociateUsers",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The organization id for associate users",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Organization disassociate data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "data": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "user_id": {
+                                                    "description": "user id",
+                                                    "type": "integer",
+                                                    "example": "1"
+                                                },
+                                                "role_id": {
+                                                    "description": "role id",
+                                                    "type": "integer",
+                                                    "example": "2"
+                                                }
+                                            },
+                                            "type": "object"
                                         }
                                     }
                                 },
@@ -836,22 +980,6 @@
                                     "password_confirmation": {
                                         "type": "string",
                                         "example": "12345678"
-                                    },
-                                    "roles": {
-                                        "type": "array",
-                                        "items": {
-                                            "description": "id of roles",
-                                            "type": "integer",
-                                            "example": "2"
-                                        }
-                                    },
-                                    "organizations": {
-                                        "type": "array",
-                                        "items": {
-                                            "description": "id of organizations",
-                                            "type": "integer",
-                                            "example": "3"
-                                        }
                                     }
                                 },
                                 "type": "object"
@@ -991,38 +1119,6 @@
                                                     "email": {
                                                         "type": "string",
                                                         "example": "teste@teste.com"
-                                                    },
-                                                    "roles_selected": {
-                                                        "type": "array",
-                                                        "items": {
-                                                            "properties": {
-                                                                "id": {
-                                                                    "type": "integer",
-                                                                    "example": "1"
-                                                                },
-                                                                "name": {
-                                                                    "type": "string",
-                                                                    "example": "Gestor(a)"
-                                                                }
-                                                            },
-                                                            "type": "object"
-                                                        }
-                                                    },
-                                                    "organizations_selected": {
-                                                        "type": "array",
-                                                        "items": {
-                                                            "properties": {
-                                                                "id": {
-                                                                    "type": "integer",
-                                                                    "example": "2"
-                                                                },
-                                                                "name": {
-                                                                    "type": "string",
-                                                                    "example": "Social Care"
-                                                                }
-                                                            },
-                                                            "type": "object"
-                                                        }
                                                     }
                                                 },
                                                 "type": "object"
@@ -1101,22 +1197,6 @@
                                     "password_confirmation": {
                                         "type": "string",
                                         "example": "12345678"
-                                    },
-                                    "roles": {
-                                        "type": "array",
-                                        "items": {
-                                            "description": "id of roles",
-                                            "type": "integer",
-                                            "example": "2"
-                                        }
-                                    },
-                                    "organizations": {
-                                        "type": "array",
-                                        "items": {
-                                            "description": "id of organizations",
-                                            "type": "integer",
-                                            "example": "3"
-                                        }
                                     }
                                 },
                                 "type": "object"
@@ -1238,103 +1318,6 @@
                                         "message": {
                                             "type": "string",
                                             "example": "Data destroy successfully"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "error"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Bad Request"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
-            }
-        },
-        "/api/admin/users/form-infos": {
-            "get": {
-                "tags": [
-                    "Admin/User"
-                ],
-                "summary": "Get form data info for user creation and updation",
-                "description": "Retrieve data needed for creating and updation a user, with organizations and roles available for selection.",
-                "operationId": "GetAdminUserFormData",
-                "responses": {
-                    "200": {
-                        "description": "Get data successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "success"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Get data successfully"
-                                        },
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "organizationsToSelect": {
-                                                        "type": "array",
-                                                        "items": {
-                                                            "properties": {
-                                                                "id": {
-                                                                    "type": "integer",
-                                                                    "example": "1"
-                                                                },
-                                                                "name": {
-                                                                    "type": "string",
-                                                                    "example": "Social Care"
-                                                                }
-                                                            },
-                                                            "type": "object"
-                                                        }
-                                                    },
-                                                    "rolesToSelect": {
-                                                        "type": "array",
-                                                        "items": {
-                                                            "properties": {
-                                                                "id": {
-                                                                    "type": "integer",
-                                                                    "example": "2"
-                                                                },
-                                                                "name": {
-                                                                    "type": "string",
-                                                                    "example": "Gestor(a)"
-                                                                }
-                                                            },
-                                                            "type": "object"
-                                                        }
-                                                    }
-                                                },
-                                                "type": "object"
-                                            }
                                         }
                                     },
                                     "type": "object"

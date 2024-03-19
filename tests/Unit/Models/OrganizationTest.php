@@ -37,8 +37,8 @@ class OrganizationTest extends TestCase
         $organizationUser1 = OrganizationUser::factory()->for($organization)->createOneQuietly();
         $organizationUser2 = OrganizationUser::factory()->for($organization)->createOneQuietly();
 
-        $this->assertTrue($organization->organizationUsers->contains($organizationUser1));
-        $this->assertTrue($organization->organizationUsers->contains($organizationUser2));
+        $this->assertTrue($organization->users()->where('user_id', $organizationUser1->user_id)->exists());
+        $this->assertTrue($organization->users()->where('user_id', $organizationUser2->user_id)->exists());
     }
 
     public function testOrganizationHasManyMultipleOrganizationFormTemplates()

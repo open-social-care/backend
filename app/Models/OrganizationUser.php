@@ -19,6 +19,7 @@ class OrganizationUser extends Model
     protected $fillable = [
         'organization_id',
         'user_id',
+        'role_id',
         'created_at',
         'updated_at',
     ];
@@ -31,5 +32,10 @@ class OrganizationUser extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function role(): BelongsTo
+    {
+        return $this->belongsTo(Role::class, 'role_id');
     }
 }

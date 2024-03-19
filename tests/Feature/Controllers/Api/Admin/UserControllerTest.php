@@ -4,7 +4,6 @@ namespace Feature\Controllers\Api\Admin;
 
 use App\Enums\RolesEnum;
 use App\Http\Resources\Api\Admin\UserResource;
-use App\Models\Organization;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -68,16 +67,11 @@ class UserControllerTest extends TestCase
 
     public function testStoreMethod()
     {
-        $roles = Role::factory()->count(2)->createQuietly();
-        $organizations = Organization::factory()->count(2)->createQuietly();
-
         $userData = [
             'name' => 'Nome do Usuário',
             'email' => 'usuario@example.com',
             'password' => 'senha123',
             'password_confirmation' => 'senha123',
-            'roles' => $roles->pluck('id')->toArray(),
-            'organizations' => $organizations->pluck('id')->toArray(),
         ];
 
         $response = $this->postJson(route('admin.users.store'), $userData);
@@ -86,8 +80,6 @@ class UserControllerTest extends TestCase
             ->assertJson(['message' => __('messages.common.success_create')]);
 
         $this->assertDatabaseHas('users', ['email' => 'usuario@example.com']);
-        $this->assertDatabaseHas('role_users', ['role_id' => $roles->first()->id]);
-        $this->assertDatabaseHas('organization_users', ['organization_id' => $organizations->first()->id]);
     }
 
     public function testStoreMethodValidation()
@@ -101,7 +93,6 @@ class UserControllerTest extends TestCase
                     'name',
                     'email',
                     'password',
-                    'roles',
                 ],
             ]);
     }
@@ -110,13 +101,8 @@ class UserControllerTest extends TestCase
     {
         $user = User::factory()->createOneQuietly();
 
-        $roles = Role::factory()->count(2)->createQuietly();
-        $organizations = Organization::factory()->count(2)->createQuietly();
-
         $updatedUserData = [
             'name' => 'New name test',
-            'roles' => $roles->pluck('id')->toArray(),
-            'organizations' => $organizations->pluck('id')->toArray(),
         ];
 
         $updatedUserData = array_merge($user->toArray(), $updatedUserData);
@@ -163,25 +149,6 @@ class UserControllerTest extends TestCase
             ->assertJsonStructure(['message']);
     }
 
-    public function testFormInfosMethod()
-    {
-        Role::factory()->count(5)->createQuietly();
-        Organization::factory()->count(5)->createQuietly();
-
-        $response = $this->getJson(route('admin.users.form-infos'));
-
-        $response->assertStatus(HttpResponse::HTTP_OK)
-            ->assertJsonStructure([
-                'data' => [
-                    'organizationsToSelect',
-                    'rolesToSelect',
-                ],
-            ]);
-
-        $response->assertJsonFragment(['organizationsToSelect' => to_select(Organization::all())]);
-        $response->assertJsonFragment(['rolesToSelect' => to_select_by_enum(Role::all(), RolesEnum::class)]);
-    }
-
     public function testGetUserMethod()
     {
         $user = User::factory()->createOneQuietly();
@@ -194,8 +161,6 @@ class UserControllerTest extends TestCase
                     'id',
                     'name',
                     'email',
-                    'roles_selected',
-                    'organizations_selected',
                 ],
             ]);
 

@@ -6,7 +6,6 @@ use App\Enums\DocumentTypesEnum;
 use App\Enums\RolesEnum;
 use App\Models\Organization;
 use App\Models\Role;
-use App\Models\RoleUser;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -119,19 +118,15 @@ class PopulateOrganizationWithUsers extends Command
             ->whereIn('name', [RolesEnum::MANAGER->value, RolesEnum::SOCIAL_ASSISTANT->value])
             ->pluck('id');
 
-        $usersIdsToAttach = RoleUser::query()
-            ->whereIn('role_id', $rolesIds)
-            ->pluck('user_id')
-            ->toArray();
+        User::query()
+            ->whereHas('roles', function ($query) use ($rolesIds) {
+                return $query->whereIn('role_id', $rolesIds);
+            })
+            ->get()
+            ->map(function ($user) use ($organization) {
+                $userRoleId = $user->roles()->first()->id;
 
-        foreach ($usersIdsToAttach as $userId) {
-            $existingEntry = $organization->organizationUsers()
-                ->where('user_id', $userId)
-                ->first();
-
-            if (! $existingEntry) {
-                $organization->organizationUsers()->create(['user_id' => $userId]);
-            }
-        }
+                return $user->organizations()->syncWithPivotValues($organization->id, ['role_id' => $userRoleId]);
+            });
     }
 }

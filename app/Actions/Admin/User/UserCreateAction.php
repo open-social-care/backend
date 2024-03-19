@@ -16,12 +16,7 @@ class UserCreateAction
         DB::beginTransaction();
 
         $userData = $userDTO->toArray();
-        unset($userData['roles']);
-        unset($userData['organizations']);
-
-        $user = User::create($userData);
-        $user->roles()->attach($userDTO->roles);
-        $user->organizations()->attach($userDTO->organizations);
+        User::create($userData);
 
         DB::commit();
     }

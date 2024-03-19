@@ -42,8 +42,9 @@ class OrganizationAssociateUsersRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'users' => 'required|array',
-            'users.*' => 'required|exists:users,id',
+            'data' => 'required|array',
+            'data.*.user_id' => 'required|exists:users,id',
+            'data.*.role_id' => 'required|exists:roles,id',
         ];
     }
 }
