@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
+use App\Enums\AuditEventTypesEnum;
+use App\Events\AuditCreateEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Api\Auth\UserLoginResource;
 use Illuminate\Http\JsonResponse;
@@ -89,6 +91,9 @@ class AuthController extends Controller
 
             if (Auth::attempt($credentials)) {
                 $token = $request->user()->createToken('auth-token')->plainTextToken;
+
+                $user = auth()->user();
+                AuditCreateEvent::dispatch($user, $user, AuditEventTypesEnum::LOGIN->name, request()->ip());
 
                 return response()->json([
                     'type' => 'success',
