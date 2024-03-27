@@ -17,7 +17,7 @@ return new class extends Migration
             $table->morphs('model');
             $table->foreignId('user_id')->constrained('users');
             $table->string('event_context')->nullable();
-            $table->enum('event_type', array_column(AuditEventTypesEnum::cases(), 'value'));
+            $table->string('event_type');
             $table->json('data')->nullable();
             $table->ipAddress('ip_address');
             $table->timestamps();
