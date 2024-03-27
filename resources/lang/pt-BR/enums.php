@@ -19,4 +19,11 @@ return [
         \App\Enums\SkinColorsEnum::WHITE->value => 'Branco(a)',
         \App\Enums\SkinColorsEnum::YELLOW->value => 'Amarelo(a)',
     ],
+
+    'audit_event_types' => [
+        \App\Enums\AuditEventTypesEnum::CREATE->value => 'Preto(a)',
+        \App\Enums\AuditEventTypesEnum::UPDATE->value => 'Pardo(a)',
+        \App\Enums\AuditEventTypesEnum::DELETE->value => 'Indígeno(a)',
+        \App\Enums\AuditEventTypesEnum::VIEW->value => 'Branco(a)',
+    ],
 ];
