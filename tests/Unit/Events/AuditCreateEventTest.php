@@ -15,7 +15,7 @@ class AuditCreateEventTest extends TestCase
         Event::fake();
 
         $user = User::factory()->createOneQuietly();
-        $eventType = AuditEventTypesEnum::LOGIN->name;
+        $eventType = AuditEventTypesEnum::LOGIN;
         $ipAddress = fake()->ipv6;
 
         AuditCreateEvent::dispatch($user, $user, $eventType, $ipAddress);
