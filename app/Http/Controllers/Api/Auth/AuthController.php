@@ -93,7 +93,7 @@ class AuthController extends Controller
                 $token = $request->user()->createToken('auth-token')->plainTextToken;
 
                 $user = auth()->user();
-                AuditCreateEvent::dispatch($user, $user, AuditEventTypesEnum::LOGIN->name, request()->ip());
+                AuditCreateEvent::dispatch($user, $user, AuditEventTypesEnum::LOGIN, request()->ip());
 
                 return response()->json([
                     'type' => 'success',

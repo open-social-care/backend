@@ -21,9 +21,10 @@ return [
     ],
 
     'audit_event_types' => [
-        \App\Enums\AuditEventTypesEnum::CREATE->value => 'Preto(a)',
-        \App\Enums\AuditEventTypesEnum::UPDATE->value => 'Pardo(a)',
-        \App\Enums\AuditEventTypesEnum::DELETE->value => 'Indígeno(a)',
-        \App\Enums\AuditEventTypesEnum::VIEW->value => 'Branco(a)',
+        \App\Enums\AuditEventTypesEnum::CREATE->value => 'Criou',
+        \App\Enums\AuditEventTypesEnum::UPDATE->value => 'Atualizou',
+        \App\Enums\AuditEventTypesEnum::DELETE->value => 'Deletou',
+        \App\Enums\AuditEventTypesEnum::VIEW->value => 'Visualizou',
+        \App\Enums\AuditEventTypesEnum::LOGIN->value => 'Acessou o sistema',
     ],
 ];

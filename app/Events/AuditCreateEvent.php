@@ -3,6 +3,7 @@
 namespace App\Events;
 
 use App\DTO\Shared\AuditDTO;
+use App\Enums\AuditEventTypesEnum;
 use App\Models\Audit;
 use App\Models\User;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -16,7 +17,7 @@ class AuditCreateEvent
 
     public Model $model;
     public User $user;
-    public string $eventType;
+    public AuditEventTypesEnum $eventType;
     public string $ipAddress;
     public ?string $eventContext;
     public ?array $data;
@@ -24,7 +25,7 @@ class AuditCreateEvent
     /**
      * Create a new event instance.
      */
-    public function __construct(Model $model, User $user, string $eventType,
+    public function __construct(Model $model, User $user, AuditEventTypesEnum $eventType,
                                 string $ipAddress, ?string $eventContext = null, ?array $data = null)
     {
         $this->model = $model;
@@ -46,7 +47,7 @@ class AuditCreateEvent
             'model_type' => get_class($this->model),
             'model_id' => $this->model->id,
             'user_id' => $this->user->id,
-            'event_type' => $this->eventType,
+            'event_type' => $this->eventType->name,
             'ip_address' => $this->ipAddress,
             'event_context' => $this->eventContext,
             'data' => $this->data,
