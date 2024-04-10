@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Requests\Api\Admin;
+namespace App\Http\Requests\Api\Manager;
 
-use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
@@ -34,11 +33,12 @@ class UserRequest extends FormRequest
      */
     public function authorize(): bool
     {
+        $organization = $this->route('organization');
         $user = $this->route('user');
 
         return $this->method() === 'PUT'
             ? auth()->user()->can('update', $user)
-            : auth()->user()->can('create', User::class);
+            : auth()->user()->can('createByOrganization', [User::class, $organization]);
     }
 
     /**

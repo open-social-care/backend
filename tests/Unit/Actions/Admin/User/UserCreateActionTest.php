@@ -3,7 +3,7 @@
 namespace Tests\Unit\Actions\Admin\User;
 
 use App\Actions\Admin\User\UserCreateAction;
-use App\DTO\Admin\UserDTO;
+use App\DTO\Shared\UserDTO;
 use App\Models\Organization;
 use App\Models\Role;
 use Illuminate\Foundation\Testing\RefreshDatabase;

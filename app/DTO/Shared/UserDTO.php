@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DTO\Admin;
+namespace App\DTO\Shared;
 
 class UserDTO
 {

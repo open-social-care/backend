@@ -1,7 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\Admin\OrganizationController as AdminOrganizationController;
-use App\Http\Controllers\Api\Admin\UserController;
+use App\Http\Controllers\Api\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Api\Manager\UserController as ManagerUserController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Auth\ForgotPasswordController;
 use App\Http\Controllers\Api\Auth\ResetPasswordController;
@@ -32,11 +33,11 @@ Route::middleware(['auth:sanctum', 'only_admin_user'])
     ->group(function () {
 
         // User Routes
-        Route::resource('users', UserController::class)
+        Route::resource('users', AdminUserController::class)
             ->except(['create', 'edit', 'show']);
 
-        Route::get('/users/form-infos', [UserController::class, 'formInfos'])->name('users.form-infos');
-        Route::get('/users/{user}', [UserController::class, 'getUser'])->name('users.get-user');
+        Route::get('/users/form-infos', [AdminUserController::class, 'formInfos'])->name('users.form-infos');
+        Route::get('/users/{user}', [AdminUserController::class, 'getUser'])->name('users.get-user');
 
         // Organization Routes
         Route::resource('organizations', AdminOrganizationController::class)
@@ -67,4 +68,12 @@ Route::middleware(['auth:sanctum', 'only_manager_user'])
 
         Route::get('/organizations/{organization}/get-users-by-role/{role}', [ManagerOrganizationController::class, 'getOrganizationUsersListByRole'])
             ->name('organizations.get-users-by-role');
+
+        // User Routes
+        Route::resource('users/{organization}', ManagerUserController::class)
+            ->except(['create','edit', 'show', 'update', 'destroy']);
+
+        Route::put('/users/{user}', [ManagerUserController::class, 'update'])->name('users.update');
+        Route::delete('/users/{user}/{organization}', [ManagerUserController::class, 'destroy'])->name('users.destroy');
+        Route::get('/users/show/{user}', [ManagerUserController::class, 'getUser'])->name('users.get-user');
     });

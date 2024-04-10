@@ -2,7 +2,7 @@
 
 namespace App\Actions\Admin\User;
 
-use App\DTO\Admin\UserDTO;
+use App\DTO\Shared\UserDTO;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 

@@ -12,7 +12,7 @@ use App\Http\Requests\Api\Admin\OrganizationAssociateUsersRequest;
 use App\Http\Requests\Api\Admin\OrganizationDisassociateUsersRequest;
 use App\Http\Requests\Api\Admin\OrganizationRequest;
 use App\Http\Resources\Api\Admin\OrganizationListResource;
-use App\Http\Resources\Api\Admin\UserListResource;
+use App\Http\Resources\Api\Shared\UserListWithRolesResource;
 use App\Http\Resources\Api\Shared\PaginationResource;
 use App\Models\Organization;
 use App\Models\Role;
@@ -595,7 +595,7 @@ class OrganizationController extends Controller
             return response()->json([
                 'type' => 'success',
                 'message' => __('messages.common.success_view'),
-                'data' => UserListResource::collection($paginate),
+                'data' => UserListWithRolesResource::collection($paginate),
                 'pagination' => PaginationResource::make($paginate),
             ], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
