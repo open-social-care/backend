@@ -19,4 +19,12 @@ return [
         \App\Enums\SkinColorsEnum::WHITE->value => 'Branco(a)',
         \App\Enums\SkinColorsEnum::YELLOW->value => 'Amarelo(a)',
     ],
+
+    'audit_event_types' => [
+        \App\Enums\AuditEventTypesEnum::CREATE->value => 'Criou',
+        \App\Enums\AuditEventTypesEnum::UPDATE->value => 'Atualizou',
+        \App\Enums\AuditEventTypesEnum::DELETE->value => 'Deletou',
+        \App\Enums\AuditEventTypesEnum::VIEW->value => 'Visualizou',
+        \App\Enums\AuditEventTypesEnum::LOGIN->value => 'Acessou o sistema',
+    ],
 ];
