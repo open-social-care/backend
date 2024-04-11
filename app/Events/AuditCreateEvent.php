@@ -16,17 +16,22 @@ class AuditCreateEvent
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public Model $model;
+
     public User $user;
+
     public AuditEventTypesEnum $eventType;
+
     public string $ipAddress;
+
     public ?string $eventContext;
+
     public ?array $data;
 
     /**
      * Create a new event instance.
      */
     public function __construct(Model $model, User $user, AuditEventTypesEnum $eventType,
-                                string $ipAddress, ?string $eventContext = null, ?array $data = null)
+        string $ipAddress, string $eventContext = null, array $data = null)
     {
         $this->model = $model;
         $this->user = $user;
@@ -38,9 +43,6 @@ class AuditCreateEvent
         $this->handle();
     }
 
-    /**
-     * @return void
-     */
     private function handle(): void
     {
         $auditDTO = new AuditDTO([

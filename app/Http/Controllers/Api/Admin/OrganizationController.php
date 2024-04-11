@@ -12,8 +12,8 @@ use App\Http\Requests\Api\Admin\OrganizationAssociateUsersRequest;
 use App\Http\Requests\Api\Admin\OrganizationDisassociateUsersRequest;
 use App\Http\Requests\Api\Admin\OrganizationRequest;
 use App\Http\Resources\Api\Admin\OrganizationListResource;
-use App\Http\Resources\Api\Shared\UserListWithRolesResource;
 use App\Http\Resources\Api\Shared\PaginationResource;
+use App\Http\Resources\Api\Shared\UserListWithRolesResource;
 use App\Models\Organization;
 use App\Models\Role;
 use App\Models\User;
@@ -351,7 +351,9 @@ class OrganizationController extends Controller
      *               type="object",
      *
      *               @OA\Property(property="data", type="array",
+     *
      *                     @OA\Items(type="object",
+     *
      *                          @OA\Property(property="user_id", type="integer", description="user id", example="1"),
      *                          @OA\Property(property="role_id", type="integer", description="role id", example="2")
      *                 )
@@ -375,6 +377,7 @@ class OrganizationController extends Controller
      *         description="Unprocessable Entity",
      *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="type", type="string", example="error"),
      *             @OA\Property(property="message", type="string", example="Unprocessable Entity"),
      *             @OA\Property(property="errors", type="object",
@@ -445,7 +448,9 @@ class OrganizationController extends Controller
      *               type="object",
      *
      *               @OA\Property(property="data", type="array",
+     *
      *                     @OA\Items(type="object",
+     *
      *                          @OA\Property(property="user_id", type="integer", description="user id", example="1"),
      *                          @OA\Property(property="role_id", type="integer", description="role id", example="2")
      *                 )
@@ -469,6 +474,7 @@ class OrganizationController extends Controller
      *         description="Unprocessable Entity",
      *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="type", type="string", example="error"),
      *             @OA\Property(property="message", type="string", example="Unprocessable Entity"),
      *             @OA\Property(property="errors", type="object",

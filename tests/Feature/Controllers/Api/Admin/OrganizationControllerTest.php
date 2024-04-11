@@ -170,7 +170,7 @@ class OrganizationControllerTest extends TestCase
                     'user_id' => $users[1]->id,
                     'role_id' => $roles[1]->id,
                 ],
-            ]
+            ],
         ];
 
         $response = $this->postJson(route('admin.organizations.associate-users', $organization->id), $data);
@@ -205,7 +205,7 @@ class OrganizationControllerTest extends TestCase
                     'user_id' => $users[1]->id,
                     'role_id' => $roles[1]->id,
                 ],
-            ]
+            ],
         ];
 
         $response = $this->postJson(route('admin.organizations.disassociate-users', $organization->id), $data);

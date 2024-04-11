@@ -8,8 +8,8 @@ use App\Actions\Manager\User\UserUpdateAction;
 use App\DTO\Shared\UserDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Manager\UserRequest;
-use App\Http\Resources\Api\Shared\UserListWithRolesResource;
 use App\Http\Resources\Api\Shared\PaginationResource;
+use App\Http\Resources\Api\Shared\UserListWithRolesResource;
 use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -91,7 +91,7 @@ class UserController extends Controller
             $this->authorize('viewByOrganization', [User::class, $organization]);
 
             $query = User::query()
-                ->whereHas('organizations', function ($query) use($organization) {
+                ->whereHas('organizations', function ($query) use ($organization) {
                     return $query->where('organization_id', $organization->id);
                 });
 

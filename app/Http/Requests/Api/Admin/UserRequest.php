@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Api\Admin;
 
-use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;

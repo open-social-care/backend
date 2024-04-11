@@ -14,18 +14,20 @@ class UserCreateAction
     /**
      * Exec$organization = ute create of user with roles and organizations
      */
-    public static function execute(UserDTO $userDTO, Organization $organization): void
+    public static function execute(UserDTO $userDTO, Organization $organization): User
     {
         DB::beginTransaction();
 
         $userData = $userDTO->toArray();
         $user = User::create($userData);
-        $roleSocialAssistant = Role::query()->firstWhere('name', RolesEnum::SOCIAL_ASSISTANT->value);
+        $roleSocialAssistant = Role::query()->firstOrCreate(['name' => RolesEnum::SOCIAL_ASSISTANT->value]);
 
         self::handleUserOrganizationAttach($user, $organization, $roleSocialAssistant);
         self::handleUserRoleAttach($user, $roleSocialAssistant);
 
         DB::commit();
+
+        return $user;
     }
 
     /**
@@ -33,7 +35,7 @@ class UserCreateAction
      */
     private static function handleUserOrganizationAttach(User $user, Organization $organization, Role $role): void
     {
-        if (!$user->hasOrganization($organization->id)) {
+        if (! $user->hasOrganization($organization->id)) {
             $organization->users()->attach($user->id, ['role_id' => $role->id]);
         }
     }
@@ -43,7 +45,7 @@ class UserCreateAction
      */
     private static function handleUserRoleAttach(User $user, Role $role): void
     {
-        if (!$user->hasRoleById($role->id)) {
+        if (! $user->hasRoleById($role->id)) {
             $user->roles()->attach($role->id);
         }
     }

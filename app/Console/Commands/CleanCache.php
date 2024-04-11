@@ -52,7 +52,6 @@ class CleanCache extends Command
         $this->executeWithMessages('cache:clear', [], $clearCacheMessages);
     }
 
-
     private function executeClearConfigurations()
     {
         $clearCacheConfigurationMessages = ['success' => 'Cache das configurações foi apagado.'];
@@ -74,8 +73,8 @@ class CleanCache extends Command
     private function executeCacheRoutes()
     {
         $cacheRouteMessages = [
-            'success'=> 'Cache das rotas foi criado.',
-            'failed' => 'Erro ao criar cache das rotas.'
+            'success' => 'Cache das rotas foi criado.',
+            'failed' => 'Erro ao criar cache das rotas.',
         ];
         $this->executeWithMessages('route:cache', [], $cacheRouteMessages);
     }

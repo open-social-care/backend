@@ -2,11 +2,11 @@
 
 use App\Http\Controllers\Api\Admin\OrganizationController as AdminOrganizationController;
 use App\Http\Controllers\Api\Admin\UserController as AdminUserController;
-use App\Http\Controllers\Api\Manager\UserController as ManagerUserController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Auth\ForgotPasswordController;
 use App\Http\Controllers\Api\Auth\ResetPasswordController;
 use App\Http\Controllers\Api\Manager\OrganizationController as ManagerOrganizationController;
+use App\Http\Controllers\Api\Manager\UserController as ManagerUserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -71,7 +71,11 @@ Route::middleware(['auth:sanctum', 'only_manager_user'])
 
         // User Routes
         Route::resource('users/{organization}', ManagerUserController::class)
-            ->except(['create','edit', 'show', 'update', 'destroy']);
+            ->except(['create', 'edit', 'show', 'update', 'destroy'])
+            ->names([
+                'index' => 'users.index',
+                'store' => 'users.store',
+            ]);
 
         Route::put('/users/{user}', [ManagerUserController::class, 'update'])->name('users.update');
         Route::delete('/users/{user}/{organization}', [ManagerUserController::class, 'destroy'])->name('users.destroy');
