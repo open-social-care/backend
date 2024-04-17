@@ -2,7 +2,6 @@
 
 namespace App\Policies;
 
-use App\Enums\RolesEnum;
 use App\Models\Organization;
 use App\Models\User;
 
@@ -11,9 +10,9 @@ class UserPolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): bool
+    public function viewAny(User $currentUser): bool
     {
-        return $user->hasRoleByName(RolesEnum::ADMIN->value);
+        return $currentUser->isAdminSystem();
     }
 
     /**
@@ -21,11 +20,7 @@ class UserPolicy
      */
     public function view(User $currentUser): bool
     {
-        if ($currentUser->hasRoleByName(RolesEnum::ADMIN->value) && $currentUser->organizations->isEmpty()) {
-            return true;
-        }
-
-        return false;
+        return $currentUser->isAdminSystem();
     }
 
     /**
@@ -33,11 +28,7 @@ class UserPolicy
      */
     public function viewByOrganization(User $currentUser, Organization $organization): bool
     {
-        if ($currentUser->hasRoleByName(RolesEnum::ADMIN->value) && $currentUser->organizations->isEmpty()) {
-            return true;
-        }
-
-        return $this->currentUserCanAccessUserByOrganization($currentUser, $organization);
+        return $currentUser->isAdminSystem() || $this->currentUserCanAccessUserByOrganization($currentUser, $organization);
     }
 
     /**
@@ -45,11 +36,7 @@ class UserPolicy
      */
     public function viewByUserOrganizations(User $currentUser, User $user): bool
     {
-        if ($currentUser->hasRoleByName(RolesEnum::ADMIN->value) && $currentUser->organizations->isEmpty()) {
-            return true;
-        }
-
-        return $this->currentUserCanAccessUser($currentUser, $user);
+        return $currentUser->isAdminSystem() || $this->currentUserCanAccessUser($currentUser, $user);
     }
 
     /**
@@ -57,11 +44,7 @@ class UserPolicy
      */
     public function create(User $currentUser): bool
     {
-        if ($currentUser->hasRoleByName(RolesEnum::ADMIN->value) && $currentUser->organizations->isEmpty()) {
-            return true;
-        }
-
-        return false;
+        return $currentUser->isAdminSystem();
     }
 
     /**
@@ -69,11 +52,7 @@ class UserPolicy
      */
     public function createByOrganization(User $currentUser, Organization $organization): bool
     {
-        if ($currentUser->hasRoleByName(RolesEnum::ADMIN->value) && $currentUser->organizations->isEmpty()) {
-            return true;
-        }
-
-        return $this->currentUserCanAccessUserByOrganization($currentUser, $organization);
+        return $currentUser->isAdminSystem() || $this->currentUserCanAccessUserByOrganization($currentUser, $organization);
     }
 
     /**
@@ -81,23 +60,23 @@ class UserPolicy
      */
     public function update(User $currentUser, User $user): bool
     {
-        if ($currentUser->hasRoleByName(RolesEnum::ADMIN->value) && $currentUser->organizations->isEmpty()) {
-            return true;
-        }
-
-        return $this->currentUserCanAccessUser($currentUser, $user);
+        return $currentUser->isAdminSystem() || $this->currentUserCanAccessUser($currentUser, $user);
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $currentUser, User $user): bool
+    public function delete(User $currentUser): bool
     {
-        if ($currentUser->hasRoleByName(RolesEnum::ADMIN->value) && $currentUser->organizations->isEmpty()) {
-            return true;
-        }
+        return $currentUser->isAdminSystem();
+    }
 
-        return $this->currentUserCanAccessUser($currentUser, $user);
+    /**
+     * Determine whether the user can delete the model.
+     */
+    public function disassociateUserFromOrganization(User $currentUser, User $user): bool
+    {
+        return $currentUser->isAdminSystem() || $this->currentUserCanAccessUser($currentUser, $user);
     }
 
     private function currentUserCanAccessUserByOrganization(User $currentUser, Organization $organization): bool

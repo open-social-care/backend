@@ -20,7 +20,7 @@ class UserCreateAction
 
         $userData = $userDTO->toArray();
         $user = User::create($userData);
-        $roleSocialAssistant = Role::query()->firstOrCreate(['name' => RolesEnum::SOCIAL_ASSISTANT->value]);
+        $roleSocialAssistant = Role::query()->firstWhere(['name' => RolesEnum::SOCIAL_ASSISTANT->value]);
 
         self::handleUserOrganizationAttach($user, $organization, $roleSocialAssistant);
         self::handleUserRoleAttach($user, $roleSocialAssistant);

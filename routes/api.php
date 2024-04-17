@@ -34,14 +34,14 @@ Route::middleware(['auth:sanctum', 'only_admin_user'])
 
         // User Routes
         Route::resource('users', AdminUserController::class)
-            ->except(['create', 'edit', 'show']);
+            ->only(['index', 'store', 'update', 'destroy']);
 
         Route::get('/users/form-infos', [AdminUserController::class, 'formInfos'])->name('users.form-infos');
         Route::get('/users/{user}', [AdminUserController::class, 'getUser'])->name('users.get-user');
 
         // Organization Routes
         Route::resource('organizations', AdminOrganizationController::class)
-            ->except(['create', 'edit', 'show']);
+            ->only(['index', 'store', 'update', 'destroy']);
 
         Route::post('/organizations/{organization}/associate-users', [AdminOrganizationController::class, 'associateUsersToOrganization'])
             ->name('organizations.associate-users');
@@ -71,13 +71,13 @@ Route::middleware(['auth:sanctum', 'only_manager_user'])
 
         // User Routes
         Route::resource('users/{organization}', ManagerUserController::class)
-            ->except(['create', 'edit', 'show', 'update', 'destroy'])
+            ->only(['index', 'store'])
             ->names([
                 'index' => 'users.index',
                 'store' => 'users.store',
             ]);
 
         Route::put('/users/{user}', [ManagerUserController::class, 'update'])->name('users.update');
-        Route::delete('/users/{user}/{organization}', [ManagerUserController::class, 'destroy'])->name('users.destroy');
+        Route::delete('/users/disassociate-user-from-organization/{user}/{organization}', [ManagerUserController::class, 'disassociateUserFromOrganization'])->name('users.disassociate-user-from-organization');
         Route::get('/users/show/{user}', [ManagerUserController::class, 'getUser'])->name('users.get-user');
     });

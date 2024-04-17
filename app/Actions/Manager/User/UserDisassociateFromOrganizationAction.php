@@ -6,7 +6,7 @@ use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
-class UserDestroyAction
+class UserDisassociateFromOrganizationAction
 {
     /**
      * Execute update of user with sync roles and organizations
@@ -15,14 +15,8 @@ class UserDestroyAction
     {
         DB::beginTransaction();
 
-        $userHasMoreOrganization = $user->organizations()->count() > 1;
-
-        if ($userHasMoreOrganization) {
-            self::handleDetachRoleUser($user, $organization);
-            $user->organizations()->detach($organization);
-        } else {
-            $user->delete();
-        }
+        self::handleDetachRoleUser($user, $organization);
+        $user->organizations()->detach($organization);
 
         DB::commit();
     }

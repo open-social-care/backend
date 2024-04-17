@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Actions\Manager\User;
 
-use App\Actions\Manager\User\UserDestroyAction;
+use App\Actions\Manager\User\UserDisassociateFromOrganizationAction;
 use App\Enums\RolesEnum;
 use App\Models\Organization;
 use App\Models\Role;
@@ -10,7 +10,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class UserDestroyActionTest extends TestCase
+class UserDisassociateFromOrganizationActionTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -29,12 +29,10 @@ class UserDestroyActionTest extends TestCase
         $this->roleSocialAssistant = Role::factory()->createQuietly(['name' => RolesEnum::SOCIAL_ASSISTANT->value]);
     }
 
-    public function testExecuteActionWhenUserHasOnlyOneOrganization()
+    public function testExecuteActionToDetachUserWhenUserHasOrganizationWithOneRole()
     {
         $user = $this->createUserWithOneOrganization();
-        UserDestroyAction::execute($user, $this->organization);
-
-        $this->assertSoftDeleted('users', ['id' => $user->id]);
+        UserDisassociateFromOrganizationAction::execute($user, $this->organization);
 
         $this->assertDatabaseMissing('organization_users', [
             'user_id' => $user->id,
@@ -47,34 +45,16 @@ class UserDestroyActionTest extends TestCase
         ]);
     }
 
-    public function testExecuteActionWhenUserHasMoreThanOneOrganizationAndSameRole()
+    public function testExecuteActionToDetachUserWhenUserHasTwoOrganizationWithSameRole()
     {
         $user = $this->createUserWithTwoOrganizationAndSameRole();
-        UserDestroyAction::execute($user, $this->organization);
+        UserDisassociateFromOrganizationAction::execute($user, $this->organization);
 
         $this->assertDatabaseHas('users', ['id' => $user->id]);
 
         $this->assertDatabaseMissing('organization_users', [
             'user_id' => $user->id,
             'organization_id' => $this->organization->id,
-        ]);
-    }
-
-    public function testExecuteActionWhenUserHasMoreThanOneOrganizationAndDifferentRoles()
-    {
-        $user = $this->createUserWithTwoOrganizationAndDifferentRoles();
-        UserDestroyAction::execute($user, $this->organization);
-
-        $this->assertDatabaseHas('users', ['id' => $user->id]);
-
-        $this->assertDatabaseMissing('organization_users', [
-            'user_id' => $user->id,
-            'organization_id' => $this->organization->id,
-        ]);
-
-        $this->assertDatabaseMissing('role_users', [
-            'user_id' => $user->id,
-            'role_id' => $this->roleManager->id,
         ]);
     }
 
@@ -95,20 +75,6 @@ class UserDestroyActionTest extends TestCase
         $organization2 = Organization::factory()->createQuietly();
         $user->organizations()->attach($organization2, ['role_id' => $this->roleManager->id]);
         $user->organizations()->attach($this->organization, ['role_id' => $this->roleManager->id]);
-
-        return $user;
-    }
-
-    private function createUserWithTwoOrganizationAndDifferentRoles()
-    {
-        $user = User::factory()->createOneQuietly();
-
-        $user->roles()->attach($this->roleManager);
-        $user->organizations()->attach($this->organization, ['role_id' => $this->roleManager->id]);
-
-        $organizationSocialAssistant = Organization::factory()->createQuietly();
-        $user->roles()->attach($this->roleSocialAssistant);
-        $user->organizations()->attach($organizationSocialAssistant, ['role_id' => $this->roleSocialAssistant->id]);
 
         return $user;
     }

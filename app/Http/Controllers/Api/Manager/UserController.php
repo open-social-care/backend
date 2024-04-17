@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Api\Manager;
 
 use App\Actions\Manager\User\UserCreateAction;
-use App\Actions\Manager\User\UserDestroyAction;
+use App\Actions\Manager\User\UserDisassociateFromOrganizationAction;
 use App\Actions\Manager\User\UserUpdateAction;
 use App\DTO\Shared\UserDTO;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\Manager\UserRequest;
+use App\Http\Requests\Api\Manager\UserCreateRequest;
+use App\Http\Requests\Api\Manager\UserUpdateRequest;
 use App\Http\Resources\Api\Shared\PaginationResource;
 use App\Http\Resources\Api\Shared\UserListWithRolesResource;
 use App\Models\Organization;
@@ -186,7 +187,7 @@ class UserController extends Controller
      *     ),
      * )
      */
-    public function store(UserRequest $request, Organization $organization): JsonResponse
+    public function store(UserCreateRequest $request, Organization $organization): JsonResponse
     {
         try {
             $this->authorize('createByOrganization', [User::class, $organization]);
@@ -276,7 +277,7 @@ class UserController extends Controller
      *     ),
      * )
      */
-    public function update(UserRequest $request, User $user): JsonResponse
+    public function update(UserUpdateRequest $request, User $user): JsonResponse
     {
         try {
             $this->authorize('update', $user);
@@ -346,12 +347,12 @@ class UserController extends Controller
      *     ),
      * )
      */
-    public function destroy(User $user, Organization $organization): JsonResponse
+    public function disassociateUserFromOrganization(User $user, Organization $organization): JsonResponse
     {
         try {
-            $this->authorize('delete', $user);
+            $this->authorize('disassociateUserFromOrganization', $user);
 
-            UserDestroyAction::execute($user, $organization);
+            UserDisassociateFromOrganizationAction::execute($user, $organization);
 
             return response()->json(['type' => 'success', 'message' => __('messages.common.success_destroy')], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {

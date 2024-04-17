@@ -26,10 +26,12 @@ class UserControllerTest extends TestCase
         $this->organization = Organization::factory()->createQuietly();
 
         $this->userManager = User::factory()->createQuietly();
-        $role = Role::factory()->createQuietly(['name' => RolesEnum::MANAGER->value]);
-        $this->userManager->roles()->attach($role);
-        $this->userManager->organizations()->attach($this->organization, ['role_id' => $role->id]);
+        $roleManager = Role::factory()->createQuietly(['name' => RolesEnum::MANAGER->value]);
+        $this->userManager->roles()->attach($roleManager);
+        $this->userManager->organizations()->attach($this->organization, ['role_id' => $roleManager->id]);
         $this->actingAs($this->userManager);
+
+        Role::factory()->createQuietly(['name' => RolesEnum::SOCIAL_ASSISTANT->value]);
     }
 
     public function testIndexMethod()
@@ -149,11 +151,11 @@ class UserControllerTest extends TestCase
             ]);
     }
 
-    public function testDestroyMethod()
+    public function testDisassociateUserFromOrganizationMethod()
     {
         $user = $this->createUserForOrganization();
 
-        $response = $this->deleteJson(route('manager.users.destroy', [
+        $response = $this->deleteJson(route('manager.users.disassociate-user-from-organization', [
             'user' => $user->id,
             'organization' => $this->organization->id,
         ]));
@@ -161,12 +163,15 @@ class UserControllerTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_OK)
             ->assertJson(['message' => __('messages.common.success_destroy')]);
 
-        $this->assertSoftDeleted('users', ['id' => $user->id]);
+        $this->assertDatabaseMissing('organization_users', [
+            'organization_id' => $this->organization->id,
+            'user_id' => $user->id,
+        ]);
     }
 
-    public function testDestroyMethodWithInvalidUser()
+    public function testDisassociateUserFromOrganizationWithInvalidUser()
     {
-        $response = $this->deleteJson(route('manager.users.destroy', [
+        $response = $this->deleteJson(route('manager.users.disassociate-user-from-organization', [
             'user' => 0,
             'organization' => 0,
         ]));
@@ -210,7 +215,7 @@ class UserControllerTest extends TestCase
     private function createUserForOrganization(string $name = null)
     {
         $name = $name ?? fake()->name;
-        $user = User::factory()->createOneQuietly(['name' => $name]);
+        $user = User::factory()->createQuietly(['name' => $name]);
         $role = Role::factory()->createQuietly(['name' => RolesEnum::SOCIAL_ASSISTANT->value]);
         $user->roles()->attach($role);
         $user->organizations()->attach($this->organization, ['role_id' => $role->id]);
