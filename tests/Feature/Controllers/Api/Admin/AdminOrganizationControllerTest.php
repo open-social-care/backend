@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Tests\TestCase;
 
-class OrganizationControllerTest extends TestCase
+class AdminOrganizationControllerTest extends TestCase
 {
     use RefreshDatabase;
 

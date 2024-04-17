@@ -1,42 +1,30 @@
 <?php
 
-namespace App\Http\Controllers\Api\Manager;
+namespace App\Http\Controllers\Api\Admin;
 
-use App\Actions\Manager\User\UserCreateAction;
-use App\Actions\Manager\User\UserDisassociateFromOrganizationAction;
-use App\Actions\Manager\User\UserUpdateAction;
+use App\Actions\Admin\User\UserCreateAction;
+use App\Actions\Admin\User\UserUpdateAction;
 use App\DTO\Shared\UserDTO;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\Manager\UserCreateRequest;
-use App\Http\Requests\Api\Manager\UserUpdateRequest;
+use App\Http\Requests\Api\Admin\UserCreateRequest;
+use App\Http\Requests\Api\Admin\UserUpdateRequest;
+use App\Http\Resources\Api\Admin\UserResource;
 use App\Http\Resources\Api\Shared\PaginationResource;
 use App\Http\Resources\Api\Shared\UserListWithRolesResource;
-use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
-class UserController extends Controller
+class AdminUserController extends Controller
 {
     /**
      * @OA\Get(
-     * path="/api/manager/users/{organization}",
-     * operationId="ManagerGetUsers",
-     * tags={"Manager/User"},
+     * path="/api/admin/users",
+     * operationId="AdminGetUsers",
+     * tags={"Admin/User"},
      * summary="Get a list of users",
      * description="Retrieve a list of users.",
      * security={{"sanctum":{}}},
-     *
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         description="The organization id",
-     *         required=true,
-     *
-     *         @OA\Schema(
-     *             type="integer"
-     *         )
-     *     ),
      *
      *     @OA\Parameter(
      *         name="q",
@@ -86,21 +74,13 @@ class UserController extends Controller
      *     ),
      * )
      */
-    public function index(Organization $organization): JsonResponse
+    public function index(): JsonResponse
     {
         try {
-            $this->authorize('viewByOrganization', [User::class, $organization]);
+            $this->authorize('view', User::class);
 
-            $query = User::query()
-                ->whereHas('organizations', function ($query) use ($organization) {
-                    return $query->where('organization_id', $organization->id);
-                });
-
-            if ($search = request()->get('q', null)) {
-                $query->whereRaw("LOWER(name) LIKE '%' || LOWER(?) || '%'", [$search]);
-            }
-
-            $paginate = $query->paginate(30);
+            $search = request()->get('q', null);
+            $paginate = User::search($search)->paginate(30);
 
             return response()->json([
                 'type' => 'success',
@@ -115,23 +95,12 @@ class UserController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/manager/users/{organization}",
-     *     operationId="ManagerCreateUser",
-     *     tags={"Manager/User"},
+     *     path="/api/admin/users",
+     *     operationId="AdminCreateUser",
+     *     tags={"Admin/User"},
      *     summary="Create a new user",
-     *     description="Create a new user with the provided information in manager.",
+     *     description="Create a new admin user with the provided information.",
      *     security={{"sanctum":{}}},
-     *
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         description="The organization id",
-     *         required=true,
-     *
-     *         @OA\Schema(
-     *             type="integer"
-     *         )
-     *     ),
      *
      *     @OA\RequestBody(
      *         required=true,
@@ -187,15 +156,15 @@ class UserController extends Controller
      *     ),
      * )
      */
-    public function store(UserCreateRequest $request, Organization $organization): JsonResponse
+    public function store(UserCreateRequest $request): JsonResponse
     {
         try {
-            $this->authorize('createByOrganization', [User::class, $organization]);
+            $this->authorize('create', User::class);
 
             $data = $request->validated();
 
             $userDto = new UserDTO($data);
-            UserCreateAction::execute($userDto, $organization);
+            UserCreateAction::execute($userDto);
 
             return response()->json(['type' => 'success', 'message' => __('messages.common.success_create')], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
@@ -205,9 +174,9 @@ class UserController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/api/manager/users/{user}",
-     *     operationId="ManagerUpdateUser",
-     *     tags={"Manager/User"},
+     *     path="/api/admin/users/{user}",
+     *     operationId="AdminUpdateUser",
+     *     tags={"Admin/User"},
      *     summary="Update user",
      *     description="Update user with the provided information.",
      *     security={{"sanctum":{}}},
@@ -295,23 +264,12 @@ class UserController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/api/manager/users/{user}/{organization}",
-     *     operationId="ManagerDestroyUser",
-     *     tags={"Manager/User"},
+     *     path="/api/admin/users/{user}",
+     *     operationId="AdminDestroyUser",
+     *     tags={"Admin/User"},
      *     summary="Destroy user",
      *     description="Destroy user with the provided id.",
      *     security={{"sanctum":{}}},
-     *
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         description="The organization id",
-     *         required=true,
-     *
-     *         @OA\Schema(
-     *             type="integer"
-     *         )
-     *     ),
      *
      *     @OA\Parameter(
      *         name="id",
@@ -347,12 +305,12 @@ class UserController extends Controller
      *     ),
      * )
      */
-    public function disassociateUserFromOrganization(User $user, Organization $organization): JsonResponse
+    public function destroy(User $user): JsonResponse
     {
         try {
-            $this->authorize('disassociateUserFromOrganization', $user);
+            $this->authorize('delete', $user);
 
-            UserDisassociateFromOrganizationAction::execute($user, $organization);
+            $user->delete();
 
             return response()->json(['type' => 'success', 'message' => __('messages.common.success_destroy')], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
@@ -362,9 +320,9 @@ class UserController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/manager/users/{user}",
-     *     operationId="ManagerGetUser",
-     *     tags={"Manager/User"},
+     *     path="/api/admin/users/{user}",
+     *     operationId="AdminGetUser",
+     *     tags={"Admin/User"},
      *     summary="Get user infos",
      *     description="Get user infos",
      *     security={{"sanctum":{}}},
@@ -411,12 +369,10 @@ class UserController extends Controller
     public function getUser(User $user): JsonResponse
     {
         try {
-            $this->authorize('viewByUserOrganizations', $user);
-
             return response()->json([
                 'type' => 'success',
                 'message' => __('messages.common.success_view'),
-                'data' => UserListWithRolesResource::make($user),
+                'data' => UserResource::make($user),
             ], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
             return response()->json(['type' => 'error', 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);

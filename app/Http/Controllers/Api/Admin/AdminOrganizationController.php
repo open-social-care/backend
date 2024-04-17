@@ -20,7 +20,7 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
-class OrganizationController extends Controller
+class AdminOrganizationController extends Controller
 {
     /**
      * @OA\Get(

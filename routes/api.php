@@ -1,12 +1,12 @@
 <?php
 
-use App\Http\Controllers\Api\Admin\OrganizationController as AdminOrganizationController;
-use App\Http\Controllers\Api\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Api\Admin\AdminOrganizationController;
+use App\Http\Controllers\Api\Admin\AdminUserController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Auth\ForgotPasswordController;
 use App\Http\Controllers\Api\Auth\ResetPasswordController;
-use App\Http\Controllers\Api\Manager\OrganizationController as ManagerOrganizationController;
-use App\Http\Controllers\Api\Manager\UserController as ManagerUserController;
+use App\Http\Controllers\Api\Manager\ManagerOrganizationController;
+use App\Http\Controllers\Api\Manager\ManagerUserController;
 use Illuminate\Support\Facades\Route;
 
 /*

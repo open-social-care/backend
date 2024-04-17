@@ -16,7 +16,7 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
-class OrganizationController extends Controller
+class ManagerOrganizationController extends Controller
 {
     /**
      * @OA\Get(
