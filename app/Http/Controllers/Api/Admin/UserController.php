@@ -6,7 +6,8 @@ use App\Actions\Admin\User\UserCreateAction;
 use App\Actions\Admin\User\UserUpdateAction;
 use App\DTO\Shared\UserDTO;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\Admin\UserRequest;
+use App\Http\Requests\Api\Admin\UserCreateRequest;
+use App\Http\Requests\Api\Admin\UserUpdateRequest;
 use App\Http\Resources\Api\Admin\UserResource;
 use App\Http\Resources\Api\Shared\PaginationResource;
 use App\Http\Resources\Api\Shared\UserListWithRolesResource;
@@ -155,7 +156,7 @@ class UserController extends Controller
      *     ),
      * )
      */
-    public function store(UserRequest $request): JsonResponse
+    public function store(UserCreateRequest $request): JsonResponse
     {
         try {
             $this->authorize('create', User::class);
@@ -245,7 +246,7 @@ class UserController extends Controller
      *     ),
      * )
      */
-    public function update(UserRequest $request, User $user): JsonResponse
+    public function update(UserUpdateRequest $request, User $user): JsonResponse
     {
         try {
             $this->authorize('update', $user);

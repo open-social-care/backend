@@ -2,14 +2,13 @@
 
 namespace App\Http\Requests\Api\Admin;
 
-use App\Models\User;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
-class UserRequest extends FormRequest
+class UserUpdateRequest extends FormRequest
 {
     /**
      * Handle a failed validation attempt.
@@ -35,9 +34,7 @@ class UserRequest extends FormRequest
     {
         $user = $this->route('user');
 
-        return $this->method() === 'PUT'
-            ? auth()->user()->can('update', $user)
-            : auth()->user()->can('create', User::class);
+        return auth()->user()->can('update', $user);
     }
 
     /**
@@ -47,20 +44,17 @@ class UserRequest extends FormRequest
     {
         $rules = [
             'name' => 'required|string|max:255',
-            'email' => ['required', 'string', 'email', 'max:255'],
-            'password' => 'required|string|min:6|confirmed',
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'max:255',
+                Rule::unique('users')
+                    ->whereNot('id', $this->user->id)
+                    ->whereNull('deleted_at')
+            ],
+            'password' => 'nullable|string|min:6|confirmed',
         ];
-
-        if ($this->method() === 'PUT' && $this->user) {
-            $rules['email'][] = Rule::unique('users')
-                ->whereNot('id', $this->user->id)
-                ->whereNull('deleted_at');
-
-            $rules['password'] = 'nullable|string|min:6|confirmed';
-        } else {
-            $rules['email'][] = Rule::unique('users')
-                ->whereNull('deleted_at');
-        }
 
         return $rules;
     }
