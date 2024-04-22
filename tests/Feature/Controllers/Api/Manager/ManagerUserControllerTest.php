@@ -87,6 +87,20 @@ class ManagerUserControllerTest extends TestCase
             ->assertJsonMissing(['name' => $user->name]);
     }
 
+    public function testIndexMethodWhenUserCantAccessOrganization()
+    {
+        $organization = Organization::factory()->createQuietly();
+        $user = User::factory()->createQuietly();
+        $roleManager = Role::factory()->createQuietly(['name' => RolesEnum::MANAGER->value]);
+        $user->roles()->attach($roleManager);
+        $user->organizations()->attach($organization, ['role_id' => $roleManager->id]);
+        $this->actingAs($user);
+
+        $response = $this->getJson(route('manager.users.index', ['organization' => $this->organization->id]));
+
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
+    }
+
     public function testStoreMethod()
     {
         $userData = [
@@ -117,6 +131,27 @@ class ManagerUserControllerTest extends TestCase
                     'password',
                 ],
             ]);
+    }
+
+    public function testStoreMethodWhenUserCantAccessOrganization()
+    {
+        $organization = Organization::factory()->createQuietly();
+        $user = User::factory()->createQuietly();
+        $roleManager = Role::factory()->createQuietly(['name' => RolesEnum::MANAGER->value]);
+        $user->roles()->attach($roleManager);
+        $user->organizations()->attach($organization, ['role_id' => $roleManager->id]);
+        $this->actingAs($user);
+
+        $userData = [
+            'name' => 'Nome do Usuário',
+            'email' => 'usuario@example.com',
+            'password' => 'senha123',
+            'password_confirmation' => 'senha123',
+        ];
+
+        $response = $this->postJson(route('manager.users.store', ['organization' => $this->organization->id]), $userData);
+
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testUpdateMethod()
@@ -151,6 +186,27 @@ class ManagerUserControllerTest extends TestCase
             ]);
     }
 
+    public function testUpdateMethodWhenUserCantAccessOrganization()
+    {
+        $organization = Organization::factory()->createQuietly();
+        $user = User::factory()->createQuietly();
+        $roleManager = Role::factory()->createQuietly(['name' => RolesEnum::MANAGER->value]);
+        $user->roles()->attach($roleManager);
+        $user->organizations()->attach($organization, ['role_id' => $roleManager->id]);
+        $this->actingAs($user);
+
+        $userToUpdate = $this->createUserForOrganization();
+
+        $updatedUserData = [
+            'name' => 'New name test',
+        ];
+
+        $updatedUserData = array_merge($user->toArray(), $updatedUserData);
+        $response = $this->putJson(route('manager.users.update', ['user' => $userToUpdate->id]), $updatedUserData);
+
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
+    }
+
     public function testDisassociateUserFromOrganizationMethod()
     {
         $user = $this->createUserForOrganization();
@@ -169,7 +225,7 @@ class ManagerUserControllerTest extends TestCase
         ]);
     }
 
-    public function testDisassociateUserFromOrganizationWithInvalidUser()
+    public function testDisassociateUserFromOrganizationMethodWithInvalidUser()
     {
         $response = $this->deleteJson(route('manager.users.disassociate-user-from-organization', [
             'user' => 0,
@@ -178,6 +234,25 @@ class ManagerUserControllerTest extends TestCase
 
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND)
             ->assertJsonStructure(['message']);
+    }
+
+    public function testDisassociateUserFromOrganizationMethodWhenUserCantAccessOrganization()
+    {
+        $organization = Organization::factory()->createQuietly();
+        $user = User::factory()->createQuietly();
+        $roleManager = Role::factory()->createQuietly(['name' => RolesEnum::MANAGER->value]);
+        $user->roles()->attach($roleManager);
+        $user->organizations()->attach($organization, ['role_id' => $roleManager->id]);
+        $this->actingAs($user);
+
+        $userToDisassociate = $this->createUserForOrganization();
+
+        $response = $this->deleteJson(route('manager.users.disassociate-user-from-organization', [
+            'user' => $userToDisassociate->id,
+            'organization' => $this->organization->id,
+        ]));;
+
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testGetUserMethod()
@@ -197,6 +272,22 @@ class ManagerUserControllerTest extends TestCase
 
         $expectedUserData = UserListWithRolesResource::make($user)->jsonSerialize();
         $response->assertJsonFragment(['data' => $expectedUserData]);
+    }
+
+    public function testGetUserMethodWhenUserCantAccessOrganization()
+    {
+        $organization = Organization::factory()->createQuietly();
+        $user = User::factory()->createQuietly();
+        $roleManager = Role::factory()->createQuietly(['name' => RolesEnum::MANAGER->value]);
+        $user->roles()->attach($roleManager);
+        $user->organizations()->attach($organization, ['role_id' => $roleManager->id]);
+        $this->actingAs($user);
+
+        $userToGet = $this->createUserForOrganization();
+
+        $response = $this->getJson(route('manager.users.get-user', $userToGet->id));
+
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     private function createUsersForOrganization()

@@ -88,9 +88,9 @@ class ManagerUserController extends Controller
      */
     public function index(Organization $organization): JsonResponse
     {
-        try {
-            $this->authorize('viewByOrganization', [User::class, $organization]);
+        $this->authorize('viewByOrganization', [User::class, $organization]);
 
+        try {
             $query = User::query()
                 ->whereHas('organizations', function ($query) use ($organization) {
                     return $query->where('organization_id', $organization->id);
@@ -189,9 +189,9 @@ class ManagerUserController extends Controller
      */
     public function store(UserCreateRequest $request, Organization $organization): JsonResponse
     {
-        try {
-            $this->authorize('createByOrganization', [User::class, $organization]);
+        $this->authorize('createByOrganization', [User::class, $organization]);
 
+        try {
             $data = $request->validated();
 
             $userDto = new UserDTO($data);
@@ -279,9 +279,9 @@ class ManagerUserController extends Controller
      */
     public function update(UserUpdateRequest $request, User $user): JsonResponse
     {
-        try {
-            $this->authorize('update', $user);
+        $this->authorize('update', $user);
 
+        try {
             $data = $request->validated();
 
             $userDto = new UserDTO($data);
@@ -349,9 +349,9 @@ class ManagerUserController extends Controller
      */
     public function disassociateUserFromOrganization(User $user, Organization $organization): JsonResponse
     {
-        try {
-            $this->authorize('disassociateUserFromOrganization', $user);
+        $this->authorize('disassociateUserFromOrganization', $user);
 
+        try {
             UserDisassociateFromOrganizationAction::execute($user, $organization);
 
             return response()->json(['type' => 'success', 'message' => __('messages.common.success_destroy')], HttpResponse::HTTP_OK);
@@ -410,9 +410,9 @@ class ManagerUserController extends Controller
      */
     public function getUser(User $user): JsonResponse
     {
-        try {
-            $this->authorize('viewByUserOrganizations', $user);
+        $this->authorize('viewByUserOrganizations', $user);
 
+        try {
             return response()->json([
                 'type' => 'success',
                 'message' => __('messages.common.success_view'),
