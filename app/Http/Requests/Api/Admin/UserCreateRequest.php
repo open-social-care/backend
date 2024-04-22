@@ -49,7 +49,7 @@ class UserCreateRequest extends FormRequest
                 'email',
                 'max:255',
                 Rule::unique('users')
-                    ->whereNull('deleted_at')
+                    ->whereNull('deleted_at'),
             ],
             'password' => 'required|string|min:6|confirmed',
         ];

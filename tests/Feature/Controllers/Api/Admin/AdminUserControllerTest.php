@@ -65,6 +65,16 @@ class AdminUserControllerTest extends TestCase
             ->assertJsonMissing(['name' => $user->name]);
     }
 
+    public function testIndexMethodWhenUserCantAccessInformation()
+    {
+        $user = User::factory()->createQuietly();
+        $this->actingAs($user);
+
+        $response = $this->getJson(route('admin.users.index'));
+
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
+    }
+
     public function testStoreMethod()
     {
         $userData = [
@@ -95,6 +105,23 @@ class AdminUserControllerTest extends TestCase
                     'password',
                 ],
             ]);
+    }
+
+    public function testStoreMethodWhenUserCantAccessInformation()
+    {
+        $user = User::factory()->createQuietly();
+        $this->actingAs($user);
+
+        $userData = [
+            'name' => 'Nome do Usuário',
+            'email' => 'usuario@example.com',
+            'password' => 'senha123',
+            'password_confirmation' => 'senha123',
+        ];
+
+        $response = $this->postJson(route('admin.users.store'), $userData);
+
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testUpdateMethod()
@@ -129,6 +156,23 @@ class AdminUserControllerTest extends TestCase
             ]);
     }
 
+    public function testUpdateMethodWhenUserCantAccessInformation()
+    {
+        $user = User::factory()->createQuietly();
+        $this->actingAs($user);
+
+        $userToUpdate = User::factory()->createOneQuietly();
+
+        $updatedUserData = [
+            'name' => 'New name test',
+        ];
+
+        $updatedUserData = array_merge($userToUpdate->toArray(), $updatedUserData);
+        $response = $this->putJson(route('admin.users.update', $userToUpdate->id), $updatedUserData);
+
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
+    }
+
     public function testDestroyMethod()
     {
         $user = User::factory()->create();
@@ -149,6 +193,18 @@ class AdminUserControllerTest extends TestCase
             ->assertJsonStructure(['message']);
     }
 
+    public function testDestroyMethodWhenUserCantAccessInformation()
+    {
+        $user = User::factory()->createQuietly();
+        $this->actingAs($user);
+
+        $userToDestroy = User::factory()->create();
+
+        $response = $this->deleteJson(route('admin.users.destroy', $userToDestroy->id));
+
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
+    }
+
     public function testGetUserMethod()
     {
         $user = User::factory()->createOneQuietly();
@@ -166,5 +222,17 @@ class AdminUserControllerTest extends TestCase
 
         $expectedUserData = UserResource::make($user)->jsonSerialize();
         $response->assertJsonFragment(['data' => $expectedUserData]);
+    }
+
+    public function testGetUserMethodWhenUserCantAccessInformation()
+    {
+        $user = User::factory()->createQuietly();
+        $this->actingAs($user);
+
+        $userToGet = User::factory()->createOneQuietly();
+
+        $response = $this->getJson(route('admin.users.get-user', $userToGet->id));
+
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 }

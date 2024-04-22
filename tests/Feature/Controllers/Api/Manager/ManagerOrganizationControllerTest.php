@@ -31,7 +31,7 @@ class ManagerOrganizationControllerTest extends TestCase
         $this->actingAs($this->userManager);
     }
 
-    public function testGetOrganizationInfo()
+    public function testGetOrganizationInfoMethod()
     {
         $response = $this->getJson(route('manager.organizations.get-info', $this->organization->id));
 
@@ -39,6 +39,20 @@ class ManagerOrganizationControllerTest extends TestCase
             ->assertJsonStructure(['organization']);
 
         $response->assertJsonFragment(['name' => $this->organization->name]);
+    }
+
+    public function testGetOrganizationInfoMethodWhenUserCantAccessOrganization()
+    {
+        $organization = Organization::factory()->createQuietly();
+        $user = User::factory()->createQuietly();
+        $roleManager = Role::factory()->createQuietly(['name' => RolesEnum::MANAGER->value]);
+        $user->roles()->attach($roleManager);
+        $user->organizations()->attach($organization, ['role_id' => $roleManager->id]);
+        $this->actingAs($user);
+
+        $response = $this->getJson(route('manager.organizations.get-info', $this->organization->id));
+
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testUpdateMethod()
@@ -59,7 +73,43 @@ class ManagerOrganizationControllerTest extends TestCase
         $this->assertEquals($updatedData['name'], $this->organization->name);
     }
 
-    public function testGetOrganizationUsersListByRole()
+    public function testUpdateMethodValidation()
+    {
+        $response = $this->putJson(route('manager.organizations.update', $this->organization->id), []);
+        $response->assertStatus(HttpResponse::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertJsonStructure([
+                'message',
+                'errors' => [
+                    'name',
+                    'phone',
+                    'document_type',
+                    'document',
+                ],
+            ]);
+    }
+
+    public function testUpdateMethodWhenUserCantAccessOrganization()
+    {
+        $organization = Organization::factory()->createQuietly();
+        $user = User::factory()->createQuietly();
+        $roleManager = Role::factory()->createQuietly(['name' => RolesEnum::MANAGER->value]);
+        $user->roles()->attach($roleManager);
+        $user->organizations()->attach($organization, ['role_id' => $roleManager->id]);
+        $this->actingAs($user);
+
+        $updatedData = [
+            'name' => 'New name organization',
+            'phone' => '(42) 3035-4135',
+            'document_type' => 'cpf',
+            'document' => '014.431.840-71',
+        ];
+
+        $response = $this->putJson(route('manager.organizations.update', $this->organization->id), $updatedData);
+
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
+    }
+
+    public function testGetOrganizationUsersListByRoleMethod()
     {
         $response = $this->getJson(route('manager.organizations.get-users-by-role', [
             'organization' => $this->organization->id,
@@ -71,5 +121,22 @@ class ManagerOrganizationControllerTest extends TestCase
 
         $this->assertCount(1, $response->json('data'));
         $response->assertJsonFragment(['name' => $this->userManager->name]);
+    }
+
+    public function testGetOrganizationUsersListByRoleMethodWhenUserCantAccessOrganization()
+    {
+        $organization = Organization::factory()->createQuietly();
+        $user = User::factory()->createQuietly();
+        $roleManager = Role::factory()->createQuietly(['name' => RolesEnum::MANAGER->value]);
+        $user->roles()->attach($roleManager);
+        $user->organizations()->attach($organization, ['role_id' => $roleManager->id]);
+        $this->actingAs($user);
+
+        $response = $this->getJson(route('manager.organizations.get-users-by-role', [
+            'organization' => $this->organization->id,
+            'role' => RolesEnum::MANAGER->value,
+        ]));
+
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 }

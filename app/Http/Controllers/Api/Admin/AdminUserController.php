@@ -72,13 +72,24 @@ class AdminUserController extends Controller
      *             @OA\Property(property="message", type="string", example="Bad Request")
      *         )
      *     ),
+     *
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="This action is unauthorized.")
+     *         )
+     *     ),
      * )
      */
     public function index(): JsonResponse
     {
-        try {
-            $this->authorize('view', User::class);
+        $this->authorize('view', User::class);
 
+        try {
             $search = request()->get('q', null);
             $paginate = User::search($search)->paginate(30);
 
@@ -154,13 +165,24 @@ class AdminUserController extends Controller
      *          ),
      *         )
      *     ),
+     *
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="This action is unauthorized.")
+     *         )
+     *     ),
      * )
      */
     public function store(UserCreateRequest $request): JsonResponse
     {
-        try {
-            $this->authorize('create', User::class);
+        $this->authorize('create', User::class);
 
+        try {
             $data = $request->validated();
 
             $userDto = new UserDTO($data);
@@ -244,13 +266,24 @@ class AdminUserController extends Controller
      *          ),
      *         )
      *     ),
+     *
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden",
+     *
+     *         @OA\JsonContent(
+     *
+     *            @OA\Property(property="type", type="string", example="error"),
+     *            @OA\Property(property="message", type="string", example="This action is unauthorized.")
+     *         )
+     *     ),
      * )
      */
     public function update(UserUpdateRequest $request, User $user): JsonResponse
     {
-        try {
-            $this->authorize('update', $user);
+        $this->authorize('update', $user);
 
+        try {
             $data = $request->validated();
 
             $userDto = new UserDTO($data);
@@ -303,13 +336,24 @@ class AdminUserController extends Controller
      *             @OA\Property(property="message", type="string", example="Bad Request")
      *         )
      *     ),
+     *
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="This action is unauthorized.")
+     *         )
+     *     ),
      * )
      */
     public function destroy(User $user): JsonResponse
     {
-        try {
-            $this->authorize('delete', $user);
+        $this->authorize('delete', $user);
 
+        try {
             $user->delete();
 
             return response()->json(['type' => 'success', 'message' => __('messages.common.success_destroy')], HttpResponse::HTTP_OK);
@@ -364,10 +408,23 @@ class AdminUserController extends Controller
      *             @OA\Property(property="message", type="string", example="Bad Request")
      *         )
      *     ),
+     *
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="This action is unauthorized.")
+     *         )
+     *     ),
      * )
      */
     public function getUser(User $user): JsonResponse
     {
+        $this->authorize('view', $user);
+
         try {
             return response()->json([
                 'type' => 'success',

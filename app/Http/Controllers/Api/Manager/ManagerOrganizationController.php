@@ -61,10 +61,23 @@ class ManagerOrganizationController extends Controller
      *             @OA\Property(property="message", type="string")
      *         )
      *     ),
+     *
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="This action is unauthorized.")
+     *         )
+     *     ),
      * )
      */
     public function getOrganizationInfo(Organization $organization): JsonResponse
     {
+        $this->authorize('view', $organization);
+
         try {
             return response()->json([
                 'organization' => OrganizationResource::make($organization),
@@ -127,10 +140,23 @@ class ManagerOrganizationController extends Controller
      *             @OA\Property(property="message", type="string")
      *         )
      *     ),
+     *
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="This action is unauthorized.")
+     *         )
+     *     ),
      * )
      */
     public function update(OrganizationRequest $request, Organization $organization): JsonResponse
     {
+        $this->authorize('update', $organization);
+
         try {
             $data = $request->validated();
 
@@ -204,10 +230,23 @@ class ManagerOrganizationController extends Controller
      *             @OA\Property(property="message", type="string")
      *         )
      *     ),
+     *
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="This action is unauthorized.")
+     *         )
+     *     ),
      * )
      */
     public function getOrganizationUsersListByRole(Organization $organization, string $role): JsonResponse
     {
+        $this->authorize('view', $organization);
+
         try {
             $paginate = User::whereHas('organizations', function ($query) use ($organization) {
                 return $query->where('organizations.id', $organization->id);

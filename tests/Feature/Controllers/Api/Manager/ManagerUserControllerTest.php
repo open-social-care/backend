@@ -250,7 +250,7 @@ class ManagerUserControllerTest extends TestCase
         $response = $this->deleteJson(route('manager.users.disassociate-user-from-organization', [
             'user' => $userToDisassociate->id,
             'organization' => $this->organization->id,
-        ]));;
+        ]));
 
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }

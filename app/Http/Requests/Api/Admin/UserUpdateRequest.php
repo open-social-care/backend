@@ -51,7 +51,7 @@ class UserUpdateRequest extends FormRequest
                 'max:255',
                 Rule::unique('users')
                     ->whereNot('id', $this->user->id)
-                    ->whereNull('deleted_at')
+                    ->whereNull('deleted_at'),
             ],
             'password' => 'nullable|string|min:6|confirmed',
         ];

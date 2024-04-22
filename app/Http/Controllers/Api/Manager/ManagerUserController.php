@@ -84,6 +84,17 @@ class ManagerUserController extends Controller
      *             @OA\Property(property="message", type="string", example="Bad Request")
      *         )
      *     ),
+     *
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="This action is unauthorized.")
+     *         )
+     *     ),
      * )
      */
     public function index(Organization $organization): JsonResponse
@@ -185,6 +196,17 @@ class ManagerUserController extends Controller
      *          ),
      *         )
      *     ),
+     *
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="This action is unauthorized.")
+     *         )
+     *     ),
      * )
      */
     public function store(UserCreateRequest $request, Organization $organization): JsonResponse
@@ -275,6 +297,17 @@ class ManagerUserController extends Controller
      *          ),
      *         )
      *     ),
+     *
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="This action is unauthorized.")
+     *         )
+     *     ),
      * )
      */
     public function update(UserUpdateRequest $request, User $user): JsonResponse
@@ -345,6 +378,17 @@ class ManagerUserController extends Controller
      *             @OA\Property(property="message", type="string", example="Bad Request")
      *         )
      *     ),
+     *
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="This action is unauthorized.")
+     *         )
+     *     ),
      * )
      */
     public function disassociateUserFromOrganization(User $user, Organization $organization): JsonResponse
@@ -404,6 +448,17 @@ class ManagerUserController extends Controller
      *
      *             @OA\Property(property="type", type="string", example="error"),
      *             @OA\Property(property="message", type="string", example="Bad Request")
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="This action is unauthorized.")
      *         )
      *     ),
      * )

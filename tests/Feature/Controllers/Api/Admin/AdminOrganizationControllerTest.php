@@ -67,6 +67,16 @@ class AdminOrganizationControllerTest extends TestCase
             ->assertJsonMissing(['name' => $organization->name]);
     }
 
+    public function testIndexMethodWhenUserCantAccessInformation()
+    {
+        $user = User::factory()->createQuietly();
+        $this->actingAs($user);
+
+        $response = $this->getJson(route('admin.organizations.index'));
+
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
+    }
+
     public function testStoreMethod()
     {
         $data = [
@@ -98,6 +108,23 @@ class AdminOrganizationControllerTest extends TestCase
                     'document',
                 ],
             ]);
+    }
+
+    public function testStoreMethodWhenUserCantAccessInformation()
+    {
+        $user = User::factory()->createQuietly();
+        $this->actingAs($user);
+
+        $data = [
+            'name' => 'Teste organization',
+            'phone' => '(42) 3035-4135',
+            'document_type' => 'cpf',
+            'document' => '529.982.247-25',
+        ];
+
+        $response = $this->postJson(route('admin.organizations.store'), $data);
+
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testUpdateMethod()
@@ -134,6 +161,25 @@ class AdminOrganizationControllerTest extends TestCase
             ]);
     }
 
+    public function testUpdateMethodWhenUserCantAccessInformation()
+    {
+        $user = User::factory()->createQuietly();
+        $this->actingAs($user);
+
+        $organization = Organization::factory()->createOneQuietly();
+
+        $updatedData = [
+            'name' => 'New name organization',
+            'phone' => '(42) 3035-4135',
+            'document_type' => 'cpf',
+            'document' => '529.982.247-25',
+        ];
+
+        $response = $this->putJson(route('admin.organizations.update', $organization->id), $updatedData);
+
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
+    }
+
     public function testDestroyMethod()
     {
         $organization = Organization::factory()->create();
@@ -154,7 +200,19 @@ class AdminOrganizationControllerTest extends TestCase
             ->assertJsonStructure(['message']);
     }
 
-    public function testAssociateUsersToOrganization()
+    public function testDestroyMethodWhenUserCantAccessInformation()
+    {
+        $user = User::factory()->createQuietly();
+        $this->actingAs($user);
+
+        $organization = Organization::factory()->create();
+
+        $response = $this->deleteJson(route('admin.organizations.destroy', $organization->id));
+
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
+    }
+
+    public function testAssociateUsersToOrganizationMethod()
     {
         $organization = Organization::factory()->createQuietly();
         $users = User::factory()->count(2)->createQuietly();
@@ -183,7 +241,34 @@ class AdminOrganizationControllerTest extends TestCase
         $this->assertDatabaseHas('organization_users', ['user_id' => $users[1]->id, 'role_id' => $roles[1]->id]);
     }
 
-    public function testDissociateUsersToOrganization()
+    public function testAssociateUsersToOrganizationMethodWhenUserCantAccessInformation()
+    {
+        $user = User::factory()->createQuietly();
+        $this->actingAs($user);
+
+        $organization = Organization::factory()->createQuietly();
+        $users = User::factory()->count(2)->createQuietly();
+        $roles = Role::factory()->count(2)->createQuietly();
+
+        $data = [
+            'data' => [
+                [
+                    'user_id' => $users[0]->id,
+                    'role_id' => $roles[0]->id,
+                ],
+                [
+                    'user_id' => $users[1]->id,
+                    'role_id' => $roles[1]->id,
+                ],
+            ],
+        ];
+
+        $response = $this->postJson(route('admin.organizations.associate-users', $organization->id), $data);
+
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
+    }
+
+    public function testDissociateUsersToOrganizationMethod()
     {
         $organization = Organization::factory()->createQuietly();
         $users = User::factory()->count(2)->createQuietly();
@@ -217,7 +302,40 @@ class AdminOrganizationControllerTest extends TestCase
         $this->assertDatabaseMissing('organization_users', ['user_id' => $users[1]->id, 'role_id' => $roles[1]->id]);
     }
 
-    public function testGetOrganizationUsersListByRole()
+    public function testDissociateUsersToOrganizationMethodWhenUserCantAccessInformation()
+    {
+        $user = User::factory()->createQuietly();
+        $this->actingAs($user);
+
+        $organization = Organization::factory()->createQuietly();
+        $users = User::factory()->count(2)->createQuietly();
+        $roles = Role::factory()->count(2)->createQuietly();
+
+        $organization->users()->attach($users[0]->id, ['role_id' => $roles[0]->id]);
+        $organization->users()->attach($users[1]->id, ['role_id' => $roles[1]->id]);
+
+        $users[0]->roles()->attach($roles[0]);
+        $users[1]->roles()->attach($roles[1]);
+
+        $data = [
+            'data' => [
+                [
+                    'user_id' => $users[0]->id,
+                    'role_id' => $roles[0]->id,
+                ],
+                [
+                    'user_id' => $users[1]->id,
+                    'role_id' => $roles[1]->id,
+                ],
+            ],
+        ];
+
+        $response = $this->postJson(route('admin.organizations.disassociate-users', $organization->id), $data);
+
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
+    }
+
+    public function testGetOrganizationUsersListByRoleMethod()
     {
         $organization = Organization::factory()->createQuietly();
 
@@ -239,5 +357,18 @@ class AdminOrganizationControllerTest extends TestCase
 
         $this->assertCount(1, $response->json('data'));
         $response->assertJsonFragment(['name' => $userManager->name]);
+    }
+
+    public function testGetOrganizationUsersListByRoleMethodWhenUserCantAccessInformation()
+    {
+        $user = User::factory()->createQuietly();
+        $this->actingAs($user);
+
+        $organization = Organization::factory()->createQuietly();
+
+        $response = $this->getJson(route('admin.organizations.get-users-by-role',
+            ['organization' => $organization->id, 'role' => RolesEnum::MANAGER->value]));
+
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 }

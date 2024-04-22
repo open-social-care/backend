@@ -13,7 +13,7 @@ class OrganizationPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasRoleByName(RolesEnum::ADMIN->value) || $user->hasRoleByName(RolesEnum::MANAGER->value);
+        return $user->isAdminSystem();
     }
 
     /**
@@ -21,15 +21,7 @@ class OrganizationPolicy
      */
     public function view(User $user, Organization $organization): bool
     {
-        if ($user->hasRoleByName(RolesEnum::ADMIN->value) && $user->organizations->isEmpty()) {
-            return true;
-        }
-
-        if ($user->hasOrganization($organization->id)) {
-            return true;
-        }
-
-        return false;
+        return $user->isAdminSystem() || $user->hasOrganization($organization->id);
     }
 
     /**
@@ -37,7 +29,7 @@ class OrganizationPolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasRoleByName(RolesEnum::ADMIN->value) && $user->organizations->isEmpty();
+        return $user->isAdminSystem();
     }
 
     /**
@@ -45,15 +37,7 @@ class OrganizationPolicy
      */
     public function update(User $user, Organization $organization): bool
     {
-        if ($user->hasRoleByName(RolesEnum::ADMIN->value) && $user->organizations->isEmpty()) {
-            return true;
-        }
-
-        if ($user->hasRoleByName(RolesEnum::MANAGER->value) && $user->hasOrganization($organization->id)) {
-            return true;
-        }
-
-        return false;
+        return $user->isAdminSystem() || ($user->hasRoleByName(RolesEnum::MANAGER->value) && $user->hasOrganization($organization->id));
     }
 
     /**
@@ -61,11 +45,7 @@ class OrganizationPolicy
      */
     public function delete(User $user, Organization $organization): bool
     {
-        if ($user->hasRoleByName(RolesEnum::ADMIN->value) && $user->organizations->isEmpty()) {
-            return true;
-        }
-
-        return false;
+        return $user->isAdminSystem();
     }
 
     /**
@@ -73,15 +53,7 @@ class OrganizationPolicy
      */
     public function associateUsers(User $user, Organization $organization): bool
     {
-        if ($user->hasRoleByName(RolesEnum::ADMIN->value) && $user->organizations->isEmpty()) {
-            return true;
-        }
-
-        if ($user->hasRoleByName(RolesEnum::MANAGER->value) && $user->hasOrganization($organization->id)) {
-            return true;
-        }
-
-        return false;
+        return $user->isAdminSystem() || ($user->hasRoleByName(RolesEnum::MANAGER->value) && $user->hasOrganization($organization->id));
     }
 
     /**
@@ -89,14 +61,6 @@ class OrganizationPolicy
      */
     public function disassociateUsers(User $user, Organization $organization): bool
     {
-        if ($user->hasRoleByName(RolesEnum::ADMIN->value) && $user->organizations->isEmpty()) {
-            return true;
-        }
-
-        if ($user->hasRoleByName(RolesEnum::MANAGER->value) && $user->hasOrganization($organization->id)) {
-            return true;
-        }
-
-        return false;
+        return $user->isAdminSystem() || ($user->hasRoleByName(RolesEnum::MANAGER->value) && $user->hasOrganization($organization->id));
     }
 }
