@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\Manager;
 use App\Actions\Manager\Organization\OrganizationUpdateAction;
 use App\DTO\Manager\OrganizationDTO;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\Manager\OrganizationRequest;
+use App\Http\Requests\Api\Manager\OrganizationUpdateRequest;
 use App\Http\Resources\Api\Manager\OrganizationResource;
 use App\Http\Resources\Api\Manager\UserListResource;
 use App\Http\Resources\Api\Shared\PaginationResource;
@@ -153,7 +153,7 @@ class ManagerOrganizationController extends Controller
      *     ),
      * )
      */
-    public function update(OrganizationRequest $request, Organization $organization): JsonResponse
+    public function update(OrganizationUpdateRequest $request, Organization $organization): JsonResponse
     {
         $this->authorize('update', $organization);
 

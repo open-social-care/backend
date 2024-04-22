@@ -3,11 +3,14 @@
 namespace App\Exceptions;
 
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -49,6 +52,14 @@ class Handler extends ExceptionHandler
 
         if ($e instanceof BadRequestHttpException) {
             return HttpResponse::HTTP_BAD_REQUEST;
+        }
+
+        if ($e instanceof NotFoundHttpException || $e instanceof ModelNotFoundException) {
+            return HttpResponse::HTTP_NOT_FOUND;
+        }
+
+        if ($e instanceof ValidationException) {
+            return HttpResponse::HTTP_UNPROCESSABLE_ENTITY;
         }
 
         if ($e instanceof HttpException) {

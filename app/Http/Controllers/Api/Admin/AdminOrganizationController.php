@@ -9,8 +9,9 @@ use App\Actions\Admin\Organization\OrganizationUpdateAction;
 use App\DTO\Admin\OrganizationDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Admin\OrganizationAssociateUsersRequest;
+use App\Http\Requests\Api\Admin\OrganizationCreateRequest;
 use App\Http\Requests\Api\Admin\OrganizationDisassociateUsersRequest;
-use App\Http\Requests\Api\Admin\OrganizationRequest;
+use App\Http\Requests\Api\Admin\OrganizationUpdateRequest;
 use App\Http\Resources\Api\Admin\OrganizationListResource;
 use App\Http\Resources\Api\Shared\PaginationResource;
 use App\Http\Resources\Api\Shared\UserListWithRolesResource;
@@ -183,7 +184,7 @@ class AdminOrganizationController extends Controller
      *     ),
      * )
      */
-    public function store(OrganizationRequest $request): JsonResponse
+    public function store(OrganizationCreateRequest $request): JsonResponse
     {
         $this->authorize('create', Organization::class);
 
@@ -284,7 +285,7 @@ class AdminOrganizationController extends Controller
      *     ),
      * )
      */
-    public function update(OrganizationRequest $request, Organization $organization): JsonResponse
+    public function update(OrganizationUpdateRequest $request, Organization $organization): JsonResponse
     {
         $this->authorize('update', $organization);
 

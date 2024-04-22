@@ -76,6 +76,7 @@ class ManagerOrganizationControllerTest extends TestCase
     public function testUpdateMethodValidation()
     {
         $response = $this->putJson(route('manager.organizations.update', $this->organization->id), []);
+
         $response->assertStatus(HttpResponse::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJsonStructure([
                 'message',
