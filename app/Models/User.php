@@ -130,4 +130,31 @@ class User extends Authenticatable
 
         return false;
     }
+
+    public function isManagerOf(Organization $organization): bool
+    {
+        return $this->hasRoleByName(RolesEnum::MANAGER->value) && $this->hasOrganization($organization->id);
+    }
+
+    public function canAccessAnotherUserByOrganization(Organization $organization): bool
+    {
+        $hasOrganization = $this
+            ->organizations()
+            ->where('organization_id', $organization->id)
+            ->exists();
+
+        return $hasOrganization;
+    }
+
+    public function canAccessUser(User $user): bool
+    {
+        $userOrganizationsIds = $user->organizations()->pluck('organization_id');
+
+        $hasOrganizationFromUser = $this
+            ->organizations()
+            ->whereIn('organization_id', $userOrganizationsIds)
+            ->exists();
+
+        return $hasOrganizationFromUser;
+    }
 }

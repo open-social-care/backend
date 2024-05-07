@@ -2,7 +2,6 @@
 
 namespace App\Policies;
 
-use App\Enums\RolesEnum;
 use App\Models\Organization;
 use App\Models\User;
 
@@ -37,7 +36,7 @@ class OrganizationPolicy
      */
     public function update(User $user, Organization $organization): bool
     {
-        return $user->isAdminSystem() || ($user->hasRoleByName(RolesEnum::MANAGER->value) && $user->hasOrganization($organization->id));
+        return $user->isAdminSystem() || $user->isManagerOf($organization);
     }
 
     /**
@@ -53,7 +52,7 @@ class OrganizationPolicy
      */
     public function associateUsers(User $user, Organization $organization): bool
     {
-        return $user->isAdminSystem() || ($user->hasRoleByName(RolesEnum::MANAGER->value) && $user->hasOrganization($organization->id));
+        return $user->isAdminSystem() || $user->isManagerOf($organization);
     }
 
     /**
@@ -61,6 +60,6 @@ class OrganizationPolicy
      */
     public function disassociateUsers(User $user, Organization $organization): bool
     {
-        return $user->isAdminSystem() || ($user->hasRoleByName(RolesEnum::MANAGER->value) && $user->hasOrganization($organization->id));
+        return $user->isAdminSystem() || $user->isManagerOf($organization);
     }
 }

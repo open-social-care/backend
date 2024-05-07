@@ -28,7 +28,7 @@ class UserPolicy
      */
     public function viewByOrganization(User $currentUser, Organization $organization): bool
     {
-        return $currentUser->isAdminSystem() || $this->currentUserCanAccessUserByOrganization($currentUser, $organization);
+        return $currentUser->isAdminSystem() || $currentUser->canAccessAnotherUserByOrganization($organization);
     }
 
     /**
@@ -36,7 +36,7 @@ class UserPolicy
      */
     public function viewByUserOrganizations(User $currentUser, User $user): bool
     {
-        return $currentUser->isAdminSystem() || $this->currentUserCanAccessUser($currentUser, $user);
+        return $currentUser->isAdminSystem() || $currentUser->canAccessUser($user);
     }
 
     /**
@@ -52,7 +52,7 @@ class UserPolicy
      */
     public function createByOrganization(User $currentUser, Organization $organization): bool
     {
-        return $currentUser->isAdminSystem() || $this->currentUserCanAccessUserByOrganization($currentUser, $organization);
+        return $currentUser->isAdminSystem() || $currentUser->canAccessAnotherUserByOrganization($organization);
     }
 
     /**
@@ -60,7 +60,7 @@ class UserPolicy
      */
     public function update(User $currentUser, User $user): bool
     {
-        return $currentUser->isAdminSystem() || $this->currentUserCanAccessUser($currentUser, $user);
+        return $currentUser->isAdminSystem() || $currentUser->canAccessUser($user);
     }
 
     /**
@@ -76,27 +76,6 @@ class UserPolicy
      */
     public function disassociateUserFromOrganization(User $currentUser, User $user): bool
     {
-        return $currentUser->isAdminSystem() || $this->currentUserCanAccessUser($currentUser, $user);
-    }
-
-    private function currentUserCanAccessUserByOrganization(User $currentUser, Organization $organization): bool
-    {
-        $currentUserHasOrganizationUser = $currentUser
-            ->organizations()
-            ->where('organization_id', $organization->id)
-            ->exists();
-
-        return $currentUserHasOrganizationUser;
-    }
-
-    private function currentUserCanAccessUser(User $currentUser, User $user): bool
-    {
-        $userOrganizationsIds = $user->organizations()->pluck('organization_id');
-        $currentUserHasOrganizationUser = $currentUser
-            ->organizations()
-            ->whereIn('organization_id', $userOrganizationsIds)
-            ->exists();
-
-        return $currentUserHasOrganizationUser;
+        return $currentUser->isAdminSystem() || $currentUser->canAccessUser($user);
     }
 }
