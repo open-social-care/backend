@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Requests\Api\Admin;
+namespace App\Http\Requests\Api\Manager;
 
 use App\Enums\DocumentTypesEnum;
-use App\Models\Organization;
 use App\Support\DocumentValidator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -11,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
-class OrganizationRequest extends FormRequest
+class OrganizationUpdateRequest extends FormRequest
 {
     public function __construct()
     {
@@ -42,9 +41,7 @@ class OrganizationRequest extends FormRequest
     {
         $organization = $this->route('organization');
 
-        return $organization
-            ? auth()->user()->can('update', $organization)
-            : auth()->user()->can('create', Organization::class);
+        return auth()->user()->can('update', $organization);
     }
 
     /**

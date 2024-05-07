@@ -50,19 +50,21 @@ class CleanCache extends Command
     {
         $clearCacheMessages = ['success' => 'Cache da aplicação foi apagado.'];
         $this->executeWithMessages('cache:clear', [], $clearCacheMessages);
+        $this->executeWithMessages('cache:clear --env=testing', [], $clearCacheMessages);
     }
-
 
     private function executeClearConfigurations()
     {
         $clearCacheConfigurationMessages = ['success' => 'Cache das configurações foi apagado.'];
         $this->executeWithMessages('config:clear', [], $clearCacheConfigurationMessages);
+        $this->executeWithMessages('config:clear --env=testing', [], $clearCacheConfigurationMessages);
     }
 
     private function executeCacheConfigurations()
     {
         $clearCacheConfigurationMessages = ['success' => 'Cache das configurações foi criado.'];
         $this->executeWithMessages('config:cache', [], $clearCacheConfigurationMessages);
+        $this->executeWithMessages('config:cache --env=testing', [], $clearCacheConfigurationMessages);
     }
 
     private function executeClearRoutes()
@@ -74,8 +76,8 @@ class CleanCache extends Command
     private function executeCacheRoutes()
     {
         $cacheRouteMessages = [
-            'success'=> 'Cache das rotas foi criado.',
-            'failed' => 'Erro ao criar cache das rotas.'
+            'success' => 'Cache das rotas foi criado.',
+            'failed' => 'Erro ao criar cache das rotas.',
         ];
         $this->executeWithMessages('route:cache', [], $cacheRouteMessages);
     }
@@ -84,12 +86,14 @@ class CleanCache extends Command
     {
         $clearCacheEventMessages = ['success' => 'Cache dos eventos foi apagado.'];
         $this->executeWithMessages('event:clear', [], $clearCacheEventMessages);
+        $this->executeWithMessages('event:clear --env=testing', [], $clearCacheEventMessages);
     }
 
     private function executeCacheEvents()
     {
         $clearCacheEventMessages = ['success' => 'Cache dos eventos foi criado.'];
         $this->executeWithMessages('event:cache', [], $clearCacheEventMessages);
+        $this->executeWithMessages('event:cache --env=testing', [], $clearCacheEventMessages);
     }
 
     private function executeWithMessages($call, $options, $messages = [])

@@ -5,11 +5,17 @@ namespace App\DTO\Shared;
 class AuditDTO
 {
     public string $model_type;
+
     public int $model_id;
+
     public int $user_id;
+
     public ?string $event_context;
+
     public string $event_type;
+
     public ?array $data;
+
     public string $ip_address;
 
     /**

@@ -60,7 +60,7 @@ class UserTest extends TestCase
         $this->assertDatabaseHas($pivotTable, [
             'user_id' => $user->id,
             'organization_id' => $organizations[0]->id,
-            'role_id' => $role->id
+            'role_id' => $role->id,
         ]);
     }
 

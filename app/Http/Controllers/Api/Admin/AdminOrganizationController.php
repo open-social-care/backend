@@ -9,18 +9,19 @@ use App\Actions\Admin\Organization\OrganizationUpdateAction;
 use App\DTO\Admin\OrganizationDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Admin\OrganizationAssociateUsersRequest;
+use App\Http\Requests\Api\Admin\OrganizationCreateRequest;
 use App\Http\Requests\Api\Admin\OrganizationDisassociateUsersRequest;
-use App\Http\Requests\Api\Admin\OrganizationRequest;
+use App\Http\Requests\Api\Admin\OrganizationUpdateRequest;
 use App\Http\Resources\Api\Admin\OrganizationListResource;
-use App\Http\Resources\Api\Admin\UserListResource;
 use App\Http\Resources\Api\Shared\PaginationResource;
+use App\Http\Resources\Api\Shared\UserListWithRolesResource;
 use App\Models\Organization;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
-class OrganizationController extends Controller
+class AdminOrganizationController extends Controller
 {
     /**
      * @OA\Get(
@@ -77,13 +78,24 @@ class OrganizationController extends Controller
      *             @OA\Property(property="message", type="string", example="Bad Request")
      *         )
      *     ),
+     *
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="This action is unauthorized.")
+     *         )
+     *     ),
      * )
      */
     public function index(): JsonResponse
     {
-        try {
-            $this->authorize('viewAny', Organization::class);
+        $this->authorize('viewAny', Organization::class);
 
+        try {
             $search = request()->get('q', null);
             $paginate = Organization::search($search)->paginate(30);
 
@@ -159,13 +171,24 @@ class OrganizationController extends Controller
      *             @OA\Property(property="message", type="string", example="Bad Request")
      *         )
      *     ),
+     *
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="This action is unauthorized.")
+     *         )
+     *     ),
      * )
      */
-    public function store(OrganizationRequest $request): JsonResponse
+    public function store(OrganizationCreateRequest $request): JsonResponse
     {
-        try {
-            $this->authorize('create', Organization::class);
+        $this->authorize('create', Organization::class);
 
+        try {
             $data = $request->validated();
 
             $dto = new OrganizationDTO($data);
@@ -249,13 +272,24 @@ class OrganizationController extends Controller
      *             @OA\Property(property="message", type="string", example="Bad Request")
      *         )
      *     ),
+     *
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="This action is unauthorized.")
+     *         )
+     *     ),
      * )
      */
-    public function update(OrganizationRequest $request, Organization $organization): JsonResponse
+    public function update(OrganizationUpdateRequest $request, Organization $organization): JsonResponse
     {
-        try {
-            $this->authorize('update', $organization);
+        $this->authorize('update', $organization);
 
+        try {
             $data = $request->validated();
 
             $dto = new OrganizationDTO($data);
@@ -308,13 +342,24 @@ class OrganizationController extends Controller
      *             @OA\Property(property="message", type="string", example="Bad Request")
      *         )
      *     ),
+     *
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="This action is unauthorized.")
+     *         )
+     *     ),
      * )
      */
     public function destroy(Organization $organization): JsonResponse
     {
-        try {
-            $this->authorize('delete', $organization);
+        $this->authorize('delete', $organization);
 
+        try {
             $organization->delete();
 
             return response()->json(['type' => 'success', 'message' => __('messages.common.success_destroy')], HttpResponse::HTTP_OK);
@@ -351,7 +396,9 @@ class OrganizationController extends Controller
      *               type="object",
      *
      *               @OA\Property(property="data", type="array",
+     *
      *                     @OA\Items(type="object",
+     *
      *                          @OA\Property(property="user_id", type="integer", description="user id", example="1"),
      *                          @OA\Property(property="role_id", type="integer", description="role id", example="2")
      *                 )
@@ -375,6 +422,7 @@ class OrganizationController extends Controller
      *         description="Unprocessable Entity",
      *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="type", type="string", example="error"),
      *             @OA\Property(property="message", type="string", example="Unprocessable Entity"),
      *             @OA\Property(property="errors", type="object",
@@ -396,12 +444,24 @@ class OrganizationController extends Controller
      *             @OA\Property(property="message", type="string", example="Bad Request")
      *         )
      *     ),
+     *
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="This action is unauthorized.")
+     *          )
+     *     ),
      * )
      */
     public function associateUsersToOrganization(OrganizationAssociateUsersRequest $request, Organization $organization): JsonResponse
     {
+        $this->authorize('associateUsers', $organization);
+
         try {
-            $this->authorize('associateUsers', $organization);
             $data = $request->validated();
 
             foreach ($data['data'] as $datum) {
@@ -445,7 +505,9 @@ class OrganizationController extends Controller
      *               type="object",
      *
      *               @OA\Property(property="data", type="array",
+     *
      *                     @OA\Items(type="object",
+     *
      *                          @OA\Property(property="user_id", type="integer", description="user id", example="1"),
      *                          @OA\Property(property="role_id", type="integer", description="role id", example="2")
      *                 )
@@ -469,6 +531,7 @@ class OrganizationController extends Controller
      *         description="Unprocessable Entity",
      *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="type", type="string", example="error"),
      *             @OA\Property(property="message", type="string", example="Unprocessable Entity"),
      *             @OA\Property(property="errors", type="object",
@@ -490,12 +553,24 @@ class OrganizationController extends Controller
      *             @OA\Property(property="message", type="string", example="Bad Request")
      *         )
      *     ),
+     *
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="This action is unauthorized.")
+     *         )
+     *     ),
      * )
      */
     public function disassociateUsersToOrganization(OrganizationDisassociateUsersRequest $request, Organization $organization): JsonResponse
     {
+        $this->authorize('disassociateUsers', $organization);
+
         try {
-            $this->authorize('disassociateUsers', $organization);
             $data = $request->validated();
 
             foreach ($data['data'] as $datum) {
@@ -577,13 +652,24 @@ class OrganizationController extends Controller
      *             @OA\Property(property="message", type="string", example="Bad Request"),
      *         )
      *     ),
+     *
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="This action is unauthorized.")
+     *         )
+     *     ),
      * )
      */
     public function getOrganizationUsersListByRole(Organization $organization, string $role): JsonResponse
     {
-        try {
-            $this->authorize('view', $organization);
+        $this->authorize('view', $organization);
 
+        try {
             $paginate = User::whereHas('organizations', function ($query) use ($organization) {
                 return $query->where('organizations.id', $organization->id);
             })
@@ -595,7 +681,7 @@ class OrganizationController extends Controller
             return response()->json([
                 'type' => 'success',
                 'message' => __('messages.common.success_view'),
-                'data' => UserListResource::collection($paginate),
+                'data' => UserListWithRolesResource::collection($paginate),
                 'pagination' => PaginationResource::make($paginate),
             ], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {

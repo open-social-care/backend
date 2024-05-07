@@ -1,11 +1,12 @@
 <?php
 
-use App\Http\Controllers\Api\Admin\OrganizationController as AdminOrganizationController;
-use App\Http\Controllers\Api\Admin\UserController;
+use App\Http\Controllers\Api\Admin\AdminOrganizationController;
+use App\Http\Controllers\Api\Admin\AdminUserController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Auth\ForgotPasswordController;
 use App\Http\Controllers\Api\Auth\ResetPasswordController;
-use App\Http\Controllers\Api\Manager\OrganizationController as ManagerOrganizationController;
+use App\Http\Controllers\Api\Manager\ManagerOrganizationController;
+use App\Http\Controllers\Api\Manager\ManagerUserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -32,15 +33,15 @@ Route::middleware(['auth:sanctum', 'only_admin_user'])
     ->group(function () {
 
         // User Routes
-        Route::resource('users', UserController::class)
-            ->except(['create', 'edit', 'show']);
+        Route::resource('users', AdminUserController::class)
+            ->only(['index', 'store', 'update', 'destroy']);
 
-        Route::get('/users/form-infos', [UserController::class, 'formInfos'])->name('users.form-infos');
-        Route::get('/users/{user}', [UserController::class, 'getUser'])->name('users.get-user');
+        Route::get('/users/form-infos', [AdminUserController::class, 'formInfos'])->name('users.form-infos');
+        Route::get('/users/{user}', [AdminUserController::class, 'getUser'])->name('users.get-user');
 
         // Organization Routes
         Route::resource('organizations', AdminOrganizationController::class)
-            ->except(['create', 'edit', 'show']);
+            ->only(['index', 'store', 'update', 'destroy']);
 
         Route::post('/organizations/{organization}/associate-users', [AdminOrganizationController::class, 'associateUsersToOrganization'])
             ->name('organizations.associate-users');
@@ -67,4 +68,16 @@ Route::middleware(['auth:sanctum', 'only_manager_user'])
 
         Route::get('/organizations/{organization}/get-users-by-role/{role}', [ManagerOrganizationController::class, 'getOrganizationUsersListByRole'])
             ->name('organizations.get-users-by-role');
+
+        // User Routes
+        Route::resource('users/{organization}', ManagerUserController::class)
+            ->only(['index', 'store'])
+            ->names([
+                'index' => 'users.index',
+                'store' => 'users.store',
+            ]);
+
+        Route::put('/users/{user}', [ManagerUserController::class, 'update'])->name('users.update');
+        Route::delete('/users/disassociate-user-from-organization/{user}/{organization}', [ManagerUserController::class, 'disassociateUserFromOrganization'])->name('users.disassociate-user-from-organization');
+        Route::get('/users/show/{user}', [ManagerUserController::class, 'getUser'])->name('users.get-user');
     });

@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Enums\AuditEventTypesEnum;
-use App\Models\City;
 use App\Models\State;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;

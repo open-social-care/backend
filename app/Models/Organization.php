@@ -52,7 +52,7 @@ class Organization extends Model
                 ->wherePivot('organization_id', '!=', $this->id)
                 ->exists();
 
-            if (!$userHasRoleInOtherOrganization) {
+            if (! $userHasRoleInOtherOrganization) {
                 $user->roles()->detach();
             }
         }
@@ -65,7 +65,7 @@ class Organization extends Model
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'organization_users')->withTimestamps()->withPivot('role_id', 'user_id');;
+        return $this->belongsToMany(User::class, 'organization_users')->withTimestamps()->withPivot('role_id', 'user_id');
     }
 
     public function organizationFormTemplates(): HasMany

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Resources\Api\Admin;
+namespace App\Http\Resources\Api\Shared;
 
 use App\Enums\RolesEnum;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserListResource extends JsonResource
+class UserListWithRolesResource extends JsonResource
 {
     /**
      * Return array of attributes

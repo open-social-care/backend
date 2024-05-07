@@ -1,29 +1,42 @@
 <?php
 
-namespace App\Http\Controllers\Api\Admin;
+namespace App\Http\Controllers\Api\Manager;
 
-use App\Actions\Admin\User\UserCreateAction;
-use App\Actions\Admin\User\UserUpdateAction;
-use App\DTO\Admin\UserDTO;
+use App\Actions\Manager\User\UserCreateAction;
+use App\Actions\Manager\User\UserDisassociateFromOrganizationAction;
+use App\Actions\Manager\User\UserUpdateAction;
+use App\DTO\Shared\UserDTO;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\Admin\UserRequest;
-use App\Http\Resources\Api\Admin\UserListResource;
-use App\Http\Resources\Api\Admin\UserResource;
+use App\Http\Requests\Api\Manager\UserCreateRequest;
+use App\Http\Requests\Api\Manager\UserUpdateRequest;
 use App\Http\Resources\Api\Shared\PaginationResource;
+use App\Http\Resources\Api\Shared\UserListWithRolesResource;
+use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
-class UserController extends Controller
+class ManagerUserController extends Controller
 {
     /**
      * @OA\Get(
-     * path="/api/admin/users",
-     * operationId="AdminGetUsers",
-     * tags={"Admin/User"},
+     * path="/api/manager/users/{organization}",
+     * operationId="ManagerGetUsers",
+     * tags={"Manager/User"},
      * summary="Get a list of users",
      * description="Retrieve a list of users.",
      * security={{"sanctum":{}}},
+     *
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="The organization id",
+     *         required=true,
+     *
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
      *
      *     @OA\Parameter(
      *         name="q",
@@ -71,18 +84,39 @@ class UserController extends Controller
      *             @OA\Property(property="message", type="string", example="Bad Request")
      *         )
      *     ),
+     *
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="This action is unauthorized.")
+     *         )
+     *     ),
      * )
      */
-    public function index(): JsonResponse
+    public function index(Organization $organization): JsonResponse
     {
+        $this->authorize('viewByOrganization', [User::class, $organization]);
+
         try {
-            $search = request()->get('q', null);
-            $paginate = User::search($search)->paginate(30);
+            $query = User::query()
+                ->whereHas('organizations', function ($query) use ($organization) {
+                    return $query->where('organization_id', $organization->id);
+                });
+
+            if ($search = request()->get('q', null)) {
+                $query->whereRaw("LOWER(name) LIKE '%' || LOWER(?) || '%'", [$search]);
+            }
+
+            $paginate = $query->paginate(30);
 
             return response()->json([
                 'type' => 'success',
                 'message' => __('messages.common.success_view'),
-                'data' => UserListResource::collection($paginate),
+                'data' => UserListWithRolesResource::collection($paginate),
                 'pagination' => PaginationResource::make($paginate),
             ], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
@@ -92,12 +126,23 @@ class UserController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/admin/users",
-     *     operationId="AdminCreateUser",
-     *     tags={"Admin/User"},
+     *     path="/api/manager/users/{organization}",
+     *     operationId="ManagerCreateUser",
+     *     tags={"Manager/User"},
      *     summary="Create a new user",
-     *     description="Create a new admin user with the provided information.",
+     *     description="Create a new user with the provided information in manager.",
      *     security={{"sanctum":{}}},
+     *
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="The organization id",
+     *         required=true,
+     *
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
      *
      *     @OA\RequestBody(
      *         required=true,
@@ -151,15 +196,28 @@ class UserController extends Controller
      *          ),
      *         )
      *     ),
+     *
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="This action is unauthorized.")
+     *         )
+     *     ),
      * )
      */
-    public function store(UserRequest $request): JsonResponse
+    public function store(UserCreateRequest $request, Organization $organization): JsonResponse
     {
+        $this->authorize('createByOrganization', [User::class, $organization]);
+
         try {
             $data = $request->validated();
 
             $userDto = new UserDTO($data);
-            UserCreateAction::execute($userDto);
+            UserCreateAction::execute($userDto, $organization);
 
             return response()->json(['type' => 'success', 'message' => __('messages.common.success_create')], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
@@ -169,9 +227,9 @@ class UserController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/api/admin/users/{user}",
-     *     operationId="AdminUpdateUser",
-     *     tags={"Admin/User"},
+     *     path="/api/manager/users/{user}",
+     *     operationId="ManagerUpdateUser",
+     *     tags={"Manager/User"},
      *     summary="Update user",
      *     description="Update user with the provided information.",
      *     security={{"sanctum":{}}},
@@ -239,10 +297,23 @@ class UserController extends Controller
      *          ),
      *         )
      *     ),
+     *
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="This action is unauthorized.")
+     *         )
+     *     ),
      * )
      */
-    public function update(UserRequest $request, User $user): JsonResponse
+    public function update(UserUpdateRequest $request, User $user): JsonResponse
     {
+        $this->authorize('update', $user);
+
         try {
             $data = $request->validated();
 
@@ -257,12 +328,23 @@ class UserController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/api/admin/users/{user}",
-     *     operationId="AdminDestroyUser",
-     *     tags={"Admin/User"},
+     *     path="/api/manager/users/{user}/{organization}",
+     *     operationId="ManagerDestroyUser",
+     *     tags={"Manager/User"},
      *     summary="Destroy user",
      *     description="Destroy user with the provided id.",
      *     security={{"sanctum":{}}},
+     *
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="The organization id",
+     *         required=true,
+     *
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
      *
      *     @OA\Parameter(
      *         name="id",
@@ -296,12 +378,25 @@ class UserController extends Controller
      *             @OA\Property(property="message", type="string", example="Bad Request")
      *         )
      *     ),
+     *
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="This action is unauthorized.")
+     *         )
+     *     ),
      * )
      */
-    public function destroy(User $user): JsonResponse
+    public function disassociateUserFromOrganization(User $user, Organization $organization): JsonResponse
     {
+        $this->authorize('disassociateUserFromOrganization', $user);
+
         try {
-            $user->delete();
+            UserDisassociateFromOrganizationAction::execute($user, $organization);
 
             return response()->json(['type' => 'success', 'message' => __('messages.common.success_destroy')], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
@@ -311,9 +406,9 @@ class UserController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/admin/users/{user}",
-     *     operationId="AdminGetUser",
-     *     tags={"Admin/User"},
+     *     path="/api/manager/users/{user}",
+     *     operationId="ManagerGetUser",
+     *     tags={"Manager/User"},
      *     summary="Get user infos",
      *     description="Get user infos",
      *     security={{"sanctum":{}}},
@@ -355,15 +450,28 @@ class UserController extends Controller
      *             @OA\Property(property="message", type="string", example="Bad Request")
      *         )
      *     ),
+     *
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="This action is unauthorized.")
+     *         )
+     *     ),
      * )
      */
     public function getUser(User $user): JsonResponse
     {
+        $this->authorize('viewByUserOrganizations', $user);
+
         try {
             return response()->json([
                 'type' => 'success',
                 'message' => __('messages.common.success_view'),
-                'data' => UserResource::make($user),
+                'data' => UserListWithRolesResource::make($user),
             ], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
             return response()->json(['type' => 'error', 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);

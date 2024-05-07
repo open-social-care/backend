@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\RolesEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -114,5 +115,46 @@ class User extends Authenticatable
     public function hasOrganization(int $organizationId): bool
     {
         return $this->organizations()->where('organization_id', $organizationId)->exists();
+    }
+
+    public function isAdminSystem(): bool
+    {
+        $roleAdmin = Role::query()->firstWhere('name', RolesEnum::ADMIN->value);
+
+        if ($roleAdmin) {
+            $hasRoleAdmin = $this->hasRoleById($roleAdmin->id);
+            $notAdminInOrganizations = ! $this->organizations()->wherePivot('role_id', $roleAdmin->id)->exists();
+
+            return $hasRoleAdmin && $notAdminInOrganizations;
+        }
+
+        return false;
+    }
+
+    public function isManagerOf(Organization $organization): bool
+    {
+        return $this->hasRoleByName(RolesEnum::MANAGER->value) && $this->hasOrganization($organization->id);
+    }
+
+    public function canAccessAnotherUserByOrganization(Organization $organization): bool
+    {
+        $hasOrganization = $this
+            ->organizations()
+            ->where('organization_id', $organization->id)
+            ->exists();
+
+        return $hasOrganization;
+    }
+
+    public function canAccessUser(User $user): bool
+    {
+        $userOrganizationsIds = $user->organizations()->pluck('organization_id');
+
+        $hasOrganizationFromUser = $this
+            ->organizations()
+            ->whereIn('organization_id', $userOrganizationsIds)
+            ->exists();
+
+        return $hasOrganizationFromUser;
     }
 }

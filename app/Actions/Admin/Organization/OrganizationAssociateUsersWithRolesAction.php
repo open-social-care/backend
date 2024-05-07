@@ -33,7 +33,7 @@ class OrganizationAssociateUsersWithRolesAction
             ->wherePivot('role_id', $role->id)
             ->exists();
 
-        if (!$hasAttach) {
+        if (! $hasAttach) {
             $organization->users()->attach($user->id, ['role_id' => $role->id]);
         }
     }
@@ -43,7 +43,7 @@ class OrganizationAssociateUsersWithRolesAction
      */
     private static function handleUserRoleAttach(User $user, Role $role): void
     {
-        if (!$user->hasRoleById($role->id)) {
+        if (! $user->hasRoleById($role->id)) {
             $user->roles()->attach($role->id);
         }
     }

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\Manager;
 use App\Actions\Manager\Organization\OrganizationUpdateAction;
 use App\DTO\Manager\OrganizationDTO;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\Manager\OrganizationRequest;
+use App\Http\Requests\Api\Manager\OrganizationUpdateRequest;
 use App\Http\Resources\Api\Manager\OrganizationResource;
 use App\Http\Resources\Api\Manager\UserListResource;
 use App\Http\Resources\Api\Shared\PaginationResource;
@@ -16,7 +16,7 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
-class OrganizationController extends Controller
+class ManagerOrganizationController extends Controller
 {
     /**
      * @OA\Get(
@@ -61,10 +61,23 @@ class OrganizationController extends Controller
      *             @OA\Property(property="message", type="string")
      *         )
      *     ),
+     *
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="This action is unauthorized.")
+     *         )
+     *     ),
      * )
      */
     public function getOrganizationInfo(Organization $organization): JsonResponse
     {
+        $this->authorize('view', $organization);
+
         try {
             return response()->json([
                 'organization' => OrganizationResource::make($organization),
@@ -127,10 +140,23 @@ class OrganizationController extends Controller
      *             @OA\Property(property="message", type="string")
      *         )
      *     ),
+     *
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="This action is unauthorized.")
+     *         )
+     *     ),
      * )
      */
-    public function update(OrganizationRequest $request, Organization $organization): JsonResponse
+    public function update(OrganizationUpdateRequest $request, Organization $organization): JsonResponse
     {
+        $this->authorize('update', $organization);
+
         try {
             $data = $request->validated();
 
@@ -204,10 +230,23 @@ class OrganizationController extends Controller
      *             @OA\Property(property="message", type="string")
      *         )
      *     ),
+     *
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="This action is unauthorized.")
+     *         )
+     *     ),
      * )
      */
     public function getOrganizationUsersListByRole(Organization $organization, string $role): JsonResponse
     {
+        $this->authorize('view', $organization);
+
         try {
             $paginate = User::whereHas('organizations', function ($query) use ($organization) {
                 return $query->where('organizations.id', $organization->id);
