@@ -96,7 +96,7 @@ class ManagerOrganizationController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/api/manager/organizations-update/{organization}",
+     *     path="/api/manager/organizations/{organization}",
      *     operationId="ManagerUpdateOrganization",
      *     tags={"Manager/Organization"},
      *     summary="Update Organization",
