@@ -31,9 +31,9 @@ class ManagerOrganizationControllerTest extends TestCase
         $this->actingAs($this->userManager);
     }
 
-    public function testGetOrganizationInfoMethod()
+    public function testShowMethod()
     {
-        $response = $this->getJson(route('manager.organizations.get-info', $this->organization->id));
+        $response = $this->getJson(route('manager.organizations.show', $this->organization->id));
 
         $response->assertStatus(HttpResponse::HTTP_OK)
             ->assertJsonStructure(['data']);
@@ -41,7 +41,7 @@ class ManagerOrganizationControllerTest extends TestCase
         $response->assertJsonFragment(['name' => $this->organization->name]);
     }
 
-    public function testGetOrganizationInfoMethodWhenUserCantAccessOrganization()
+    public function testShowMethodWhenUserCantAccessOrganization()
     {
         $organization = Organization::factory()->createQuietly();
         $user = User::factory()->createQuietly();
@@ -50,7 +50,7 @@ class ManagerOrganizationControllerTest extends TestCase
         $user->organizations()->attach($organization, ['role_id' => $roleManager->id]);
         $this->actingAs($user);
 
-        $response = $this->getJson(route('manager.organizations.get-info', $this->organization->id));
+        $response = $this->getJson(route('manager.organizations.show', $this->organization->id));
 
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }

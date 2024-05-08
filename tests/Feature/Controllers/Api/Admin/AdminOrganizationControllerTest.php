@@ -371,4 +371,28 @@ class AdminOrganizationControllerTest extends TestCase
 
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
+
+    public function testShowMethod()
+    {
+        $response = $this->getJson(route('admin.organizations.show', $this->organization->id));
+
+        $response->assertStatus(HttpResponse::HTTP_OK)
+            ->assertJsonStructure(['data']);
+
+        $response->assertJsonFragment(['name' => $this->organization->name]);
+    }
+
+    public function testShowMethodWhenUserCantAccessOrganization()
+    {
+        $organization = Organization::factory()->createQuietly();
+        $user = User::factory()->createQuietly();
+        $roleManager = Role::factory()->createQuietly(['name' => RolesEnum::MANAGER->value]);
+        $user->roles()->attach($roleManager);
+        $user->organizations()->attach($organization, ['role_id' => $roleManager->id]);
+        $this->actingAs($user);
+
+        $response = $this->getJson(route('admin.organizations.show', $this->organization->id));
+
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
+    }
 }

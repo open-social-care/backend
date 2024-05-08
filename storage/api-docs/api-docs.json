@@ -282,6 +282,116 @@
             }
         },
         "/api/admin/organizations/{organization}": {
+            "get": {
+                "tags": [
+                    "Admin/Organization"
+                ],
+                "summary": "Get organization",
+                "description": "Retrieve organization show.",
+                "operationId": "AdminGetOrganization",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The organization id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Successful response"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": "1"
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Social Care"
+                                                    },
+                                                    "document_type": {
+                                                        "type": "string",
+                                                        "example": "cpf"
+                                                    },
+                                                    "document": {
+                                                        "type": "string",
+                                                        "example": "123.456.789-0"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Bad Request"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "This action is unauthorized."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
             "put": {
                 "tags": [
                     "Admin/Organization"
@@ -919,118 +1029,6 @@
                                                 }
                                             },
                                             "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "error"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Bad Request"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "error"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "This action is unauthorized."
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
-            }
-        },
-        "/api/admin/organizations-get-info/{organization}": {
-            "get": {
-                "tags": [
-                    "Admin/Organization"
-                ],
-                "summary": "Get organization info",
-                "description": "Retrieve organization info.",
-                "operationId": "AdminGetOrganization",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "The organization id",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful response",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "example": "success"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Successful response"
-                                        },
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "id": {
-                                                        "type": "integer",
-                                                        "example": "1"
-                                                    },
-                                                    "name": {
-                                                        "type": "string",
-                                                        "example": "Social Care"
-                                                    },
-                                                    "document_type": {
-                                                        "type": "string",
-                                                        "example": "cpf"
-                                                    },
-                                                    "document": {
-                                                        "type": "string",
-                                                        "example": "123.456.789-0"
-                                                    }
-                                                },
-                                                "type": "object"
-                                            }
                                         }
                                     },
                                     "type": "object"
@@ -2066,13 +2064,13 @@
                 }
             }
         },
-        "/api/manager/organizations-get-info/{organization}": {
+        "/api/manager/organizations/{organization}": {
             "get": {
                 "tags": [
                     "Manager/Organization"
                 ],
-                "summary": "Get organization info",
-                "description": "Retrieve organization info.",
+                "summary": "Get organization",
+                "description": "Retrieve organization show.",
                 "operationId": "ManagerGetOrganization",
                 "parameters": [
                     {
@@ -2176,9 +2174,7 @@
                         "sanctum": []
                     }
                 ]
-            }
-        },
-        "/api/manager/organizations-update/{organization}": {
+            },
             "put": {
                 "tags": [
                     "Manager/Organization"

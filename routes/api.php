@@ -41,7 +41,7 @@ Route::middleware(['auth:sanctum', 'only_admin_user'])
 
         // Organization Routes
         Route::resource('organizations', AdminOrganizationController::class)
-            ->only(['index', 'store', 'update', 'destroy']);
+            ->only(['index', 'store', 'update', 'destroy', 'show']);
 
         Route::post('/organizations/{organization}/associate-users', [AdminOrganizationController::class, 'associateUsersToOrganization'])
             ->name('organizations.associate-users');
@@ -51,9 +51,6 @@ Route::middleware(['auth:sanctum', 'only_admin_user'])
 
         Route::get('/organizations/{organization}/get-users-by-role/{role}', [AdminOrganizationController::class, 'getOrganizationUsersListByRole'])
             ->name('organizations.get-users-by-role');
-
-        Route::get('/organizations/get-info/{organization}', [AdminOrganizationController::class, 'getOrganizationInfo'])
-            ->name('organizations.get-info');
     });
 
 // Manager routes
@@ -63,11 +60,8 @@ Route::middleware(['auth:sanctum', 'only_manager_user'])
     ->group(function () {
 
         // Organization Routes
-        Route::get('/organizations/get-info/{organization}', [ManagerOrganizationController::class, 'getOrganizationInfo'])
-            ->name('organizations.get-info');
-
-        Route::put('/organizations/update/{organization}', [ManagerOrganizationController::class, 'update'])
-            ->name('organizations.update');
+        Route::resource('organizations', AdminOrganizationController::class)
+            ->only(['update', 'show']);
 
         Route::get('/organizations/{organization}/get-users-by-role/{role}', [ManagerOrganizationController::class, 'getOrganizationUsersListByRole'])
             ->name('organizations.get-users-by-role');
