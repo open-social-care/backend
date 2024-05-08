@@ -36,7 +36,7 @@ class ManagerOrganizationControllerTest extends TestCase
         $response = $this->getJson(route('manager.organizations.get-info', $this->organization->id));
 
         $response->assertStatus(HttpResponse::HTTP_OK)
-            ->assertJsonStructure(['organization']);
+            ->assertJsonStructure(['data']);
 
         $response->assertJsonFragment(['name' => $this->organization->name]);
     }
