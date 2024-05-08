@@ -51,6 +51,9 @@ Route::middleware(['auth:sanctum', 'only_admin_user'])
 
         Route::get('/organizations/{organization}/get-users-by-role/{role}', [AdminOrganizationController::class, 'getOrganizationUsersListByRole'])
             ->name('organizations.get-users-by-role');
+
+        Route::get('/organizations/get-info/{organization}', [AdminOrganizationController::class, 'getOrganizationInfo'])
+            ->name('organizations.get-info');
     });
 
 // Manager routes

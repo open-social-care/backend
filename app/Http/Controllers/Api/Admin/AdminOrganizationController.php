@@ -13,6 +13,7 @@ use App\Http\Requests\Api\Admin\OrganizationCreateRequest;
 use App\Http\Requests\Api\Admin\OrganizationDisassociateUsersRequest;
 use App\Http\Requests\Api\Admin\OrganizationUpdateRequest;
 use App\Http\Resources\Api\Admin\OrganizationListResource;
+use App\Http\Resources\Api\Shared\OrganizationResource;
 use App\Http\Resources\Api\Shared\PaginationResource;
 use App\Http\Resources\Api\Shared\UserListWithRolesResource;
 use App\Models\Organization;
@@ -686,6 +687,82 @@ class AdminOrganizationController extends Controller
             ], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
             return response()->json(['type' => 'error', 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
+        }
+    }
+
+    /**
+     * @OA\Get(
+     * path="/api/admin/organizations-get-info/{organization}",
+     * operationId="AdminGetOrganization",
+     * tags={"Admin/Organization"},
+     * summary="Get organization info",
+     * description="Retrieve organization info.",
+     * security={{"sanctum":{}}},
+     *
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="The organization id",
+     *         required=true,
+     *
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful response",
+     *
+     *         @OA\JsonContent(
+     *             type="object",
+     *
+     *              @OA\Property(property="type", type="string", example="success"),
+     *              @OA\Property(property="message", type="string", example="Successful response"),
+     *              @OA\Property(property="data", type="array", @OA\Items(
+     *                  @OA\Property(property="id", type="integer", example="1"),
+     *                  @OA\Property(property="name", type="string", example="Social Care"),
+     *                  @OA\Property(property="document_type", type="string", example="cpf"),
+     *                  @OA\Property(property="document", type="string", example="123.456.789-0")
+     *              ))
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad Request",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Bad Request")
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="This action is unauthorized.")
+     *         )
+     *     ),
+     * )
+     */
+    public function getOrganizationInfo(Organization $organization): JsonResponse
+    {
+        $this->authorize('view', $organization);
+
+        try {
+            return response()->json([
+                'type' => 'success',
+                'message' => __('messages.common.success_view'),
+                'data' => OrganizationResource::make($organization),
+            ], HttpResponse::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
         }
     }
 }

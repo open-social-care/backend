@@ -6,8 +6,8 @@ use App\Actions\Manager\Organization\OrganizationUpdateAction;
 use App\DTO\Manager\OrganizationDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Manager\OrganizationUpdateRequest;
-use App\Http\Resources\Api\Manager\OrganizationResource;
 use App\Http\Resources\Api\Manager\UserListResource;
+use App\Http\Resources\Api\Shared\OrganizationResource;
 use App\Http\Resources\Api\Shared\PaginationResource;
 use App\Models\Organization;
 use App\Models\User;
@@ -20,7 +20,7 @@ class ManagerOrganizationController extends Controller
 {
     /**
      * @OA\Get(
-     * path="/api/manager/organizations-get-info",
+     * path="/api/manager/organizations-get-info/{organization}",
      * operationId="ManagerGetOrganization",
      * tags={"Manager/Organization"},
      * summary="Get organization info",
@@ -45,10 +45,14 @@ class ManagerOrganizationController extends Controller
      *         @OA\JsonContent(
      *             type="object",
      *
-     *                 @OA\Property(property="id", type="integer"),
-     *                 @OA\Property(property="name", type="string"),
-     *                 @OA\Property(property="document_type", type="string"),
-     *                 @OA\Property(property="document", type="string")
+     *              @OA\Property(property="type", type="string", example="success"),
+     *              @OA\Property(property="message", type="string", example="Successful response"),
+     *              @OA\Property(property="data", type="array", @OA\Items(
+     *                  @OA\Property(property="id", type="integer", example="1"),
+     *                  @OA\Property(property="name", type="string", example="Social Care"),
+     *                  @OA\Property(property="document_type", type="string", example="cpf"),
+     *                  @OA\Property(property="document", type="string", example="123.456.789-0")
+     *              ))
      *         )
      *     ),
      *
@@ -58,7 +62,8 @@ class ManagerOrganizationController extends Controller
      *
      *         @OA\JsonContent(
      *
-     *             @OA\Property(property="message", type="string")
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Bad Request")
      *         )
      *     ),
      *
@@ -80,7 +85,9 @@ class ManagerOrganizationController extends Controller
 
         try {
             return response()->json([
-                'organization' => OrganizationResource::make($organization),
+                'type' => 'success',
+                'message' => __('messages.common.success_view'),
+                'data' => OrganizationResource::make($organization),
             ], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
@@ -89,7 +96,7 @@ class ManagerOrganizationController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/api/manager/organizations-update",
+     *     path="/api/manager/organizations-update/{organization}",
      *     operationId="ManagerUpdateOrganization",
      *     tags={"Manager/Organization"},
      *     summary="Update Organization",
@@ -127,7 +134,25 @@ class ManagerOrganizationController extends Controller
      *
      *         @OA\JsonContent(
      *
-     *             @OA\Property(property="message", type="string")
+     *             @OA\Property(property="type", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Organization updated successfully")
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=422,
+     *         description="Unprocessable Entity",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Unprocessable Entity"),
+     *             @OA\Property(property="errors", type="object",
+     *                @OA\Property(property="name", type="array", description="field with errors",
+     *
+     *                  @OA\Items(type="string", description="message error", example="The field name is required")
+     *             )
+     *           ),
      *         )
      *     ),
      *
@@ -137,7 +162,8 @@ class ManagerOrganizationController extends Controller
      *
      *         @OA\JsonContent(
      *
-     *             @OA\Property(property="message", type="string")
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Bad Request")
      *         )
      *     ),
      *
@@ -163,9 +189,9 @@ class ManagerOrganizationController extends Controller
             $dto = new OrganizationDTO($data);
             OrganizationUpdateAction::execute($dto, $organization);
 
-            return response()->json(['message' => __('messages.common.success_update')], HttpResponse::HTTP_OK);
+            return response()->json(['type' => 'success', 'message' => __('messages.common.success_update')], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
-            return response()->json(['message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
+            return response()->json(['type' => 'error', 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
         }
     }
 
@@ -207,6 +233,8 @@ class ManagerOrganizationController extends Controller
      *         @OA\JsonContent(
      *             type="object",
      *
+     *             @OA\Property(property="type", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Successful response"),
      *             @OA\Property(property="data", type="array", @OA\Items(
      *                 @OA\Property(property="name", type="string"),
      *                 @OA\Property(property="email", type="string")
@@ -227,7 +255,8 @@ class ManagerOrganizationController extends Controller
      *
      *         @OA\JsonContent(
      *
-     *             @OA\Property(property="message", type="string")
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Bad Request"),
      *         )
      *     ),
      *
@@ -257,6 +286,8 @@ class ManagerOrganizationController extends Controller
                 ->paginate(30);
 
             return response()->json([
+                'type' => 'success',
+                'message' => __('messages.common.success_view'),
                 'data' => UserListResource::collection($paginate),
                 'pagination' => PaginationResource::make($paginate),
             ], HttpResponse::HTTP_OK);
