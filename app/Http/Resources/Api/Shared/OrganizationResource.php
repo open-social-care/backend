@@ -17,6 +17,8 @@ class OrganizationResource extends JsonResource
             'name' => $this->name,
             'document_type' => $this->document_type,
             'document' => $this->document,
+            'phone' => $this->phone,
+            'subject_ref' => $this->subject_ref,
         ];
     }
 }
