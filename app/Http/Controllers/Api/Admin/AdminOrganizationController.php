@@ -765,4 +765,92 @@ class AdminOrganizationController extends Controller
             return response()->json(['message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
         }
     }
+
+    /**
+     * @OA\Get(
+     * path="/api/admin/organizations/get-users-by-role-that-not-belong-to-organization/{organization}",
+     * operationId="AdminGetUsersByRoleThatNotBelongToOrganization",
+     * tags={"Admin/Organization"},
+     * summary="Get a list of users by role that not belong to organization",
+     * description="Retrieve a list of users by role that not belong to organization.",
+     * security={{"sanctum":{}}},
+     *
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="The organization id",
+     *         required=true,
+     *
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful response",
+     *
+     *         @OA\JsonContent(
+     *             type="object",
+     *
+     *             @OA\Property(property="type", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Successful response"),
+     *             @OA\Property(property="data", type="array", @OA\Items(
+     *                 @OA\Property(property="id", type="integer", example="1"),
+     *                 @OA\Property(property="name", type="string", example="Teste"),
+     *                 @OA\Property(property="email", type="string", example="teste@teste.com"),
+     *                 @OA\Property(property="roles", type="array", @OA\Items(type="string", example="Gestor(a)")),
+     *             )),
+     *             @OA\Property(property="pagination", type="object",
+     *             @OA\Property(property="total", type="integer"),
+     *             @OA\Property(property="per_page", type="integer"),
+     *             @OA\Property(property="current_page", type="integer"),
+     *             @OA\Property(property="last_page", type="integer"),
+     *             @OA\Property(property="from", type="integer"),
+     *             @OA\Property(property="to", type="integer"))
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad Request",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Bad Request"),
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="type", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="This action is unauthorized.")
+     *         )
+     *     ),
+     * )
+     */
+    public function getUsersListByRoleThatNotBelongToOrganization(Organization $organization): JsonResponse
+    {
+        $this->authorize('view', $organization);
+
+        try {
+            $paginate = User::whereDoesntHave('organizations', function ($query) use ($organization) {
+                $query->where('organization_id', $organization->id);
+            })->paginate(30);
+
+            return response()->json([
+                'type' => 'success',
+                'message' => __('messages.common.success_view'),
+                'data' => UserListWithRolesResource::collection($paginate),
+                'pagination' => PaginationResource::make($paginate),
+            ], HttpResponse::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json(['type' => 'error', 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
+        }
+    }
 }

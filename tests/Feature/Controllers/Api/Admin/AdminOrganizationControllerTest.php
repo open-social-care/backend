@@ -395,4 +395,44 @@ class AdminOrganizationControllerTest extends TestCase
 
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
+
+    public function testGetUsersListByRoleThatNotBelongToOrganizationMethod()
+    {
+        $roleManager = Role::factory()->createQuietly(['name' => RolesEnum::MANAGER->value]);
+
+        $organization1 = Organization::factory()->createQuietly();
+        $userWithOrganization1 = User::factory()->createQuietly();
+        $userWithOrganization1->roles()->attach($roleManager);
+        $organization1->users()->attach($userWithOrganization1->id, ['role_id' => $roleManager->id]);
+
+        $organization2 = Organization::factory()->createQuietly();
+        $userWithOrganization2 = User::factory()->createQuietly();
+        $userWithOrganization2->roles()->attach($roleManager);
+        $organization2->users()->attach($userWithOrganization2->id, ['role_id' => $roleManager->id]);
+
+        $userWithoutOrganization = User::factory()->createQuietly();
+
+        $response = $this->getJson(route('admin.organizations.get-users-by-role-that-not-belong-to-organization',
+            ['organization' => $organization1->id]));
+
+        $response->assertStatus(HttpResponse::HTTP_OK)
+            ->assertJsonStructure(['data', 'pagination']);
+
+        $response->assertJsonFragment(['name' => $userWithOrganization2->name]);
+        $response->assertJsonFragment(['name' => $userWithoutOrganization->name]);
+        $response->assertJsonMissing(['name' => $userWithOrganization1->name]);
+    }
+
+    public function testGetUsersListByRoleThatNotBelongToOrganizationMethodWhenUserCantAccessInformation()
+    {
+        $user = User::factory()->createQuietly();
+        $this->actingAs($user);
+
+        $organization = Organization::factory()->createQuietly();
+
+        $response = $this->getJson(route('admin.organizations.get-users-by-role-that-not-belong-to-organization',
+            ['organization' => $organization->id]));
+
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
+    }
 }
