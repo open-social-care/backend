@@ -20,11 +20,11 @@ class ManagerOrganizationController extends Controller
 {
     /**
      * @OA\Get(
-     * path="/api/manager/organizations-get-info/{organization}",
+     * path="/api/manager/organizations/{organization}",
      * operationId="ManagerGetOrganization",
      * tags={"Manager/Organization"},
-     * summary="Get organization info",
-     * description="Retrieve organization info.",
+     * summary="Get organization",
+     * description="Retrieve organization show.",
      * security={{"sanctum":{}}},
      *
      *     @OA\Parameter(
@@ -79,7 +79,7 @@ class ManagerOrganizationController extends Controller
      *     ),
      * )
      */
-    public function getOrganizationInfo(Organization $organization): JsonResponse
+    public function show(Organization $organization): JsonResponse
     {
         $this->authorize('view', $organization);
 
