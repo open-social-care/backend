@@ -768,7 +768,7 @@ class AdminOrganizationController extends Controller
 
     /**
      * @OA\Get(
-     * path="/api/admin/organizations/{organization}/get-non-members",
+     * path="/api/admin/organizations/{organization}/get-non-members-by-role/{role}",
      * operationId="AdminOrganizationGetNonMembers",
      * tags={"Admin/Organization"},
      * summary="Get a list of organization non members",
@@ -783,6 +783,17 @@ class AdminOrganizationController extends Controller
      *
      *         @OA\Schema(
      *             type="integer"
+     *         )
+     *     ),
+     *
+     *     @OA\Parameter(
+     *         name="role",
+     *         in="path",
+     *         description="The role for filter users (manager or social_assistant)",
+     *         required=true,
+     *
+     *         @OA\Schema(
+     *             type="string"
      *         )
      *     ),
      *
@@ -834,14 +845,17 @@ class AdminOrganizationController extends Controller
      *     ),
      * )
      */
-    public function getNonMembers(Organization $organization): JsonResponse
+    public function getNonMembersByRole(Organization $organization, string $role): JsonResponse
     {
         $this->authorize('view', $organization);
 
         try {
-            $paginate = User::whereDoesntHave('organizations', function ($query) use ($organization) {
-                $query->where('organization_id', $organization->id);
-            })->paginate(30);
+            $role = Role::query()->firstWhere('name', $role);
+
+            $paginate = User::whereDoesntHave('organizations', function ($query) use ($organization, $role) {
+                $query->where('organization_id', $organization->id)->where('role_id', $role->id);
+            })
+                ->paginate(30);
 
             return response()->json([
                 'type' => 'success',

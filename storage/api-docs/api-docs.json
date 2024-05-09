@@ -1084,7 +1084,7 @@
                 ]
             }
         },
-        "/api/admin/organizations/{organization}/get-non-members": {
+        "/api/admin/organizations/{organization}/get-non-members-by-role/{role}": {
             "get": {
                 "tags": [
                     "Admin/Organization"
@@ -1100,6 +1100,15 @@
                         "required": true,
                         "schema": {
                             "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "role",
+                        "in": "path",
+                        "description": "The role for filter users (manager or social_assistant)",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 ],

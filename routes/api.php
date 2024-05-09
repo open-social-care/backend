@@ -52,9 +52,9 @@ Route::middleware(['auth:sanctum', 'only_admin_user'])
         Route::get('/organizations/{organization}/get-users-by-role/{role}', [AdminOrganizationController::class, 'getOrganizationUsersListByRole'])
             ->name('organizations.get-users-by-role');
 
-        Route::get('/organizations/{organization}/get-non-members',
-            [AdminOrganizationController::class, 'getNonMembers'])
-            ->name('organizations.get-non-members');
+        Route::get('/organizations/{organization}/get-non-members-by-role/{role}',
+            [AdminOrganizationController::class, 'getNonMembersByRole'])
+            ->name('organizations.get-non-members-by-role');
     });
 
 // Manager routes
