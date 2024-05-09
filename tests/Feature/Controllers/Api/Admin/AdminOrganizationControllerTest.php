@@ -412,7 +412,7 @@ class AdminOrganizationControllerTest extends TestCase
 
         $userWithoutOrganization = User::factory()->createQuietly();
 
-        $response = $this->getJson(route('admin.organizations.get-users-by-role-that-not-belong-to-organization',
+        $response = $this->getJson(route('admin.organizations.get-non-members',
             ['organization' => $organization1->id]));
 
         $response->assertStatus(HttpResponse::HTTP_OK)
@@ -430,7 +430,7 @@ class AdminOrganizationControllerTest extends TestCase
 
         $organization = Organization::factory()->createQuietly();
 
-        $response = $this->getJson(route('admin.organizations.get-users-by-role-that-not-belong-to-organization',
+        $response = $this->getJson(route('admin.organizations.get-non-members',
             ['organization' => $organization->id]));
 
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);

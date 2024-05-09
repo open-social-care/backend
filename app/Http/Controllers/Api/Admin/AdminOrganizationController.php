@@ -768,11 +768,11 @@ class AdminOrganizationController extends Controller
 
     /**
      * @OA\Get(
-     * path="/api/admin/organizations/get-users-by-role-that-not-belong-to-organization/{organization}",
-     * operationId="AdminGetUsersByRoleThatNotBelongToOrganization",
+     * path="/api/admin/organizations/{organization}/get-non-members",
+     * operationId="AdminOrganizationGetNonMembers",
      * tags={"Admin/Organization"},
-     * summary="Get a list of users by role that not belong to organization",
-     * description="Retrieve a list of users by role that not belong to organization.",
+     * summary="Get a list of organization non members",
+     * description="Retrieve a list of organization non members.",
      * security={{"sanctum":{}}},
      *
      *     @OA\Parameter(
@@ -834,7 +834,7 @@ class AdminOrganizationController extends Controller
      *     ),
      * )
      */
-    public function getUsersListByRoleThatNotBelongToOrganization(Organization $organization): JsonResponse
+    public function getNonMembers(Organization $organization): JsonResponse
     {
         $this->authorize('view', $organization);
 
