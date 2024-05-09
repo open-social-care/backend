@@ -7,12 +7,14 @@ use App\Actions\Admin\Organization\OrganizationCreateAction;
 use App\Actions\Admin\Organization\OrganizationDisassociateUsersWithRolesAction;
 use App\Actions\Admin\Organization\OrganizationUpdateAction;
 use App\DTO\Admin\OrganizationDTO;
+use App\Enums\RolesEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Admin\OrganizationAssociateUsersRequest;
 use App\Http\Requests\Api\Admin\OrganizationCreateRequest;
 use App\Http\Requests\Api\Admin\OrganizationDisassociateUsersRequest;
 use App\Http\Requests\Api\Admin\OrganizationUpdateRequest;
 use App\Http\Resources\Api\Admin\OrganizationListResource;
+use App\Http\Resources\Api\Admin\UserResource;
 use App\Http\Resources\Api\Shared\OrganizationResource;
 use App\Http\Resources\Api\Shared\PaginationResource;
 use App\Http\Resources\Api\Shared\UserListWithRolesResource;
@@ -855,13 +857,15 @@ class AdminOrganizationController extends Controller
             $paginate = User::whereDoesntHave('organizations', function ($query) use ($organization, $role) {
                 $query->where('organization_id', $organization->id)->where('role_id', $role->id);
             })
-                ->paginate(30);
+                ->whereDoesntHave('roles', function ($query) {
+                    $query->where('roles.name', RolesEnum::ADMIN->value);
+                })
+                ->get();
 
             return response()->json([
                 'type' => 'success',
                 'message' => __('messages.common.success_view'),
-                'data' => UserListWithRolesResource::collection($paginate),
-                'pagination' => PaginationResource::make($paginate),
+                'data' => UserResource::collection($paginate),
             ], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
             return response()->json(['type' => 'error', 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
