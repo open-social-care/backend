@@ -2,9 +2,12 @@
 
 namespace App\Http\Requests\Api\Admin;
 
+use App\Enums\RolesEnum;
+use App\Models\Role;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class OrganizationAssociateUsersRequest extends FormRequest
@@ -41,10 +44,19 @@ class OrganizationAssociateUsersRequest extends FormRequest
      */
     public function rules(): array
     {
+        $roleAdmin = Role::query()->firstWhere('name', RolesEnum::ADMIN->value);
+
         return [
             'data' => 'required|array',
             'data.*.user_id' => 'required|exists:users,id',
-            'data.*.role_id' => 'required|exists:roles,id',
+            'data.*.role_id' => ['required', 'exists:roles,id',  Rule::notIn([$roleAdmin->id]),],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+          'data.*.role_id.not_in' => 'O Perfil de usuário Admin não pode ser associado a um usuário de organização',
         ];
     }
 }

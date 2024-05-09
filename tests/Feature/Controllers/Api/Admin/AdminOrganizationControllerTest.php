@@ -396,42 +396,49 @@ class AdminOrganizationControllerTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testGetUsersListByRoleThatNotBelongToOrganizationMethod()
+    public function testGetNonMembersByRoleMethod()
     {
         $roleManager = Role::factory()->createQuietly(['name' => RolesEnum::MANAGER->value]);
 
         $organization1 = Organization::factory()->createQuietly();
-        $userWithOrganization1 = User::factory()->createQuietly();
-        $userWithOrganization1->roles()->attach($roleManager);
-        $organization1->users()->attach($userWithOrganization1->id, ['role_id' => $roleManager->id]);
+        $userManagerWithOrganization1 = User::factory()->createQuietly();
+        $userManagerWithOrganization1->roles()->attach($roleManager);
+        $organization1->users()->attach($userManagerWithOrganization1->id, ['role_id' => $roleManager->id]);
+
+        $roleSocialAssistant = Role::factory()->createQuietly(['name' => RolesEnum::SOCIAL_ASSISTANT->value]);
+        $userSocialAssistantWithOrganization1 = User::factory()->createQuietly();
+        $userSocialAssistantWithOrganization1->roles()->attach($roleSocialAssistant);
+        $organization1->users()->attach($userSocialAssistantWithOrganization1->id, ['role_id' => $roleSocialAssistant->id]);
 
         $organization2 = Organization::factory()->createQuietly();
-        $userWithOrganization2 = User::factory()->createQuietly();
-        $userWithOrganization2->roles()->attach($roleManager);
-        $organization2->users()->attach($userWithOrganization2->id, ['role_id' => $roleManager->id]);
+        $userManagerWithOrganization2 = User::factory()->createQuietly();
+        $userManagerWithOrganization2->roles()->attach($roleManager);
+        $organization2->users()->attach($userManagerWithOrganization2->id, ['role_id' => $roleManager->id]);
 
         $userWithoutOrganization = User::factory()->createQuietly();
 
-        $response = $this->getJson(route('admin.organizations.get-non-members',
-            ['organization' => $organization1->id]));
+        $response = $this->getJson(route('admin.organizations.get-non-members-by-role',
+            ['organization' => $organization1->id, 'role' => $roleManager->name]));
 
         $response->assertStatus(HttpResponse::HTTP_OK)
-            ->assertJsonStructure(['data', 'pagination']);
+            ->assertJsonStructure(['data']);
 
-        $response->assertJsonFragment(['name' => $userWithOrganization2->name]);
+        $response->assertJsonFragment(['name' => $userSocialAssistantWithOrganization1->name]);
         $response->assertJsonFragment(['name' => $userWithoutOrganization->name]);
-        $response->assertJsonMissing(['name' => $userWithOrganization1->name]);
+        $response->assertJsonFragment(['name' => $userManagerWithOrganization2->name]);
+
+        $response->assertJsonMissing(['name' => $userManagerWithOrganization1->name]);
     }
 
-    public function testGetUsersListByRoleThatNotBelongToOrganizationMethodWhenUserCantAccessInformation()
+    public function testGetNonMembersByRoleMethodWhenUserCantAccessInformation()
     {
         $user = User::factory()->createQuietly();
         $this->actingAs($user);
 
         $organization = Organization::factory()->createQuietly();
 
-        $response = $this->getJson(route('admin.organizations.get-non-members',
-            ['organization' => $organization->id]));
+        $response = $this->getJson(route('admin.organizations.get-non-members-by-role',
+            ['organization' => $organization->id, 'role' => 'manager']));
 
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }

@@ -1084,7 +1084,7 @@
                 ]
             }
         },
-        "/api/admin/organizations/{organization}/get-non-members": {
+        "/api/admin/organizations/{organization}/get-non-members-by-role/{role}": {
             "get": {
                 "tags": [
                     "Admin/Organization"
@@ -1100,6 +1100,15 @@
                         "required": true,
                         "schema": {
                             "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "role",
+                        "in": "path",
+                        "description": "The role for filter users (manager or social_assistant)",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 ],
@@ -1133,40 +1142,10 @@
                                                     "email": {
                                                         "type": "string",
                                                         "example": "teste@teste.com"
-                                                    },
-                                                    "roles": {
-                                                        "type": "array",
-                                                        "items": {
-                                                            "type": "string",
-                                                            "example": "Gestor(a)"
-                                                        }
                                                     }
                                                 },
                                                 "type": "object"
                                             }
-                                        },
-                                        "pagination": {
-                                            "properties": {
-                                                "total": {
-                                                    "type": "integer"
-                                                },
-                                                "per_page": {
-                                                    "type": "integer"
-                                                },
-                                                "current_page": {
-                                                    "type": "integer"
-                                                },
-                                                "last_page": {
-                                                    "type": "integer"
-                                                },
-                                                "from": {
-                                                    "type": "integer"
-                                                },
-                                                "to": {
-                                                    "type": "integer"
-                                                }
-                                            },
-                                            "type": "object"
                                         }
                                     },
                                     "type": "object"

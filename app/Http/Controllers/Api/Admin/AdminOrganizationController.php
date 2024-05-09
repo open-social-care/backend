@@ -7,12 +7,14 @@ use App\Actions\Admin\Organization\OrganizationCreateAction;
 use App\Actions\Admin\Organization\OrganizationDisassociateUsersWithRolesAction;
 use App\Actions\Admin\Organization\OrganizationUpdateAction;
 use App\DTO\Admin\OrganizationDTO;
+use App\Enums\RolesEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Admin\OrganizationAssociateUsersRequest;
 use App\Http\Requests\Api\Admin\OrganizationCreateRequest;
 use App\Http\Requests\Api\Admin\OrganizationDisassociateUsersRequest;
 use App\Http\Requests\Api\Admin\OrganizationUpdateRequest;
 use App\Http\Resources\Api\Admin\OrganizationListResource;
+use App\Http\Resources\Api\Admin\UserResource;
 use App\Http\Resources\Api\Shared\OrganizationResource;
 use App\Http\Resources\Api\Shared\PaginationResource;
 use App\Http\Resources\Api\Shared\UserListWithRolesResource;
@@ -768,7 +770,7 @@ class AdminOrganizationController extends Controller
 
     /**
      * @OA\Get(
-     * path="/api/admin/organizations/{organization}/get-non-members",
+     * path="/api/admin/organizations/{organization}/get-non-members-by-role/{role}",
      * operationId="AdminOrganizationGetNonMembers",
      * tags={"Admin/Organization"},
      * summary="Get a list of organization non members",
@@ -786,6 +788,17 @@ class AdminOrganizationController extends Controller
      *         )
      *     ),
      *
+     *     @OA\Parameter(
+     *         name="role",
+     *         in="path",
+     *         description="The role for filter users (manager or social_assistant)",
+     *         required=true,
+     *
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *
      *     @OA\Response(
      *         response=200,
      *         description="Successful response",
@@ -799,15 +812,7 @@ class AdminOrganizationController extends Controller
      *                 @OA\Property(property="id", type="integer", example="1"),
      *                 @OA\Property(property="name", type="string", example="Teste"),
      *                 @OA\Property(property="email", type="string", example="teste@teste.com"),
-     *                 @OA\Property(property="roles", type="array", @OA\Items(type="string", example="Gestor(a)")),
      *             )),
-     *             @OA\Property(property="pagination", type="object",
-     *             @OA\Property(property="total", type="integer"),
-     *             @OA\Property(property="per_page", type="integer"),
-     *             @OA\Property(property="current_page", type="integer"),
-     *             @OA\Property(property="last_page", type="integer"),
-     *             @OA\Property(property="from", type="integer"),
-     *             @OA\Property(property="to", type="integer"))
      *         )
      *     ),
      *
@@ -834,20 +839,25 @@ class AdminOrganizationController extends Controller
      *     ),
      * )
      */
-    public function getNonMembers(Organization $organization): JsonResponse
+    public function getNonMembersByRole(Organization $organization, string $role): JsonResponse
     {
         $this->authorize('view', $organization);
 
         try {
-            $paginate = User::whereDoesntHave('organizations', function ($query) use ($organization) {
-                $query->where('organization_id', $organization->id);
-            })->paginate(30);
+            $role = Role::query()->firstWhere('name', $role);
+
+            $paginate = User::whereDoesntHave('organizations', function ($query) use ($organization, $role) {
+                $query->where('organization_id', $organization->id)->where('role_id', $role->id);
+            })
+                ->whereDoesntHave('roles', function ($query) {
+                    $query->where('roles.name', RolesEnum::ADMIN->value);
+                })
+                ->get();
 
             return response()->json([
                 'type' => 'success',
                 'message' => __('messages.common.success_view'),
-                'data' => UserListWithRolesResource::collection($paginate),
-                'pagination' => PaginationResource::make($paginate),
+                'data' => UserResource::collection($paginate),
             ], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
             return response()->json(['type' => 'error', 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
