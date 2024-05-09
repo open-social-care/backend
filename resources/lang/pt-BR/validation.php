@@ -148,5 +148,9 @@ return [
         'document' => 'Documento',
         'subject_ref' => 'Referência de sujeito/usuários',
         'users' => 'Usuários',
+        'role_id' => 'Perfil de usuário',
+        'data.*.role_id' => 'Perfil de usuário',
+        'user_id' => 'Usuário',
+        'data.*.user_id' => 'Usuário',
     ],
 ];

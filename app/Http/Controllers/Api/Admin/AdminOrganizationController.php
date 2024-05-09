@@ -812,15 +812,7 @@ class AdminOrganizationController extends Controller
      *                 @OA\Property(property="id", type="integer", example="1"),
      *                 @OA\Property(property="name", type="string", example="Teste"),
      *                 @OA\Property(property="email", type="string", example="teste@teste.com"),
-     *                 @OA\Property(property="roles", type="array", @OA\Items(type="string", example="Gestor(a)")),
      *             )),
-     *             @OA\Property(property="pagination", type="object",
-     *             @OA\Property(property="total", type="integer"),
-     *             @OA\Property(property="per_page", type="integer"),
-     *             @OA\Property(property="current_page", type="integer"),
-     *             @OA\Property(property="last_page", type="integer"),
-     *             @OA\Property(property="from", type="integer"),
-     *             @OA\Property(property="to", type="integer"))
      *         )
      *     ),
      *

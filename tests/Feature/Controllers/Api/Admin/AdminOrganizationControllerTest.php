@@ -421,7 +421,7 @@ class AdminOrganizationControllerTest extends TestCase
             ['organization' => $organization1->id, 'role' => $roleManager->name]));
 
         $response->assertStatus(HttpResponse::HTTP_OK)
-            ->assertJsonStructure(['data', 'pagination']);
+            ->assertJsonStructure(['data']);
 
         $response->assertJsonFragment(['name' => $userSocialAssistantWithOrganization1->name]);
         $response->assertJsonFragment(['name' => $userWithoutOrganization->name]);
