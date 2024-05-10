@@ -7,7 +7,6 @@ use App\Models\User;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class FormTemplateCreateRequest extends FormRequest
@@ -46,9 +45,9 @@ class FormTemplateCreateRequest extends FormRequest
         $rules = [
             'title' => 'required|string|max:255',
             'description' => 'required|string|max:255',
-//            'short_questions' => 'nullable|array',
-//            'short_questions.*.description' => 'required_with:short_questions|string|max:255',
-//            'short_questions.*.answer_required' => 'required_with:short_questions|boolean',
+            //            'short_questions' => 'nullable|array',
+            //            'short_questions.*.description' => 'required_with:short_questions|string|max:255',
+            //            'short_questions.*.answer_required' => 'required_with:short_questions|boolean',
         ];
 
         return $rules;

@@ -5,9 +5,9 @@ use App\Http\Controllers\Api\Admin\AdminUserController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Auth\ForgotPasswordController;
 use App\Http\Controllers\Api\Auth\ResetPasswordController;
+use App\Http\Controllers\Api\Manager\ManagerFormTemplateController;
 use App\Http\Controllers\Api\Manager\ManagerOrganizationController;
 use App\Http\Controllers\Api\Manager\ManagerUserController;
-use App\Http\Controllers\Api\Manager\ManagerFormTemplateController;
 use Illuminate\Support\Facades\Route;
 
 /*
