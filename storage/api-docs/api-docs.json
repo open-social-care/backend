@@ -334,6 +334,14 @@
                                                     "document": {
                                                         "type": "string",
                                                         "example": "123.456.789-0"
+                                                    },
+                                                    "phone": {
+                                                        "type": "string",
+                                                        "example": "(41)3333-3333)"
+                                                    },
+                                                    "subject_ref": {
+                                                        "type": "string",
+                                                        "example": "sujeito"
                                                     }
                                                 },
                                                 "type": "object"
@@ -666,10 +674,10 @@
                                                     "type": "integer",
                                                     "example": "1"
                                                 },
-                                                "role_id": {
-                                                    "description": "role id",
-                                                    "type": "integer",
-                                                    "example": "2"
+                                                "role_name": {
+                                                    "description": "role name",
+                                                    "type": "string",
+                                                    "example": "manager"
                                                 }
                                             },
                                             "type": "object"
@@ -819,10 +827,10 @@
                                                     "type": "integer",
                                                     "example": "1"
                                                 },
-                                                "role_id": {
-                                                    "description": "role id",
-                                                    "type": "integer",
-                                                    "example": "2"
+                                                "role_name": {
+                                                    "description": "role name",
+                                                    "type": "string",
+                                                    "example": "manager"
                                                 }
                                             },
                                             "type": "object"
@@ -958,7 +966,7 @@
                     {
                         "name": "role",
                         "in": "path",
-                        "description": "The role for filter users (manager or social_assistant)",
+                        "description": "The role for filter users (manager or social-assistant)",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -1105,7 +1113,7 @@
                     {
                         "name": "role",
                         "in": "path",
-                        "description": "The role for filter users (manager or social_assistant)",
+                        "description": "The role for filter users (manager or social-assistant)",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -1890,20 +1898,6 @@
                                                             "type": "integer",
                                                             "example": "1"
                                                         }
-                                                    },
-                                                    "organizations_ids": {
-                                                        "type": "array",
-                                                        "items": {
-                                                            "type": "integer",
-                                                            "example": "1"
-                                                        }
-                                                    },
-                                                    "subject_ref_by_organizations": {
-                                                        "type": "array",
-                                                        "items": {
-                                                            "type": "integer",
-                                                            "example": "subjects"
-                                                        }
                                                     }
                                                 },
                                                 "type": "object"
@@ -2179,6 +2173,149 @@
                         }
                     }
                 }
+            }
+        },
+        "/api/manager/organizations": {
+            "get": {
+                "tags": [
+                    "Manager/Organization"
+                ],
+                "summary": "Get a list of organizations",
+                "description": "Retrieve a list of organizations.",
+                "operationId": "ManagerGetOrganizations",
+                "parameters": [
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "description": "The search query parameter",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Successful response"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": "1"
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Social Care"
+                                                    },
+                                                    "document_type": {
+                                                        "type": "string",
+                                                        "example": "cpf"
+                                                    },
+                                                    "document": {
+                                                        "type": "string",
+                                                        "example": "123.456.789-0"
+                                                    },
+                                                    "phone": {
+                                                        "type": "string",
+                                                        "example": "(41)3333-3333)"
+                                                    },
+                                                    "subject_ref": {
+                                                        "type": "string",
+                                                        "example": "sujeito"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "pagination": {
+                                            "properties": {
+                                                "total": {
+                                                    "type": "integer"
+                                                },
+                                                "per_page": {
+                                                    "type": "integer"
+                                                },
+                                                "current_page": {
+                                                    "type": "integer"
+                                                },
+                                                "last_page": {
+                                                    "type": "integer"
+                                                },
+                                                "from": {
+                                                    "type": "integer"
+                                                },
+                                                "to": {
+                                                    "type": "integer"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Bad Request"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "This action is unauthorized."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
             }
         },
         "/api/manager/organizations/{organization}": {
@@ -2462,7 +2599,7 @@
                     {
                         "name": "role",
                         "in": "path",
-                        "description": "The role for filter users (manager or social_assistant)",
+                        "description": "The role for filter users (manager or social-assistant)",
                         "required": true,
                         "schema": {
                             "type": "string"

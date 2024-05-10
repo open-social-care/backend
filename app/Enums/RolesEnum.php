@@ -10,5 +10,5 @@ enum RolesEnum: string
 
     case ADMIN = 'admin';
     case MANAGER = 'manager';
-    case SOCIAL_ASSISTANT = 'social_assistant';
+    case SOCIAL_ASSISTANT = 'social-assistant';
 }

@@ -403,7 +403,7 @@ class AdminOrganizationController extends Controller
      *                     @OA\Items(type="object",
      *
      *                          @OA\Property(property="user_id", type="integer", description="user id", example="1"),
-     *                          @OA\Property(property="role_id", type="integer", description="role id", example="2")
+     *                          @OA\Property(property="role_name", type="string", description="role name", example="manager")
      *                 )
      *               )
      *          )
@@ -469,7 +469,7 @@ class AdminOrganizationController extends Controller
 
             foreach ($data['data'] as $datum) {
                 $user = User::query()->find($datum['user_id']);
-                $role = Role::query()->find($datum['role_id']);
+                $role = Role::query()->firstWhere('name', $datum['role_name']);
 
                 OrganizationAssociateUsersWithRolesAction::execute($user, $role, $organization);
             }
@@ -512,7 +512,7 @@ class AdminOrganizationController extends Controller
      *                     @OA\Items(type="object",
      *
      *                          @OA\Property(property="user_id", type="integer", description="user id", example="1"),
-     *                          @OA\Property(property="role_id", type="integer", description="role id", example="2")
+     *                          @OA\Property(property="role_name", type="string", description="role name", example="manager")
      *                 )
      *               )
      *          )
@@ -578,7 +578,7 @@ class AdminOrganizationController extends Controller
 
             foreach ($data['data'] as $datum) {
                 $user = User::query()->find($datum['user_id']);
-                $role = Role::query()->find($datum['role_id']);
+                $role = Role::query()->firstWhere('name', $datum['role_name']);
 
                 OrganizationDisassociateUsersWithRolesAction::execute($user, $role, $organization);
             }
@@ -612,7 +612,7 @@ class AdminOrganizationController extends Controller
      *     @OA\Parameter(
      *         name="role",
      *         in="path",
-     *         description="The role for filter users (manager or social_assistant)",
+     *         description="The role for filter users (manager or social-assistant)",
      *         required=true,
      *
      *         @OA\Schema(
@@ -725,7 +725,9 @@ class AdminOrganizationController extends Controller
      *                  @OA\Property(property="id", type="integer", example="1"),
      *                  @OA\Property(property="name", type="string", example="Social Care"),
      *                  @OA\Property(property="document_type", type="string", example="cpf"),
-     *                  @OA\Property(property="document", type="string", example="123.456.789-0")
+     *                  @OA\Property(property="document", type="string", example="123.456.789-0"),
+     *                  @OA\Property(property="phone", type="string", example="(41)3333-3333)"),
+     *                  @OA\Property(property="subject_ref", type="string", example="sujeito")
      *              ))
      *         )
      *     ),
@@ -791,7 +793,7 @@ class AdminOrganizationController extends Controller
      *     @OA\Parameter(
      *         name="role",
      *         in="path",
-     *         description="The role for filter users (manager or social_assistant)",
+     *         description="The role for filter users (manager or social-assistant)",
      *         required=true,
      *
      *         @OA\Schema(

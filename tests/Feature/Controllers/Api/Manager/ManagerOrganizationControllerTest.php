@@ -31,6 +31,55 @@ class ManagerOrganizationControllerTest extends TestCase
         $this->actingAs($this->userManager);
     }
 
+    public function testIndexMethod()
+    {
+        $response = $this->getJson(route('manager.organizations.index'));
+
+        $response->assertStatus(HttpResponse::HTTP_OK)
+            ->assertJsonStructure(['data', 'pagination']);
+
+        $response->assertJsonFragment(['name' => $this->organization->name]);
+    }
+
+    public function testIndexMethodWithSearchTerm()
+    {
+        $organization = Organization::factory()->createOneQuietly(['name' => 'Test search']);
+        $role = Role::factory()->createQuietly(['name' => RolesEnum::SOCIAL_ASSISTANT->value]);
+
+        $this->userManager->organizations()->attach($organization, ['role_id' => $role->id]);
+
+        $response = $this->getJson(route('manager.organizations.index', ['q' => 'Test search']));
+
+        $response->assertStatus(HttpResponse::HTTP_OK)
+            ->assertJsonStructure(['data', 'pagination'])
+            ->assertJsonFragment(['name' => $organization->name]);
+    }
+
+    public function testIndexMethodWithSearchTermWhenDontHaveContent()
+    {
+        $organization = Organization::factory()->createOneQuietly(['name' => 'Test search']);
+        $role = Role::factory()->createQuietly(['name' => RolesEnum::SOCIAL_ASSISTANT->value]);
+
+        $this->userManager->organizations()->attach($this->organization, ['role_id' => $role->id]);
+
+        $response = $this->getJson(route('manager.organizations.index', ['q' => 'null organization']));
+
+        $response->assertStatus(HttpResponse::HTTP_OK)
+            ->assertJsonStructure(['data', 'pagination'])
+            ->assertJsonCount(0, 'data')
+            ->assertJsonMissing(['name' => $organization->name]);
+    }
+
+    public function testIndexMethodWhenUserCantAccessInformation()
+    {
+        $user = User::factory()->createQuietly();
+        $this->actingAs($user);
+
+        $response = $this->getJson(route('manager.organizations.index'));
+
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
+    }
+
     public function testShowMethod()
     {
         $response = $this->getJson(route('manager.organizations.show', $this->organization->id));

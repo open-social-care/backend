@@ -64,8 +64,8 @@ Route::middleware(['auth:sanctum', 'only_manager_user'])
     ->group(function () {
 
         // Organization Routes
-        Route::resource('organizations', AdminOrganizationController::class)
-            ->only(['update', 'show']);
+        Route::resource('organizations', ManagerOrganizationController::class)
+            ->only(['index', 'update', 'show']);
 
         Route::get('/organizations/{organization}/get-users-by-role/{role}', [ManagerOrganizationController::class, 'getOrganizationUsersListByRole'])
             ->name('organizations.get-users-by-role');

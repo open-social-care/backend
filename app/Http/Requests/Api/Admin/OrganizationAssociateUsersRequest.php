@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Api\Admin;
 
 use App\Enums\RolesEnum;
-use App\Models\Role;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -44,19 +43,17 @@ class OrganizationAssociateUsersRequest extends FormRequest
      */
     public function rules(): array
     {
-        $roleAdmin = Role::query()->firstWhere('name', RolesEnum::ADMIN->value);
-
         return [
             'data' => 'required|array',
-            'data.*.user_id' => 'required|exists:users,id',
-            'data.*.role_id' => ['required', 'exists:roles,id',  Rule::notIn([$roleAdmin->id]),],
+            'data.*.user_id' => 'required|integer|exists:users,id',
+            'data.*.role_name' => ['required', 'string', 'exists:roles,name',  Rule::notIn([RolesEnum::ADMIN->value])],
         ];
     }
 
     public function messages(): array
     {
         return [
-          'data.*.role_id.not_in' => 'O Perfil de usuário Admin não pode ser associado a um usuário de organização',
+            'data.*.role_name.not_in' => 'O Perfil de usuário Admin não pode ser associado a um usuário de organização',
         ];
     }
 }

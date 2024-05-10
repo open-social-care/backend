@@ -216,17 +216,18 @@ class AdminOrganizationControllerTest extends TestCase
     {
         $organization = Organization::factory()->createQuietly();
         $users = User::factory()->count(2)->createQuietly();
-        $roles = Role::factory()->count(2)->createQuietly();
+        $role1 = Role::factory()->createOneQuietly(['name' => RolesEnum::MANAGER->value]);
+        $role2 = Role::factory()->createOneQuietly(['name' => RolesEnum::SOCIAL_ASSISTANT->value]);
 
         $data = [
             'data' => [
                 [
                     'user_id' => $users[0]->id,
-                    'role_id' => $roles[0]->id,
+                    'role_name' => $role1->name,
                 ],
                 [
                     'user_id' => $users[1]->id,
-                    'role_id' => $roles[1]->id,
+                    'role_name' => $role2->name,
                 ],
             ],
         ];
@@ -237,8 +238,8 @@ class AdminOrganizationControllerTest extends TestCase
             ->assertJson(['message' => __('messages.common.success_update')]);
 
         $this->assertEquals(count($data['data']), $organization->fresh()->users->count());
-        $this->assertDatabaseHas('organization_users', ['user_id' => $users[0]->id, 'role_id' => $roles[0]->id]);
-        $this->assertDatabaseHas('organization_users', ['user_id' => $users[1]->id, 'role_id' => $roles[1]->id]);
+        $this->assertDatabaseHas('organization_users', ['user_id' => $users[0]->id, 'role_id' => $role1->id]);
+        $this->assertDatabaseHas('organization_users', ['user_id' => $users[1]->id, 'role_id' => $role2->id]);
     }
 
     public function testAssociateUsersToOrganizationMethodWhenUserCantAccessInformation()
@@ -248,17 +249,18 @@ class AdminOrganizationControllerTest extends TestCase
 
         $organization = Organization::factory()->createQuietly();
         $users = User::factory()->count(2)->createQuietly();
-        $roles = Role::factory()->count(2)->createQuietly();
+        $role1 = Role::factory()->createOneQuietly(['name' => RolesEnum::MANAGER->value]);
+        $role2 = Role::factory()->createOneQuietly(['name' => RolesEnum::SOCIAL_ASSISTANT->value]);
 
         $data = [
             'data' => [
                 [
                     'user_id' => $users[0]->id,
-                    'role_id' => $roles[0]->id,
+                    'role_name' => $role1->name,
                 ],
                 [
                     'user_id' => $users[1]->id,
-                    'role_id' => $roles[1]->id,
+                    'role_name' => $role2->name,
                 ],
             ],
         ];
@@ -272,23 +274,24 @@ class AdminOrganizationControllerTest extends TestCase
     {
         $organization = Organization::factory()->createQuietly();
         $users = User::factory()->count(2)->createQuietly();
-        $roles = Role::factory()->count(2)->createQuietly();
+        $role1 = Role::factory()->createOneQuietly(['name' => RolesEnum::MANAGER->value]);
+        $role2 = Role::factory()->createOneQuietly(['name' => RolesEnum::SOCIAL_ASSISTANT->value]);
 
-        $organization->users()->attach($users[0]->id, ['role_id' => $roles[0]->id]);
-        $organization->users()->attach($users[1]->id, ['role_id' => $roles[1]->id]);
+        $organization->users()->attach($users[0]->id, ['role_id' => $role1->id]);
+        $organization->users()->attach($users[1]->id, ['role_id' => $role2->id]);
 
-        $users[0]->roles()->attach($roles[0]);
-        $users[1]->roles()->attach($roles[1]);
+        $users[0]->roles()->attach($role1);
+        $users[1]->roles()->attach($role2);
 
         $data = [
             'data' => [
                 [
                     'user_id' => $users[0]->id,
-                    'role_id' => $roles[0]->id,
+                    'role_name' => $role1->name,
                 ],
                 [
                     'user_id' => $users[1]->id,
-                    'role_id' => $roles[1]->id,
+                    'role_name' => $role2->name,
                 ],
             ],
         ];
@@ -298,8 +301,8 @@ class AdminOrganizationControllerTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_OK)
             ->assertJson(['message' => __('messages.common.success_update')]);
 
-        $this->assertDatabaseMissing('organization_users', ['user_id' => $users[0]->id, 'role_id' => $roles[0]->id]);
-        $this->assertDatabaseMissing('organization_users', ['user_id' => $users[1]->id, 'role_id' => $roles[1]->id]);
+        $this->assertDatabaseMissing('organization_users', ['user_id' => $users[0]->id, 'role_id' => $role1->id]);
+        $this->assertDatabaseMissing('organization_users', ['user_id' => $users[1]->id, 'role_id' => $role2->id]);
     }
 
     public function testDissociateUsersToOrganizationMethodWhenUserCantAccessInformation()
@@ -309,23 +312,24 @@ class AdminOrganizationControllerTest extends TestCase
 
         $organization = Organization::factory()->createQuietly();
         $users = User::factory()->count(2)->createQuietly();
-        $roles = Role::factory()->count(2)->createQuietly();
+        $role1 = Role::factory()->createOneQuietly(['name' => RolesEnum::MANAGER->value]);
+        $role2 = Role::factory()->createOneQuietly(['name' => RolesEnum::SOCIAL_ASSISTANT->value]);
 
-        $organization->users()->attach($users[0]->id, ['role_id' => $roles[0]->id]);
-        $organization->users()->attach($users[1]->id, ['role_id' => $roles[1]->id]);
+        $organization->users()->attach($users[0]->id, ['role_id' => $role1->id]);
+        $organization->users()->attach($users[1]->id, ['role_id' => $role2->id]);
 
-        $users[0]->roles()->attach($roles[0]);
-        $users[1]->roles()->attach($roles[1]);
+        $users[0]->roles()->attach($role1);
+        $users[1]->roles()->attach($role2);
 
         $data = [
             'data' => [
                 [
                     'user_id' => $users[0]->id,
-                    'role_id' => $roles[0]->id,
+                    'role_name' => $role1->name,
                 ],
                 [
                     'user_id' => $users[1]->id,
-                    'role_id' => $roles[1]->id,
+                    'role_name' => $role2->name,
                 ],
             ],
         ];
