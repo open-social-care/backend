@@ -17,7 +17,6 @@ class UserLoginResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'roles_ids' => $this->roles->pluck('id'),
-            'organizations_ids' => $this->organizations->pluck('id'),
         ];
     }
 }

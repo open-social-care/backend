@@ -1898,20 +1898,6 @@
                                                             "type": "integer",
                                                             "example": "1"
                                                         }
-                                                    },
-                                                    "organizations_ids": {
-                                                        "type": "array",
-                                                        "items": {
-                                                            "type": "integer",
-                                                            "example": "1"
-                                                        }
-                                                    },
-                                                    "subject_ref_by_organizations": {
-                                                        "type": "array",
-                                                        "items": {
-                                                            "type": "integer",
-                                                            "example": "subjects"
-                                                        }
                                                     }
                                                 },
                                                 "type": "object"

@@ -55,8 +55,6 @@ class AuthController extends Controller
      *                   @OA\Property(property="name", type="string", example="Test"),
      *                   @OA\Property(property="email", type="string", example="test@test.com"),
      *                   @OA\Property(property="roles_ids", type="array", @OA\Items(type="integer", example="1")),
-     *                   @OA\Property(property="organizations_ids", type="array", @OA\Items(type="integer", example="1")),
-     *                   @OA\Property(property="subject_ref_by_organizations", type="array", @OA\Items(type="integer", example="subjects"))
      *              )),
      *          )
      *      ),
