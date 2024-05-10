@@ -157,4 +157,9 @@ class User extends Authenticatable
 
         return $hasOrganizationFromUser;
     }
+
+    public function isManager(): bool
+    {
+        return $this->hasRoleByName(RolesEnum::MANAGER->value) && $this->organizations()->exists();
+    }
 }

@@ -67,6 +67,26 @@ class OrganizationPolicyTest extends TestCase
         $this->assertFalse($result);
     }
 
+    public function testViewYoursMethodReturnsTrueForManagerOrganizationUser()
+    {
+        $user = $this->createManagerUser();
+        $policy = new OrganizationPolicy();
+
+        $result = $policy->viewYours($user);
+
+        $this->assertTrue($result);
+    }
+
+    public function testViewYoursMethodReturnsFalseForNonManagerOrganizationUser()
+    {
+        $user = $this->createAdminSystemUser();
+        $policy = new OrganizationPolicy();
+
+        $result = $policy->viewYours($user);
+
+        $this->assertFalse($result);
+    }
+
     public function testCreateMethodReturnsTrueForAdminSystemUser()
     {
         $user = $this->createAdminSystemUser();

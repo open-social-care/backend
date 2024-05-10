@@ -24,6 +24,14 @@ class OrganizationPolicy
     }
 
     /**
+     * Determine whether the user can view the model.
+     */
+    public function viewYours(User $user): bool
+    {
+        return $user->isManager();
+    }
+
+    /**
      * Determine whether the user can create models.
      */
     public function create(User $user): bool

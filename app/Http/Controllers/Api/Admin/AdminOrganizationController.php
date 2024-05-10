@@ -725,7 +725,9 @@ class AdminOrganizationController extends Controller
      *                  @OA\Property(property="id", type="integer", example="1"),
      *                  @OA\Property(property="name", type="string", example="Social Care"),
      *                  @OA\Property(property="document_type", type="string", example="cpf"),
-     *                  @OA\Property(property="document", type="string", example="123.456.789-0")
+     *                  @OA\Property(property="document", type="string", example="123.456.789-0"),
+     *                  @OA\Property(property="phone", type="string", example="(41)3333-3333)"),
+     *                  @OA\Property(property="subject_ref", type="string", example="sujeito")
      *              ))
      *         )
      *     ),
