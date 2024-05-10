@@ -44,7 +44,7 @@ class OrganizationDisassociateUsersRequest extends FormRequest
         return [
             'data' => 'required|array',
             'data.*.user_id' => 'required|exists:users,id',
-            'data.*.role_id' => 'required|exists:roles,id',
+            'data.*.role_name' => 'required|string|exists:roles,name',
         ];
     }
 }

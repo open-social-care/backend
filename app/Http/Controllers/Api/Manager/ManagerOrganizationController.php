@@ -316,7 +316,7 @@ class ManagerOrganizationController extends Controller
      *     @OA\Parameter(
      *         name="role",
      *         in="path",
-     *         description="The role for filter users (manager or social_assistant)",
+     *         description="The role for filter users (manager or social-assistant)",
      *         required=true,
      *
      *         @OA\Schema(

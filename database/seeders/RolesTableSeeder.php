@@ -15,13 +15,13 @@ class RolesTableSeeder extends Seeder
     {
         $data = [
             [
-                'name' => RolesEnum::ADMIN,
+                'name' => RolesEnum::ADMIN->value,
             ],
             [
-                'name' => RolesEnum::MANAGER,
+                'name' => RolesEnum::MANAGER->value,
             ],
             [
-                'name' => RolesEnum::SOCIAL_ASSISTANT,
+                'name' => RolesEnum::SOCIAL_ASSISTANT->value,
             ],
         ];
 
