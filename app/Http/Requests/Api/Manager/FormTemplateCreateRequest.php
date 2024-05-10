@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Api\Manager;
 
+use App\Models\FormTemplate;
+use App\Models\User;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -32,7 +34,8 @@ class FormTemplateCreateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return auth()->user()->can('create', [FormTemplate::class])
+            || auth()->user()->can('update', [FormTemplate::class]);
     }
 
     /**
@@ -43,15 +46,9 @@ class FormTemplateCreateRequest extends FormRequest
         $rules = [
             'title' => 'required|string|max:255',
             'description' => 'required|string|max:255',
-            'has_file_uploads' => 'required|boolean',
-            'short_questions' => 'nullable|array',
-            'short_questions.*.description' => 'required_with:short_questions|string|max:255',
-            'short_questions.*.answer_required' => 'required_with:short_questions|boolean',
-            'multiple_choice_questions' => 'nullable|array',
-            'multiple_choice_questions.*.description' => 'required_with:multiple_choice_questions|string|max:255',
-            'multiple_choice_questions.*.answer_required' => 'required_with:multiple_choice_questions|boolean',
-            'multiple_choice_questions.*.multiple_choice_options' => 'required_with:multiple_choice_questions|array',
-            'multiple_choice_questions.*.multiple_choice_options.*.description' => 'required_with:multiple_choice_questions|string|max:255',
+//            'short_questions' => 'nullable|array',
+//            'short_questions.*.description' => 'required_with:short_questions|string|max:255',
+//            'short_questions.*.answer_required' => 'required_with:short_questions|boolean',
         ];
 
         return $rules;

@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\Auth\ForgotPasswordController;
 use App\Http\Controllers\Api\Auth\ResetPasswordController;
 use App\Http\Controllers\Api\Manager\ManagerOrganizationController;
 use App\Http\Controllers\Api\Manager\ManagerUserController;
+use App\Http\Controllers\Api\Manager\ManagerFormTemplateController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -81,4 +82,8 @@ Route::middleware(['auth:sanctum', 'only_manager_user'])
         Route::put('/users/{user}', [ManagerUserController::class, 'update'])->name('users.update');
         Route::delete('/users/disassociate-user-from-organization/{user}/{organization}', [ManagerUserController::class, 'disassociateUserFromOrganization'])->name('users.disassociate-user-from-organization');
         Route::get('/users/show/{user}', [ManagerUserController::class, 'getUser'])->name('users.get-user');
+
+        // Form Templates Routes
+
+        Route::resource('form-templates', ManagerFormTemplateController::class);
     });
