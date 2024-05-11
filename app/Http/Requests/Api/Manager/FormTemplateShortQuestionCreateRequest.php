@@ -8,7 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
-class FormTemplateCreateRequest extends FormRequest
+class FormTemplateShortQuestionCreateRequest extends FormRequest
 {
     /**
      * Handle a failed validation attempt.
@@ -42,8 +42,8 @@ class FormTemplateCreateRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'title' => 'required|string|max:255',
             'description' => 'required|string|max:255',
+            'answer_required' => 'required|boolean',
         ];
 
         return $rules;

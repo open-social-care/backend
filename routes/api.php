@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\Auth\ResetPasswordController;
 use App\Http\Controllers\Api\Manager\ManagerFormTemplateController;
 use App\Http\Controllers\Api\Manager\ManagerOrganizationController;
 use App\Http\Controllers\Api\Manager\ManagerUserController;
+use App\Http\Controllers\Api\Manager\ManagerFormTemplateShortQuestionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -84,6 +85,15 @@ Route::middleware(['auth:sanctum', 'only_manager_user'])
         Route::get('/users/show/{user}', [ManagerUserController::class, 'getUser'])->name('users.get-user');
 
         // Form Templates Routes
-
         Route::resource('form-templates', ManagerFormTemplateController::class);
+
+        // Form Templates Routes > Short questions
+        Route::resource('form-templates/{form_template}/short-questions', ManagerFormTemplateShortQuestionController::class)
+            ->names([
+                'index' => 'form-templates.short-questions.index',
+                'store' => 'form-templates.short-questions.store',
+                'update' => 'form-templates.short-questions.update',
+                'destroy' => 'form-templates.short-questions.destroy',
+                'show' => 'form-templates.short-questions.show',
+            ]);;
     });
