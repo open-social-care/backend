@@ -2,9 +2,7 @@
 
 namespace Tests\Unit\Actions\Manager\FormTemplates\ShortQuestion;
 
-use App\Actions\Manager\FormTemplates\FormTemplateCreateAction;
 use App\Actions\Manager\FormTemplates\ShortQuestions\ShortQuestionCreateAction;
-use App\DTO\Manager\FormTemplateDTO;
 use App\DTO\Manager\ShortQuestionDTO;
 use App\Models\FormTemplate;
 use Illuminate\Foundation\Testing\RefreshDatabase;

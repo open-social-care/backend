@@ -2,7 +2,6 @@
 
 namespace App\Actions\Manager\FormTemplates\ShortQuestions;
 
-use App\DTO\Manager\FormTemplateDTO;
 use App\DTO\Manager\ShortQuestionDTO;
 use App\Models\FormTemplate;
 use App\Models\ShortQuestion;

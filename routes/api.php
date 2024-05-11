@@ -6,9 +6,9 @@ use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Auth\ForgotPasswordController;
 use App\Http\Controllers\Api\Auth\ResetPasswordController;
 use App\Http\Controllers\Api\Manager\ManagerFormTemplateController;
+use App\Http\Controllers\Api\Manager\ManagerFormTemplateShortQuestionController;
 use App\Http\Controllers\Api\Manager\ManagerOrganizationController;
 use App\Http\Controllers\Api\Manager\ManagerUserController;
-use App\Http\Controllers\Api\Manager\ManagerFormTemplateShortQuestionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -95,5 +95,5 @@ Route::middleware(['auth:sanctum', 'only_manager_user'])
                 'update' => 'form-templates.short-questions.update',
                 'destroy' => 'form-templates.short-questions.destroy',
                 'show' => 'form-templates.short-questions.show',
-            ]);;
+            ]);
     });

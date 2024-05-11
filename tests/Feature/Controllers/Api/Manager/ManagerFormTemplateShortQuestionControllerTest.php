@@ -35,7 +35,7 @@ class ManagerFormTemplateShortQuestionControllerTest extends TestCase
 
         $response = $this->getJson(route('manager.form-templates.short-questions.index',
             [
-                'form_template' => $formTemplate->id
+                'form_template' => $formTemplate->id,
             ]));
 
         $response->assertStatus(HttpResponse::HTTP_OK)
@@ -54,7 +54,7 @@ class ManagerFormTemplateShortQuestionControllerTest extends TestCase
         $formTemplate = FormTemplate::factory()->createOneQuietly();
         $response = $this->getJson(route('manager.form-templates.short-questions.index',
             [
-                'form_template' => $formTemplate->id
+                'form_template' => $formTemplate->id,
             ]));
 
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
@@ -71,7 +71,7 @@ class ManagerFormTemplateShortQuestionControllerTest extends TestCase
 
         $response = $this->postJson(route('manager.form-templates.short-questions.store',
             [
-                'form_template' => $formTemplate->id
+                'form_template' => $formTemplate->id,
             ]), $data);
 
         $response->assertStatus(HttpResponse::HTTP_OK)
@@ -86,7 +86,7 @@ class ManagerFormTemplateShortQuestionControllerTest extends TestCase
 
         $response = $this->postJson(route('manager.form-templates.short-questions.store',
             [
-                'form_template' => $formTemplate->id
+                'form_template' => $formTemplate->id,
             ]), []);
 
         $response->assertStatus(HttpResponse::HTTP_UNPROCESSABLE_ENTITY)
@@ -113,7 +113,7 @@ class ManagerFormTemplateShortQuestionControllerTest extends TestCase
 
         $response = $this->postJson(route('manager.form-templates.short-questions.store',
             [
-                'form_template' => $formTemplate->id
+                'form_template' => $formTemplate->id,
             ]), $data);
 
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
@@ -132,7 +132,7 @@ class ManagerFormTemplateShortQuestionControllerTest extends TestCase
         $response = $this->putJson(route('manager.form-templates.short-questions.update',
             [
                 'form_template' => $formTemplate->id,
-                'short_question' => $shortQuestion->id
+                'short_question' => $shortQuestion->id,
             ]), $updatedData);
 
         $response->assertStatus(HttpResponse::HTTP_OK)
@@ -150,7 +150,7 @@ class ManagerFormTemplateShortQuestionControllerTest extends TestCase
         $response = $this->putJson(route('manager.form-templates.short-questions.update',
             [
                 'form_template' => $formTemplate->id,
-                'short_question' => $shortQuestion->id
+                'short_question' => $shortQuestion->id,
             ]), []);
 
         $response->assertStatus(HttpResponse::HTTP_UNPROCESSABLE_ENTITY)
@@ -178,7 +178,7 @@ class ManagerFormTemplateShortQuestionControllerTest extends TestCase
         $response = $this->putJson(route('manager.form-templates.short-questions.update',
             [
                 'form_template' => $formTemplate->id,
-                'short_question' => $shortQuestion->id
+                'short_question' => $shortQuestion->id,
             ]), $updatedData);
 
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
@@ -192,7 +192,7 @@ class ManagerFormTemplateShortQuestionControllerTest extends TestCase
         $response = $this->deleteJson(route('manager.form-templates.short-questions.destroy',
             [
                 'form_template' => $formTemplate->id,
-                'short_question' => $shortQuestion->id
+                'short_question' => $shortQuestion->id,
             ]));
 
         $response->assertStatus(HttpResponse::HTTP_OK)
@@ -206,7 +206,7 @@ class ManagerFormTemplateShortQuestionControllerTest extends TestCase
         $response = $this->deleteJson(route('manager.form-templates.short-questions.destroy',
             [
                 'form_template' => 0,
-                'short_question' => 0
+                'short_question' => 0,
             ]));
 
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND)
@@ -224,7 +224,7 @@ class ManagerFormTemplateShortQuestionControllerTest extends TestCase
         $response = $this->deleteJson(route('manager.form-templates.short-questions.destroy',
             [
                 'form_template' => $formTemplate->id,
-                'short_question' => $shortQuestion->id
+                'short_question' => $shortQuestion->id,
             ]));
 
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
@@ -238,7 +238,7 @@ class ManagerFormTemplateShortQuestionControllerTest extends TestCase
         $response = $this->getJson(route('manager.form-templates.short-questions.show',
             [
                 'form_template' => $formTemplate->id,
-                'short_question' => $shortQuestion->id
+                'short_question' => $shortQuestion->id,
             ]));
 
         $response->assertStatus(HttpResponse::HTTP_OK)
@@ -258,7 +258,7 @@ class ManagerFormTemplateShortQuestionControllerTest extends TestCase
         $response = $this->getJson(route('manager.form-templates.short-questions.show',
             [
                 'form_template' => $formTemplate->id,
-                'short_question' => $shortQuestion->id
+                'short_question' => $shortQuestion->id,
             ]));
 
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);

@@ -19,7 +19,7 @@ class ManagerFormTemplateShortQuestionController extends Controller
      * @OA\Get(
      * path="/api/manager/form-template/{form_template}/short-questions",
      * operationId="ManagerFormTemplatesShortQuestions",
-     * tags={"Manager/FormTemplatesShortQuestions"},
+     * tags={"Manager/FormTemplates/ShortQuestions"},
      * summary="Get a list of form template short questions",
      * description="Retrieve a list of short questions.",
      * security={{"sanctum":{}}},
@@ -98,7 +98,7 @@ class ManagerFormTemplateShortQuestionController extends Controller
      * @OA\Post(
      *     path="/api/manager/form-template/{form_template}/short-questions",
      *     operationId="ManagerCreateFormTemplateShortQuestions",
-     *     tags={"Manager/FormTemplatesShortQuestions"},
+     *     tags={"Manager/FormTemplates/ShortQuestions"},
      *     summary="Create a new form template short question",
      *     description="Create a new short question for form template with the provided information.",
      *     security={{"sanctum":{}}},
@@ -197,7 +197,7 @@ class ManagerFormTemplateShortQuestionController extends Controller
      * @OA\Put(
      *     path="/api/manager/form-template/{form_template}/short-questions/{short_question}",
      *     operationId="ManagerUpdateFormTemplatesShortQuestion",
-     *     tags={"Manager/FormTemplatesShortQuestion"},
+     *     tags={"Manager/FormTemplates/ShortQuestions"},
      *     summary="Update Form Template short questions",
      *     description="Update Form template short question with the provided information.",
      *     security={{"sanctum":{}}},
@@ -310,7 +310,7 @@ class ManagerFormTemplateShortQuestionController extends Controller
      * @OA\Delete(
      *     path="/api/manager/form-templates/{form_template}/short-questions/{short_question}",
      *     operationId="ManagerDestroyFormTemplatesShortQuestion",
-     *     tags={"Manager/FormTemplatesShortQuestion"},
+     *     tags={"Manager/FormTemplates/ShortQuestions"},
      *     summary="Destroy form template short questions",
      *     description="Destroy short questions from form template with the provided id.",
      *     security={{"sanctum":{}}},
@@ -388,7 +388,7 @@ class ManagerFormTemplateShortQuestionController extends Controller
      * @OA\Get(
      * path="/api/manager/form-templates/{form_template}/short-questions/{short_question}",
      * operationId="ManagerGetFormTemplateShortQuestion",
-     * tags={"Manager/FormTemplatesShortQuestion"},
+     * tags={"Manager/FormTemplates/ShortQuestions"},
      * summary="Get form template short question" ,
      * description="Retrieve form template short question show.",
      * security={{"sanctum":{}}},
