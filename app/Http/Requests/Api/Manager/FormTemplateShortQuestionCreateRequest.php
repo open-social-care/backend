@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Api\Manager;
 
-use App\Models\FormTemplate;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -32,8 +31,9 @@ class FormTemplateShortQuestionCreateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return auth()->user()->can('create', [FormTemplate::class])
-            || auth()->user()->can('update', [FormTemplate::class]);
+        $formTemplate = $this->route('form_template');
+
+        return auth()->user()->can('createQuestionsForFormTemplate', $formTemplate);
     }
 
     /**

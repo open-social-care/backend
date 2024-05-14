@@ -77,7 +77,7 @@ class ManagerFormTemplateShortQuestionController extends Controller
      */
     public function index(FormTemplate $formTemplate): JsonResponse
     {
-        $this->authorize('view', FormTemplate::class);
+        $this->authorize('view', $formTemplate);
 
         try {
             $shortQuestions = ShortQuestion::query()
@@ -179,7 +179,7 @@ class ManagerFormTemplateShortQuestionController extends Controller
      */
     public function store(FormTemplateShortQuestionCreateRequest $request, FormTemplate $formTemplate): JsonResponse
     {
-        $this->authorize('create', FormTemplate::class);
+        $this->authorize('createQuestionsForFormTemplate', $formTemplate);
 
         try {
             $data = $request->validated();

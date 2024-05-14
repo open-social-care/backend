@@ -6,7 +6,7 @@ class ShortQuestionDTO
 {
     public string $description;
 
-    public string $answer_required;
+    public bool $answer_required;
 
     /**
      * Construct class set DTO attributes

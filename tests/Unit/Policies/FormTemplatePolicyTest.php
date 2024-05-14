@@ -27,10 +27,31 @@ class FormTemplatePolicyTest extends TestCase
 
     public function testViewAnyMethodReturnsFalseForNonAdminSystemUser()
     {
-        $user = $this->createManagerUser();
+        $data = $this->createManagerUser();
         $policy = new FormTemplatePolicy();
 
-        $result = $policy->viewAny($user);
+        $result = $policy->viewAny($data['user']);
+
+        $this->assertFalse($result);
+    }
+
+    public function testViewForOrganizationMethodReturnsTrueForManagerOfOrganization()
+    {
+        $data = $this->createManagerUser();
+        $policy = new FormTemplatePolicy();
+
+        $result = $policy->viewForOrganization($data['user'], $data['organization']);
+
+        $this->assertTrue($result);
+    }
+
+    public function testViewForOrganizationMethodReturnsFalseForNonManagerOfOrganization()
+    {
+        $data = $this->createManagerUser();
+        $nonUser = User::factory()->createOneQuietly();
+        $policy = new FormTemplatePolicy();
+
+        $result = $policy->viewForOrganization($nonUser, $data['organization']);
 
         $this->assertFalse($result);
     }
@@ -38,19 +59,21 @@ class FormTemplatePolicyTest extends TestCase
     public function testViewMethodReturnsTrueForAdminSystemUser()
     {
         $user = $this->createAdminSystemUser();
+        $formTemplate = FormTemplate::factory()->createOneQuietly();
         $policy = new FormTemplatePolicy();
 
-        $result = $policy->view($user);
+        $result = $policy->view($user, $formTemplate);
 
         $this->assertTrue($result);
     }
 
-    public function testViewMethodReturnsTrueForManagerUser()
+    public function testViewMethodReturnsTrueForManagerUserThatHasCommonOrganization()
     {
-        $user = $this->createManagerUser();
+        $data = $this->createManagerUser();
+        $formTemplate = FormTemplate::factory()->hasAttached($data['organization'])->createOneQuietly();
         $policy = new FormTemplatePolicy();
 
-        $result = $policy->view($user);
+        $result = $policy->view($data['user'], $formTemplate);
 
         $this->assertTrue($result);
     }
@@ -58,39 +81,76 @@ class FormTemplatePolicyTest extends TestCase
     public function testViewMethodReturnsFalseForNonAdminSystemOrManagerUser()
     {
         $user = User::factory()->createQuietly();
+        $formTemplate = FormTemplate::factory()->createOneQuietly();
         $policy = new FormTemplatePolicy();
 
-        $result = $policy->view($user);
+        $result = $policy->view($user, $formTemplate);
 
         $this->assertFalse($result);
     }
 
-    public function testCreateMethodReturnsTrueForAdminSystemUser()
+    public function testCreateQuestionsForFormTemplateMethodReturnsTrueForManagerThatHasCommonOrganization()
+    {
+        $data = $this->createManagerUser();
+        $formTemplate = FormTemplate::factory()->hasAttached($data['organization'])->createOneQuietly();
+        $policy = new FormTemplatePolicy();
+
+        $result = $policy->createQuestionsForFormTemplate($data['user'], $formTemplate);
+
+        $this->assertTrue($result);
+    }
+
+    public function testCreateQuestionsForFormTemplateMethodReturnsFalseForNonManagerOfOrganization()
+    {
+        $data = $this->createManagerUser();
+        $formTemplate = FormTemplate::factory()->hasAttached($data['organization'])->createOneQuietly();
+        $nonUser = User::factory()->createOneQuietly();
+        $policy = new FormTemplatePolicy();
+
+        $result = $policy->createQuestionsForFormTemplate($nonUser, $formTemplate);
+
+        $this->assertFalse($result);
+    }
+
+    public function testCreateQuestionsForFormTemplateMethodReturnsTrueForAdminSystemUser()
     {
         $user = $this->createAdminSystemUser();
+        $formTemplate = FormTemplate::factory()->createOneQuietly();
         $policy = new FormTemplatePolicy();
 
-        $result = $policy->create($user);
+        $result = $policy->view($user, $formTemplate);
 
         $this->assertTrue($result);
     }
 
-    public function testCreateMethodReturnsTrueForManagerUser()
+    public function testCreateForOrganizationMethodReturnsTrueForAdminSystemUser()
     {
-        $user = $this->createManagerUser();
+        $user = $this->createAdminSystemUser();
+        $organization = Organization::factory()->createOneQuietly();
         $policy = new FormTemplatePolicy();
 
-        $result = $policy->create($user);
+        $result = $policy->createForOrganization($user, $organization);
 
         $this->assertTrue($result);
     }
 
-    public function testCreateAnyMethodReturnsFalseForNonAdminSystemOrManagerUsers()
+    public function testCreateForOrganizationMethodReturnsTrueForManagerUser()
+    {
+        $data = $this->createManagerUser();
+        $policy = new FormTemplatePolicy();
+
+        $result = $policy->createForOrganization($data['user'], $data['organization']);
+
+        $this->assertTrue($result);
+    }
+
+    public function testCreateForOrganizationMethodReturnsFalseForNonAdminSystemOrManagerUsers()
     {
         $user = User::factory()->createQuietly();
+        $organization = Organization::factory()->createOneQuietly();
         $policy = new FormTemplatePolicy();
 
-        $result = $policy->create($user);
+        $result = $policy->createForOrganization($user, $organization);
 
         $this->assertFalse($result);
     }
@@ -108,11 +168,11 @@ class FormTemplatePolicyTest extends TestCase
 
     public function testUpdateMethodReturnsTrueForManagerUser()
     {
-        $user = $this->createManagerUser();
-        $formTemplate = FormTemplate::factory()->createOneQuietly();
+        $data = $this->createManagerUser();
+        $formTemplate = FormTemplate::factory()->hasAttached($data['organization'])->createOneQuietly();
         $policy = new FormTemplatePolicy();
 
-        $result = $policy->update($user, $formTemplate);
+        $result = $policy->update($data['user'], $formTemplate);
 
         $this->assertTrue($result);
     }
@@ -141,11 +201,11 @@ class FormTemplatePolicyTest extends TestCase
 
     public function testDeleteMethodReturnsTrueForManagerUser()
     {
-        $user = $this->createManagerUser();
-        $formTemplate = FormTemplate::factory()->createOneQuietly();
+        $data = $this->createManagerUser();
+        $formTemplate = FormTemplate::factory()->hasAttached($data['organization'])->createOneQuietly();
         $policy = new FormTemplatePolicy();
 
-        $result = $policy->delete($user, $formTemplate);
+        $result = $policy->delete($data['user'], $formTemplate);
 
         $this->assertTrue($result);
     }
@@ -170,7 +230,7 @@ class FormTemplatePolicyTest extends TestCase
         return $userAdmin;
     }
 
-    private function createManagerUser(): User
+    private function createManagerUser(): array
     {
         $organization = Organization::factory()->createQuietly();
 
@@ -179,6 +239,9 @@ class FormTemplatePolicyTest extends TestCase
         $userManager->roles()->attach($role);
         $userManager->organizations()->attach($organization, ['role_id' => $role->id]);
 
-        return $userManager;
+        return [
+            'organization' => $organization,
+            'user' => $userManager,
+        ];
     }
 }

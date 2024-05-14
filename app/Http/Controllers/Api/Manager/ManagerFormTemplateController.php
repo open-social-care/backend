@@ -7,9 +7,11 @@ use App\Actions\Manager\FormTemplates\FormTemplateUpdateAction;
 use App\DTO\Manager\FormTemplateDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Manager\FormTemplateCreateRequest;
+use App\Http\Requests\Api\Manager\FormTemplateUpdateRequest;
 use App\Http\Resources\Api\Manager\FormTemplateResource;
 use App\Http\Resources\Api\Shared\PaginationResource;
 use App\Models\FormTemplate;
+use App\Models\Organization;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
@@ -17,12 +19,23 @@ class ManagerFormTemplateController extends Controller
 {
     /**
      * @OA\Get(
-     * path="/api/manager/form-templates",
+     * path="/api/manager/form-templates/{organization}",
      * operationId="ManagerFormTemplates",
      * tags={"Manager/FormTemplates"},
      * summary="Get a list of form templates",
      * description="Retrieve a list of form templates.",
      * security={{"sanctum":{}}},
+     *
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="The organization id",
+     *         required=true,
+     *
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
      *
      *     @OA\Parameter(
      *         name="q",
@@ -82,13 +95,21 @@ class ManagerFormTemplateController extends Controller
      *     ),
      * )
      */
-    public function index(): JsonResponse
+    public function index(Organization $organization): JsonResponse
     {
-        $this->authorize('view', FormTemplate::class);
+        $this->authorize('viewForOrganization', [FormTemplate::class, $organization]);
 
         try {
-            $search = request()->get('q', null);
-            $paginate = FormTemplate::search($search)->paginate(30);
+            $query = FormTemplate::query()
+                ->whereHas('organizations', function ($query) use ($organization) {
+                    return $query->where('organization_id', $organization->id);
+                });
+
+            if ($search = request()->get('q', null)) {
+                $query->whereRaw("LOWER(title) LIKE '%' || LOWER(?) || '%'", [$search]);
+            }
+
+            $paginate = $query->paginate(30);
 
             return response()->json([
                 'type' => 'success',
@@ -103,12 +124,23 @@ class ManagerFormTemplateController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/manager/form-templates",
+     *     path="/api/manager/form-templates/{organization}",
      *     operationId="ManagerCreateFormTemplates",
      *     tags={"Manager/FormTemplates"},
      *     summary="Create a new form template",
      *     description="Create a new form template with the provided information.",
      *     security={{"sanctum":{}}},
+     *
+     *     @OA\Parameter(
+     *          name="id",
+     *          in="path",
+     *          description="The organization id",
+     *          required=true,
+     *
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
      *
      *     @OA\RequestBody(
      *         required=true,
@@ -173,15 +205,15 @@ class ManagerFormTemplateController extends Controller
      *     ),
      * )
      */
-    public function store(FormTemplateCreateRequest $request): JsonResponse
+    public function store(FormTemplateCreateRequest $request, Organization $organization): JsonResponse
     {
-        $this->authorize('create', FormTemplate::class);
+        $this->authorize('createForOrganization', [FormTemplate::class, $organization]);
 
         try {
             $data = $request->validated();
 
             $dto = new FormTemplateDTO($data);
-            FormTemplateCreateAction::execute($dto);
+            FormTemplateCreateAction::execute($dto, $organization);
 
             return response()->json(['type' => 'success', 'message' => __('messages.common.success_create')], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
@@ -272,7 +304,7 @@ class ManagerFormTemplateController extends Controller
      *     ),
      * )
      */
-    public function update(FormTemplateCreateRequest $request, FormTemplate $formTemplate): JsonResponse
+    public function update(FormTemplateUpdateRequest $request, FormTemplate $formTemplate): JsonResponse
     {
         $this->authorize('update', $formTemplate);
 

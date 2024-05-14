@@ -15,23 +15,25 @@ class ManagerFormTemplateControllerTest extends TestCase
 {
     use RefreshDatabase;
 
+    private Organization $organization;
+
     public function setUp(): void
     {
         parent::setUp();
 
         $userManager = User::factory()->createQuietly();
         $role = Role::factory()->createQuietly(['name' => RolesEnum::MANAGER->value]);
-        $organization = Organization::factory()->createQuietly();
+        $this->organization = Organization::factory()->createQuietly();
         $userManager->roles()->attach($role);
-        $userManager->organizations()->attach($organization, ['role_id' => $role->id]);
+        $userManager->organizations()->attach($this->organization, ['role_id' => $role->id]);
         $this->actingAs($userManager);
     }
 
     public function testIndexMethod()
     {
-        $formTemplates = FormTemplate::factory()->count(10)->createQuietly();
+        $formTemplates = FormTemplate::factory()->hasAttached($this->organization)->count(10)->createQuietly();
 
-        $response = $this->getJson(route('manager.form-templates.index'));
+        $response = $this->getJson(route('manager.form-templates.index', $this->organization));
 
         $response->assertStatus(HttpResponse::HTTP_OK)
             ->assertJsonStructure(['data', 'pagination']);
@@ -43,10 +45,14 @@ class ManagerFormTemplateControllerTest extends TestCase
 
     public function testIndexMethodWithSearchTerm()
     {
-        FormTemplate::factory()->count(10)->createQuietly();
-        $formTemplate = FormTemplate::factory()->createOneQuietly(['title' => 'Test search']);
+        FormTemplate::factory()->count(10)->hasAttached($this->organization)->createQuietly();
+        $formTemplate = FormTemplate::factory()->hasAttached($this->organization)->createOneQuietly(['title' => 'Test search']);
 
-        $response = $this->getJson(route('manager.form-templates.index', ['q' => 'Test search']));
+        $response = $this->getJson(route('manager.form-templates.index',
+            [
+                'organization' => $this->organization,
+                'q' => 'Test search',
+            ]));
 
         $response->assertStatus(HttpResponse::HTTP_OK)
             ->assertJsonStructure(['data', 'pagination'])
@@ -55,10 +61,14 @@ class ManagerFormTemplateControllerTest extends TestCase
 
     public function testIndexMethodWithSearchTermWhenDontHaveContent()
     {
-        FormTemplate::factory()->count(10)->createQuietly();
-        $formTemplate = FormTemplate::factory()->createOneQuietly(['title' => 'Test form template']);
+        FormTemplate::factory()->count(10)->hasAttached($this->organization)->createQuietly();
+        $formTemplate = FormTemplate::factory()->hasAttached($this->organization)->createOneQuietly(['title' => 'Test form template']);
 
-        $response = $this->getJson(route('manager.form-templates.index', ['q' => 'null form template']));
+        $response = $this->getJson(route('manager.form-templates.index',
+            [
+                'organization' => $this->organization,
+                'q' => 'null form template',
+            ]));
 
         $response->assertStatus(HttpResponse::HTTP_OK)
             ->assertJsonStructure(['data', 'pagination'])
@@ -71,7 +81,7 @@ class ManagerFormTemplateControllerTest extends TestCase
         $user = User::factory()->createQuietly();
         $this->actingAs($user);
 
-        $response = $this->getJson(route('manager.form-templates.index'));
+        $response = $this->getJson(route('manager.form-templates.index', $this->organization));
 
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
@@ -83,7 +93,7 @@ class ManagerFormTemplateControllerTest extends TestCase
             'description' => 'Default',
         ];
 
-        $response = $this->postJson(route('manager.form-templates.store'), $data);
+        $response = $this->postJson(route('manager.form-templates.store', $this->organization), $data);
 
         $response->assertStatus(HttpResponse::HTTP_OK)
             ->assertJson(['message' => __('messages.common.success_create')]);
@@ -93,7 +103,7 @@ class ManagerFormTemplateControllerTest extends TestCase
 
     public function testStoreMethodValidation()
     {
-        $response = $this->postJson(route('manager.form-templates.store'), []);
+        $response = $this->postJson(route('manager.form-templates.store', $this->organization), []);
 
         $response->assertStatus(HttpResponse::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJsonStructure([
@@ -115,14 +125,14 @@ class ManagerFormTemplateControllerTest extends TestCase
             'description' => 'Default',
         ];
 
-        $response = $this->postJson(route('manager.form-templates.store'), $data);
+        $response = $this->postJson(route('manager.form-templates.store', $this->organization), $data);
 
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testUpdateMethod()
     {
-        $formTemplate = FormTemplate::factory()->createOneQuietly();
+        $formTemplate = FormTemplate::factory()->hasAttached($this->organization)->createOneQuietly();
 
         $updatedData = [
             'title' => 'Test forms update',
@@ -140,7 +150,7 @@ class ManagerFormTemplateControllerTest extends TestCase
 
     public function testUpdateMethodValidation()
     {
-        $formTemplate = FormTemplate::factory()->createOneQuietly();
+        $formTemplate = FormTemplate::factory()->hasAttached($this->organization)->createOneQuietly();
 
         $response = $this->putJson(route('manager.form-templates.update', $formTemplate->id), []);
         $response->assertStatus(HttpResponse::HTTP_UNPROCESSABLE_ENTITY)
@@ -157,7 +167,7 @@ class ManagerFormTemplateControllerTest extends TestCase
         $user = User::factory()->createQuietly();
         $this->actingAs($user);
 
-        $formTemplate = FormTemplate::factory()->createOneQuietly();
+        $formTemplate = FormTemplate::factory()->hasAttached($this->organization)->createOneQuietly();
 
         $updatedData = [
             'title' => 'Test forms update',
@@ -171,7 +181,7 @@ class ManagerFormTemplateControllerTest extends TestCase
 
     public function testDestroyMethod()
     {
-        $formTemplate = FormTemplate::factory()->createOneQuietly();
+        $formTemplate = FormTemplate::factory()->hasAttached($this->organization)->createOneQuietly();
 
         $response = $this->deleteJson(route('manager.form-templates.destroy', $formTemplate->id));
 
@@ -194,7 +204,7 @@ class ManagerFormTemplateControllerTest extends TestCase
         $user = User::factory()->createQuietly();
         $this->actingAs($user);
 
-        $formTemplate = FormTemplate::factory()->createOneQuietly();
+        $formTemplate = FormTemplate::factory()->hasAttached($this->organization)->createOneQuietly();
 
         $response = $this->deleteJson(route('manager.form-templates.destroy', $formTemplate->id));
 
@@ -203,7 +213,7 @@ class ManagerFormTemplateControllerTest extends TestCase
 
     public function testShowMethod()
     {
-        $formTemplate = FormTemplate::factory()->createOneQuietly();
+        $formTemplate = FormTemplate::factory()->hasAttached($this->organization)->createOneQuietly();
 
         $response = $this->getJson(route('manager.form-templates.show', $formTemplate->id));
 
@@ -218,7 +228,7 @@ class ManagerFormTemplateControllerTest extends TestCase
         $user = User::factory()->createQuietly();
         $this->actingAs($user);
 
-        $formTemplate = FormTemplate::factory()->createOneQuietly();
+        $formTemplate = FormTemplate::factory()->hasAttached($this->organization)->createOneQuietly();
 
         $response = $this->getJson(route('manager.form-templates.show', $formTemplate->id));
 

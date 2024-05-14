@@ -85,7 +85,16 @@ Route::middleware(['auth:sanctum', 'only_manager_user'])
         Route::get('/users/show/{user}', [ManagerUserController::class, 'getUser'])->name('users.get-user');
 
         // Form Templates Routes
-        Route::resource('form-templates', ManagerFormTemplateController::class);
+        Route::resource('form-templates/{organization}', ManagerFormTemplateController::class)
+            ->only(['index', 'store'])
+            ->names([
+                'index' => 'form-templates.index',
+                'store' => 'form-templates.store',
+            ]);
+
+        Route::put('/form-templates/{form_template}', [ManagerFormTemplateController::class, 'update'])->name('form-templates.update');
+        Route::delete('/form-templates/{form_template}', [ManagerFormTemplateController::class, 'destroy'])->name('form-templates.destroy');
+        Route::get('/form-templates/show/{form_template}', [ManagerFormTemplateController::class, 'show'])->name('form-templates.show');
 
         // Form Templates Routes > Short questions
         Route::resource('form-templates/{form_template}/short-questions', ManagerFormTemplateShortQuestionController::class)

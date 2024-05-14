@@ -2175,7 +2175,7 @@
                 }
             }
         },
-        "/api/manager/form-templates": {
+        "/api/manager/form-templates/{organization}": {
             "get": {
                 "tags": [
                     "Manager/FormTemplates"
@@ -2184,6 +2184,15 @@
                 "description": "Retrieve a list of form templates.",
                 "operationId": "ManagerFormTemplates",
                 "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The organization id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
                     {
                         "name": "q",
                         "in": "query",
@@ -2312,6 +2321,17 @@
                 "summary": "Create a new form template",
                 "description": "Create a new form template with the provided information.",
                 "operationId": "ManagerCreateFormTemplates",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The organization id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "requestBody": {
                     "description": "form template data",
                     "required": true,

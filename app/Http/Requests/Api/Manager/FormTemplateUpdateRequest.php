@@ -2,13 +2,12 @@
 
 namespace App\Http\Requests\Api\Manager;
 
-use App\Models\FormTemplate;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
-class FormTemplateCreateRequest extends FormRequest
+class FormTemplateUpdateRequest extends FormRequest
 {
     /**
      * Handle a failed validation attempt.
@@ -32,9 +31,9 @@ class FormTemplateCreateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        $organization = $this->route('organization');
+        $formTemplate = $this->route('form_template');
 
-        return auth()->user()->can('createForOrganization', [FormTemplate::class, $organization]);
+        return auth()->user()->can('update', $formTemplate);
     }
 
     /**

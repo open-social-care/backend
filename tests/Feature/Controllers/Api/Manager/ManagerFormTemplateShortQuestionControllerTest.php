@@ -16,21 +16,23 @@ class ManagerFormTemplateShortQuestionControllerTest extends TestCase
 {
     use RefreshDatabase;
 
+    private Organization $organization;
+
     public function setUp(): void
     {
         parent::setUp();
 
         $userManager = User::factory()->createQuietly();
         $role = Role::factory()->createQuietly(['name' => RolesEnum::MANAGER->value]);
-        $organization = Organization::factory()->createQuietly();
+        $this->organization = Organization::factory()->createQuietly();
         $userManager->roles()->attach($role);
-        $userManager->organizations()->attach($organization, ['role_id' => $role->id]);
+        $userManager->organizations()->attach($this->organization, ['role_id' => $role->id]);
         $this->actingAs($userManager);
     }
 
     public function testIndexMethod()
     {
-        $formTemplate = FormTemplate::factory()->createOneQuietly();
+        $formTemplate = FormTemplate::factory()->hasAttached($this->organization)->createOneQuietly();
         $shortQuestions = ShortQuestion::factory()->count(5)->for($formTemplate)->createQuietly();
 
         $response = $this->getJson(route('manager.form-templates.short-questions.index',
@@ -51,7 +53,7 @@ class ManagerFormTemplateShortQuestionControllerTest extends TestCase
         $user = User::factory()->createQuietly();
         $this->actingAs($user);
 
-        $formTemplate = FormTemplate::factory()->createOneQuietly();
+        $formTemplate = FormTemplate::factory()->hasAttached($this->organization)->createOneQuietly();
         $response = $this->getJson(route('manager.form-templates.short-questions.index',
             [
                 'form_template' => $formTemplate->id,
@@ -62,7 +64,7 @@ class ManagerFormTemplateShortQuestionControllerTest extends TestCase
 
     public function testStoreMethod()
     {
-        $formTemplate = FormTemplate::factory()->createOneQuietly();
+        $formTemplate = FormTemplate::factory()->hasAttached($this->organization)->createOneQuietly();
 
         $data = [
             'description' => 'Age?',
@@ -82,7 +84,7 @@ class ManagerFormTemplateShortQuestionControllerTest extends TestCase
 
     public function testStoreMethodValidation()
     {
-        $formTemplate = FormTemplate::factory()->createOneQuietly();
+        $formTemplate = FormTemplate::factory()->hasAttached($this->organization)->createOneQuietly();
 
         $response = $this->postJson(route('manager.form-templates.short-questions.store',
             [
@@ -104,7 +106,7 @@ class ManagerFormTemplateShortQuestionControllerTest extends TestCase
         $user = User::factory()->createQuietly();
         $this->actingAs($user);
 
-        $formTemplate = FormTemplate::factory()->createOneQuietly();
+        $formTemplate = FormTemplate::factory()->hasAttached($this->organization)->createOneQuietly();
 
         $data = [
             'description' => 'Age?',
@@ -121,7 +123,7 @@ class ManagerFormTemplateShortQuestionControllerTest extends TestCase
 
     public function testUpdateMethod()
     {
-        $formTemplate = FormTemplate::factory()->createOneQuietly();
+        $formTemplate = FormTemplate::factory()->hasAttached($this->organization)->createOneQuietly();
         $shortQuestion = ShortQuestion::factory()->for($formTemplate)->createOneQuietly();
 
         $updatedData = [
@@ -144,7 +146,7 @@ class ManagerFormTemplateShortQuestionControllerTest extends TestCase
 
     public function testUpdateMethodValidation()
     {
-        $formTemplate = FormTemplate::factory()->createOneQuietly();
+        $formTemplate = FormTemplate::factory()->hasAttached($this->organization)->createOneQuietly();
         $shortQuestion = ShortQuestion::factory()->for($formTemplate)->createOneQuietly();
 
         $response = $this->putJson(route('manager.form-templates.short-questions.update',
@@ -167,7 +169,7 @@ class ManagerFormTemplateShortQuestionControllerTest extends TestCase
         $user = User::factory()->createQuietly();
         $this->actingAs($user);
 
-        $formTemplate = FormTemplate::factory()->createOneQuietly();
+        $formTemplate = FormTemplate::factory()->hasAttached($this->organization)->createOneQuietly();
         $shortQuestion = ShortQuestion::factory()->for($formTemplate)->createOneQuietly();
 
         $updatedData = [
@@ -186,7 +188,7 @@ class ManagerFormTemplateShortQuestionControllerTest extends TestCase
 
     public function testDestroyMethod()
     {
-        $formTemplate = FormTemplate::factory()->createOneQuietly();
+        $formTemplate = FormTemplate::factory()->hasAttached($this->organization)->createOneQuietly();
         $shortQuestion = ShortQuestion::factory()->for($formTemplate)->createOneQuietly();
 
         $response = $this->deleteJson(route('manager.form-templates.short-questions.destroy',
@@ -201,7 +203,7 @@ class ManagerFormTemplateShortQuestionControllerTest extends TestCase
         $this->assertSoftDeleted('short_questions', ['id' => $shortQuestion->id]);
     }
 
-    public function testDestroyMethodWithInvalidUser()
+    public function testDestroyMethodWithInvalidFormTemplateAndShortQuestionIds()
     {
         $response = $this->deleteJson(route('manager.form-templates.short-questions.destroy',
             [
@@ -218,7 +220,7 @@ class ManagerFormTemplateShortQuestionControllerTest extends TestCase
         $user = User::factory()->createQuietly();
         $this->actingAs($user);
 
-        $formTemplate = FormTemplate::factory()->createOneQuietly();
+        $formTemplate = FormTemplate::factory()->hasAttached($this->organization)->createOneQuietly();
         $shortQuestion = ShortQuestion::factory()->for($formTemplate)->createOneQuietly();
 
         $response = $this->deleteJson(route('manager.form-templates.short-questions.destroy',
@@ -232,7 +234,7 @@ class ManagerFormTemplateShortQuestionControllerTest extends TestCase
 
     public function testShowMethod()
     {
-        $formTemplate = FormTemplate::factory()->createOneQuietly();
+        $formTemplate = FormTemplate::factory()->hasAttached($this->organization)->createOneQuietly();
         $shortQuestion = ShortQuestion::factory()->for($formTemplate)->createOneQuietly();
 
         $response = $this->getJson(route('manager.form-templates.short-questions.show',
@@ -252,7 +254,7 @@ class ManagerFormTemplateShortQuestionControllerTest extends TestCase
         $user = User::factory()->createQuietly();
         $this->actingAs($user);
 
-        $formTemplate = FormTemplate::factory()->createOneQuietly();
+        $formTemplate = FormTemplate::factory()->hasAttached($this->organization)->createOneQuietly();
         $shortQuestion = ShortQuestion::factory()->for($formTemplate)->createOneQuietly();
 
         $response = $this->getJson(route('manager.form-templates.short-questions.show',
