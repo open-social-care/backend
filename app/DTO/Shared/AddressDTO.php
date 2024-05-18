@@ -14,7 +14,7 @@ class AddressDTO
 
     public string $number;
 
-    public ?string $district;
+    public string $district;
 
     public ?string $complement;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions\SocialAssistant;
+namespace App\Actions\SocialAssistant\Subject;
 
 use App\DTO\SocialAssistant\SubjectDTO;
 use App\Models\Subject;

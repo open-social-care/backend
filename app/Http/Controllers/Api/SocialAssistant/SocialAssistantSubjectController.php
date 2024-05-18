@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api\SocialAssistant;
 
 use App\Actions\Shared\AddressCreateAction;
-use App\Actions\SocialAssistant\SubjectCreateAction;
-use App\Actions\SocialAssistant\SubjectUpdateAction;
+use App\Actions\SocialAssistant\Subject\SubjectCreateAction;
+use App\Actions\SocialAssistant\Subject\SubjectUpdateAction;
 use App\DTO\Shared\AddressDTO;
 use App\DTO\SocialAssistant\SubjectDTO;
 use App\Enums\SkinColorsEnum;
