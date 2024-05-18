@@ -23,7 +23,7 @@ class SubjectFactory extends Factory
 
         return [
             'name' => fake()->name,
-            'birth_date' => fake()->dateTimeThisDecade,
+            'birth_date' => fake()->date(),
             'organization_id' => $organization->id,
             'user_id' => $user->id,
         ];

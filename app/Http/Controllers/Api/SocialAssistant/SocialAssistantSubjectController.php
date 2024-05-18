@@ -244,7 +244,8 @@ class SocialAssistantSubjectController extends Controller
             $dto = new SubjectDTO($data, $organization, auth()->user());
             $subject = SubjectCreateAction::execute($dto);
 
-            foreach ($data['addresses'] as $address) {
+            $addresses = data_get($data, 'addresses', []);
+            foreach ($addresses as $address) {
                 $dto = new AddressDTO($address, $subject);
                 AddressCreateAction::execute($dto);
             }
@@ -374,7 +375,8 @@ class SocialAssistantSubjectController extends Controller
             SubjectUpdateAction::execute($dto, $subject);
 
             $subject->addresses()->delete();
-            foreach ($data['addresses'] as $address) {
+            $addresses = data_get($data, 'addresses', []);
+            foreach ($addresses as $address) {
                 $dto = new AddressDTO($address, $subject);
                 AddressCreateAction::execute($dto);
             }
@@ -593,7 +595,7 @@ class SocialAssistantSubjectController extends Controller
      *         )
      *     ),
      *
-     *     @OA\Response(
+     * @OA\Response(
      *         response=400,
      *         description="Bad Request",
      *
@@ -604,7 +606,7 @@ class SocialAssistantSubjectController extends Controller
      *         )
      *     ),
      *
-     *     @OA\Response(
+     * @OA\Response(
      *         response=403,
      *         description="Forbidden",
      *
