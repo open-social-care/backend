@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Organization;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,9 +18,14 @@ class SubjectFactory extends Factory
      */
     public function definition(): array
     {
+        $organization = Organization::factory()->createOneQuietly();
+        $user = User::factory()->createOneQuietly();
+
         return [
             'name' => fake()->name,
             'birth_date' => fake()->dateTimeThisDecade,
+            'organization_id' => $organization->id,
+            'user_id' => $user->id,
         ];
     }
 }

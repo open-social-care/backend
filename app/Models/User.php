@@ -162,4 +162,9 @@ class User extends Authenticatable
     {
         return $this->hasRoleByName(RolesEnum::MANAGER->value) && $this->organizations()->exists();
     }
+
+    public function isSocialAssistantOf(Organization $organization): bool
+    {
+        return $this->hasRoleByName(RolesEnum::SOCIAL_ASSISTANT->value) && $this->hasOrganization($organization->id);
+    }
 }

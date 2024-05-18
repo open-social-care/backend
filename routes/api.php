@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\Manager\ManagerFormTemplateController;
 use App\Http\Controllers\Api\Manager\ManagerFormTemplateShortQuestionController;
 use App\Http\Controllers\Api\Manager\ManagerOrganizationController;
 use App\Http\Controllers\Api\Manager\ManagerUserController;
+use App\Http\Controllers\Api\SocialAssistant\SocialAssistantSubjectController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -105,4 +106,24 @@ Route::middleware(['auth:sanctum', 'only_manager_user'])
                 'destroy' => 'form-templates.short-questions.destroy',
                 'show' => 'form-templates.short-questions.show',
             ]);
+    });
+
+// Social Assistant Routes
+Route::middleware(['auth:sanctum', 'only_social_assistant_user'])
+    ->prefix('social-assistant')
+    ->name('social-assistant.')
+    ->group(function () {
+
+        // Subjects
+        Route::resource('subjects/{organization}', SocialAssistantSubjectController::class)
+            ->only(['index', 'store'])
+            ->names([
+                'index' => 'subjects.index',
+                'store' => 'subjects.store',
+            ]);
+
+        Route::put('/subjects/{subject}', [SocialAssistantSubjectController::class, 'update'])->name('subjects.update');
+        Route::get('/subjects/show/{subject}', [SocialAssistantSubjectController::class, 'show'])->name('subjects.show');
+        Route::get('/subjects/get/form-infos', [SocialAssistantSubjectController::class, 'getFormInfos'])->name('subjects.get-form-infos');
+        Route::get('/subjects/get/cities-by-state-to-select/{state}', [SocialAssistantSubjectController::class, 'getCitiesByStateToSelect'])->name('subjects.get-cities-by-state-to-select');
     });

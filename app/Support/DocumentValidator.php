@@ -98,4 +98,23 @@ class DocumentValidator
             return true;
         }
     }
+
+    public static function validateRg(string $rg): bool
+    {
+        if (empty($rg)) {
+            return false;
+        }
+
+        $rg = preg_replace('/[^0-9Xx]/', '', $rg);
+
+        if (strlen($rg) < 8 || strlen($rg) > 9) {
+            return false;
+        }
+
+        if (! preg_match('/^[0-9]{8,9}$|^[0-9]{8}X$/i', $rg)) {
+            return false;
+        }
+
+        return true;
+    }
 }

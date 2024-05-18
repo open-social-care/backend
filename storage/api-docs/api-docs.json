@@ -4592,9 +4592,914 @@
                     }
                 ]
             }
+        },
+        "/api/social-assistant/subjects/{organization}": {
+            "get": {
+                "tags": [
+                    "SocialAssistant/Subject"
+                ],
+                "summary": "Get a list of subjects",
+                "description": "Retrieve a list of subjects.",
+                "operationId": "SocialAssistantGetSubjects",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The organization id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "description": "The search query parameter",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Successful response"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": "1"
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Teste"
+                                                    },
+                                                    "birth_date": {
+                                                        "type": "string",
+                                                        "example": "19/05/1990"
+                                                    },
+                                                    "last_form_answer_date": {
+                                                        "type": "string",
+                                                        "example": "17/02/2023"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "pagination": {
+                                            "properties": {
+                                                "total": {
+                                                    "type": "integer"
+                                                },
+                                                "per_page": {
+                                                    "type": "integer"
+                                                },
+                                                "current_page": {
+                                                    "type": "integer"
+                                                },
+                                                "last_page": {
+                                                    "type": "integer"
+                                                },
+                                                "from": {
+                                                    "type": "integer"
+                                                },
+                                                "to": {
+                                                    "type": "integer"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Bad Request"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "This action is unauthorized."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "SocialAssistant/Subject"
+                ],
+                "summary": "Create a new subject",
+                "description": "Create a new subject with the provided information in social assistant.",
+                "operationId": "SocialAssistantCreateSubject",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The organization id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "User data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Teste"
+                                    },
+                                    "birth_date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "1990/05/23"
+                                    },
+                                    "nationality": {
+                                        "type": "string",
+                                        "example": "brasil"
+                                    },
+                                    "phone": {
+                                        "description": "(00) 00000-0000",
+                                        "type": "string",
+                                        "example": "(42) 91234-5789"
+                                    },
+                                    "father_name": {
+                                        "type": "string",
+                                        "example": "father example"
+                                    },
+                                    "mother_name": {
+                                        "type": "string",
+                                        "example": "mother example"
+                                    },
+                                    "cpf": {
+                                        "type": "string",
+                                        "example": "123.456.789-0"
+                                    },
+                                    "rg": {
+                                        "type": "string",
+                                        "example": "12.345.678-9"
+                                    },
+                                    "skin_color": {
+                                        "description": "black|medium-black|indigenous|white|yellow",
+                                        "type": "string",
+                                        "example": "black"
+                                    },
+                                    "relative_relation_type": {
+                                        "type": "string",
+                                        "example": "uncle"
+                                    },
+                                    "relative_name": {
+                                        "type": "string",
+                                        "example": "uncle name"
+                                    },
+                                    "relative_phone": {
+                                        "description": "(00) 00000-0000",
+                                        "type": "string",
+                                        "example": "(42) 91234-5789"
+                                    },
+                                    "addresses": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "street": {
+                                                    "type": "string",
+                                                    "example": "street name"
+                                                },
+                                                "number": {
+                                                    "type": "string",
+                                                    "example": "123"
+                                                },
+                                                "district": {
+                                                    "type": "string",
+                                                    "example": "district example"
+                                                },
+                                                "complement": {
+                                                    "type": "string",
+                                                    "example": "house"
+                                                },
+                                                "state_id": {
+                                                    "type": "integer",
+                                                    "example": "1"
+                                                },
+                                                "city_id": {
+                                                    "type": "integer",
+                                                    "example": "1"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User created successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Bad Request"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unprocessable Entity"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "name": {
+                                                    "description": "field with errors",
+                                                    "type": "array",
+                                                    "items": {
+                                                        "description": "message error",
+                                                        "type": "string",
+                                                        "example": "Name is required"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "This action is unauthorized."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/social-assistant/subjects/{subject}": {
+            "get": {
+                "tags": [
+                    "SocialAssistant/Subject"
+                ],
+                "summary": "Get subject infos",
+                "description": "Get subject infos",
+                "operationId": "SocialAssistantGetSubject",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The subject id for get",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Get data successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Teste"
+                                        },
+                                        "birth_date": {
+                                            "type": "string",
+                                            "format": "date",
+                                            "example": "1990/05/23"
+                                        },
+                                        "nationality": {
+                                            "type": "string",
+                                            "example": "brasil"
+                                        },
+                                        "phone": {
+                                            "description": "(00) 00000-0000",
+                                            "type": "string",
+                                            "example": "(42) 91234-5789"
+                                        },
+                                        "father_name": {
+                                            "type": "string",
+                                            "example": "father example"
+                                        },
+                                        "mother_name": {
+                                            "type": "string",
+                                            "example": "mother example"
+                                        },
+                                        "cpf": {
+                                            "type": "string",
+                                            "example": "123.456.789-0"
+                                        },
+                                        "rg": {
+                                            "type": "string",
+                                            "example": "12.345.678-9"
+                                        },
+                                        "skin_color": {
+                                            "description": "black|medium-black|indigenous|white|yellow",
+                                            "type": "string",
+                                            "example": "black"
+                                        },
+                                        "relative_relation_type": {
+                                            "type": "string",
+                                            "example": "uncle"
+                                        },
+                                        "relative_name": {
+                                            "type": "string",
+                                            "example": "uncle name"
+                                        },
+                                        "relative_phone": {
+                                            "description": "(00) 00000-0000",
+                                            "type": "string",
+                                            "example": "(42) 91234-5789"
+                                        },
+                                        "addresses": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "street": {
+                                                        "type": "string",
+                                                        "example": "street name"
+                                                    },
+                                                    "number": {
+                                                        "type": "string",
+                                                        "example": "123"
+                                                    },
+                                                    "district": {
+                                                        "type": "string",
+                                                        "example": "district example"
+                                                    },
+                                                    "complement": {
+                                                        "type": "string",
+                                                        "example": "house"
+                                                    },
+                                                    "state_id": {
+                                                        "type": "integer",
+                                                        "example": "1"
+                                                    },
+                                                    "city_id": {
+                                                        "type": "integer",
+                                                        "example": "1"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Bad Request"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "This action is unauthorized."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "SocialAssistant/Subject"
+                ],
+                "summary": "Update subject",
+                "description": "Update subject with the provided information.",
+                "operationId": "SocialAssistantUpdateSubject",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The subject id for update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Teste"
+                                    },
+                                    "birth_date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "1990/05/23"
+                                    },
+                                    "nationality": {
+                                        "type": "string",
+                                        "example": "brasil"
+                                    },
+                                    "phone": {
+                                        "description": "(00) 00000-0000",
+                                        "type": "string",
+                                        "example": "(42) 91234-5789"
+                                    },
+                                    "father_name": {
+                                        "type": "string",
+                                        "example": "father example"
+                                    },
+                                    "mother_name": {
+                                        "type": "string",
+                                        "example": "mother example"
+                                    },
+                                    "cpf": {
+                                        "type": "string",
+                                        "example": "123.456.789-0"
+                                    },
+                                    "rg": {
+                                        "type": "string",
+                                        "example": "12.345.678-9"
+                                    },
+                                    "skin_color": {
+                                        "description": "black|medium-black|indigenous|white|yellow",
+                                        "type": "string",
+                                        "example": "black"
+                                    },
+                                    "relative_relation_type": {
+                                        "type": "string",
+                                        "example": "uncle"
+                                    },
+                                    "relative_name": {
+                                        "type": "string",
+                                        "example": "uncle name"
+                                    },
+                                    "relative_phone": {
+                                        "description": "(00) 00000-0000",
+                                        "type": "string",
+                                        "example": "(42) 91234-5789"
+                                    },
+                                    "addresses": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "street": {
+                                                    "type": "string",
+                                                    "example": "street name"
+                                                },
+                                                "number": {
+                                                    "type": "string",
+                                                    "example": "123"
+                                                },
+                                                "district": {
+                                                    "type": "string",
+                                                    "example": "district example"
+                                                },
+                                                "complement": {
+                                                    "type": "string",
+                                                    "example": "house"
+                                                },
+                                                "state_id": {
+                                                    "type": "integer",
+                                                    "example": "1"
+                                                },
+                                                "city_id": {
+                                                    "type": "integer",
+                                                    "example": "1"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Data updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Data updated successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Bad Request"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unprocessable Entity"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "name": {
+                                                    "description": "field with errors",
+                                                    "type": "array",
+                                                    "items": {
+                                                        "description": "message error",
+                                                        "type": "string",
+                                                        "example": "name is required in use"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "This action is unauthorized."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/social-assistant/get/form-infos": {
+            "get": {
+                "tags": [
+                    "SocialAssistant/Subject"
+                ],
+                "summary": "Get subject form infos",
+                "description": "Get subject form infos",
+                "operationId": "SocialAssistantGetSubjectFormInfos",
+                "responses": {
+                    "200": {
+                        "description": "Get data successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "skinColors": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "string",
+                                                        "example": "black"
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Preto(a)"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "states": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": "1"
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Acre"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Bad Request"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "This action is unauthorized."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/social-assistant/get/cities-by-state-to-select/{state}": {
+            "get": {
+                "tags": [
+                    "SocialAssistant/Subject"
+                ],
+                "summary": "Get cities by state to select",
+                "description": "Get cities by state to select",
+                "operationId": "SocialAssistantGetCitiesByStateToSelect",
+                "responses": {
+                    "200": {
+                        "description": "Get data successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
         }
     },
     "components": {
+        "responses": {
+            "400": {
+                "description": "Bad Request",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "example": "error"
+                                },
+                                "message": {
+                                    "type": "string",
+                                    "example": "Bad Request"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "403": {
+                "description": "Forbidden",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "example": "error"
+                                },
+                                "message": {
+                                    "type": "string",
+                                    "example": "This action is unauthorized."
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
         "securitySchemes": {
             "sanctum": {
                 "type": "apiKey",
