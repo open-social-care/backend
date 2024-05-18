@@ -107,10 +107,7 @@ class SocialAssistantSubjectController extends Controller
         $this->authorize('viewByOrganization', [Subject::class, $organization]);
 
         try {
-            $query = Subject::query()
-                ->whereHas('organizations', function ($query) use ($organization) {
-                    return $query->where('organization_id', $organization->id);
-                });
+            $query = Subject::query()->where('organization_id', $organization->id);
 
             if ($search = request()->get('q', null)) {
                 $query->whereRaw("LOWER(name) LIKE '%' || LOWER(?) || '%'", [$search]);
