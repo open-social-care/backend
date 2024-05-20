@@ -14,11 +14,10 @@ use App\Http\Requests\Api\SocialAssistant\SubjectUpdateRequest;
 use App\Http\Resources\Api\Shared\PaginationResource;
 use App\Http\Resources\Api\SocialAssistant\SubjectListResource;
 use App\Http\Resources\Api\SocialAssistant\SubjectResource;
-use App\Models\City;
 use App\Models\Organization;
-use App\Models\State;
 use App\Models\Subject;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class SocialAssistantSubjectController extends Controller
@@ -239,6 +238,8 @@ class SocialAssistantSubjectController extends Controller
         $this->authorize('createByOrganization', [Subject::class, $organization]);
 
         try {
+            DB::beginTransaction();
+
             $data = $request->validated();
 
             $dto = new SubjectDTO($data, $organization, auth()->user());
@@ -249,6 +250,8 @@ class SocialAssistantSubjectController extends Controller
                 $dto = new AddressDTO($address, $subject);
                 AddressCreateAction::execute($dto);
             }
+
+            DB::commit();
 
             return response()->json(['type' => 'success', 'message' => __('messages.common.success_create')], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
@@ -369,6 +372,8 @@ class SocialAssistantSubjectController extends Controller
         $this->authorize('update', $subject);
 
         try {
+            DB::beginTransaction();
+
             $data = $request->validated();
 
             $dto = new SubjectDTO($data, $subject->organization, auth()->user());
@@ -380,6 +385,8 @@ class SocialAssistantSubjectController extends Controller
                 $dto = new AddressDTO($address, $subject);
                 AddressCreateAction::execute($dto);
             }
+
+            DB::commit();
 
             return response()->json(['type' => 'success', 'message' => __('messages.common.success_update')], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
