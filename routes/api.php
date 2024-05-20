@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\Manager\ManagerOrganizationController;
 use App\Http\Controllers\Api\Manager\ManagerUserController;
 use App\Http\Controllers\Api\Shared\CityController;
 use App\Http\Controllers\Api\Shared\StateController;
+use App\Http\Controllers\Api\SocialAssistant\SocialAssistantOrganizationController;
 use App\Http\Controllers\Api\SocialAssistant\SocialAssistantSubjectController;
 use Illuminate\Support\Facades\Route;
 
@@ -127,6 +128,10 @@ Route::middleware(['auth:sanctum', 'only_social_assistant_user'])
         Route::put('/subjects/{subject}', [SocialAssistantSubjectController::class, 'update'])->name('subjects.update');
         Route::get('/subjects/show/{subject}', [SocialAssistantSubjectController::class, 'show'])->name('subjects.show');
         Route::get('/subjects/get/form-infos', [SocialAssistantSubjectController::class, 'getFormInfos'])->name('subjects.get-form-infos');
+
+        // Organization Routes
+        Route::resource('organizations', SocialAssistantOrganizationController::class)
+            ->only(['index', 'show']);
     });
 
 Route::middleware(['auth:sanctum'])

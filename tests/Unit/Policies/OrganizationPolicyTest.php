@@ -77,7 +77,17 @@ class OrganizationPolicyTest extends TestCase
         $this->assertTrue($result);
     }
 
-    public function testViewYoursMethodReturnsFalseForNonManagerOrganizationUser()
+    public function testViewYoursMethodReturnsTrueForSocialAssistantOrganizationUser()
+    {
+        $user = $this->createSocialAssistantUser();
+        $policy = new OrganizationPolicy();
+
+        $result = $policy->viewYours($user);
+
+        $this->assertTrue($result);
+    }
+
+    public function testViewYoursMethodReturnsFalseForNonManagerOrSocialAssistantOrganizationUser()
     {
         $user = $this->createAdminSystemUser();
         $policy = new OrganizationPolicy();
@@ -243,6 +253,18 @@ class OrganizationPolicyTest extends TestCase
 
         $userManager = User::factory()->createQuietly();
         $role = Role::factory()->createQuietly(['name' => RolesEnum::MANAGER->value]);
+        $userManager->roles()->attach($role);
+        $userManager->organizations()->attach($organization, ['role_id' => $role->id]);
+
+        return $userManager;
+    }
+
+    private function createSocialAssistantUser(): User
+    {
+        $organization = Organization::factory()->createQuietly();
+
+        $userManager = User::factory()->createQuietly();
+        $role = Role::factory()->createQuietly(['name' => RolesEnum::SOCIAL_ASSISTANT->value]);
         $userManager->roles()->attach($role);
         $userManager->organizations()->attach($organization, ['role_id' => $role->id]);
 

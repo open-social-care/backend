@@ -177,4 +177,9 @@ class User extends Authenticatable
             ->wherePivot('role_id', $roleSocialAssistant->id)
             ->exists();
     }
+
+    public function isSocialAssistant(): bool
+    {
+        return $this->hasRoleByName(RolesEnum::SOCIAL_ASSISTANT->value) && $this->organizations()->exists();
+    }
 }
