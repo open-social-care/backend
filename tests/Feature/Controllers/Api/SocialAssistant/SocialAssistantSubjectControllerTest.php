@@ -6,7 +6,6 @@ use App\Enums\RolesEnum;
 use App\Http\Resources\Api\SocialAssistant\SubjectResource;
 use App\Models\Organization;
 use App\Models\Role;
-use App\Models\State;
 use App\Models\Subject;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;

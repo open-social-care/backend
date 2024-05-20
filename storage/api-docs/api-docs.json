@@ -5608,71 +5608,9 @@
                     }
                 ]
             }
-        },
-        "/api/social-assistant/get/cities-by-state-to-select/{state}": {
-            "get": {
-                "tags": [
-                    "SocialAssistant/Subject"
-                ],
-                "summary": "Get cities by state to select",
-                "description": "Get cities by state to select",
-                "operationId": "SocialAssistantGetCitiesByStateToSelect",
-                "responses": {
-                    "200": {
-                        "description": "Get data successfully"
-                    }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
-            }
         }
     },
     "components": {
-        "responses": {
-            "400": {
-                "description": "Bad Request",
-                "content": {
-                    "application/json": {
-                        "schema": {
-                            "properties": {
-                                "type": {
-                                    "type": "string",
-                                    "example": "error"
-                                },
-                                "message": {
-                                    "type": "string",
-                                    "example": "Bad Request"
-                                }
-                            },
-                            "type": "object"
-                        }
-                    }
-                }
-            },
-            "403": {
-                "description": "Forbidden",
-                "content": {
-                    "application/json": {
-                        "schema": {
-                            "properties": {
-                                "type": {
-                                    "type": "string",
-                                    "example": "error"
-                                },
-                                "message": {
-                                    "type": "string",
-                                    "example": "This action is unauthorized."
-                                }
-                            },
-                            "type": "object"
-                        }
-                    }
-                }
-            }
-        },
         "securitySchemes": {
             "sanctum": {
                 "type": "apiKey",

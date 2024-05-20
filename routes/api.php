@@ -9,9 +9,9 @@ use App\Http\Controllers\Api\Manager\ManagerFormTemplateController;
 use App\Http\Controllers\Api\Manager\ManagerFormTemplateShortQuestionController;
 use App\Http\Controllers\Api\Manager\ManagerOrganizationController;
 use App\Http\Controllers\Api\Manager\ManagerUserController;
-use App\Http\Controllers\Api\SocialAssistant\SocialAssistantSubjectController;
-use App\Http\Controllers\Api\Shared\StateController;
 use App\Http\Controllers\Api\Shared\CityController;
+use App\Http\Controllers\Api\Shared\StateController;
+use App\Http\Controllers\Api\SocialAssistant\SocialAssistantSubjectController;
 use Illuminate\Support\Facades\Route;
 
 /*

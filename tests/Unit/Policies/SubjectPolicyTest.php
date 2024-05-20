@@ -15,6 +15,15 @@ class SubjectPolicyTest extends TestCase
 {
     use RefreshDatabase;
 
+    private Role $socialAssistantRole;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->socialAssistantRole = Role::factory()->createQuietly(['name' => RolesEnum::SOCIAL_ASSISTANT->value]);
+    }
+
     public function testViewByOrganizationMethodReturnsTrueForAdminSystemUser()
     {
         $user = $this->createAdminSystemUser();
@@ -126,9 +135,8 @@ class SubjectPolicyTest extends TestCase
         $organization = Organization::factory()->createQuietly();
 
         $user = User::factory()->createQuietly();
-        $role = Role::factory()->createQuietly(['name' => RolesEnum::SOCIAL_ASSISTANT->value]);
-        $user->roles()->attach($role);
-        $user->organizations()->attach($organization, ['role_id' => $role->id]);
+        $user->roles()->attach($this->socialAssistantRole);
+        $user->organizations()->attach($organization, ['role_id' => $this->socialAssistantRole->id]);
 
         return [
             'organization' => $organization,

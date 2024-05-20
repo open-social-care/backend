@@ -14,6 +14,18 @@ class UserPolicyTest extends TestCase
 {
     use RefreshDatabase;
 
+    private Role $roleManager;
+
+    private Role $socialAssistant;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->roleManager = Role::factory()->createQuietly(['name' => RolesEnum::MANAGER->value]);
+        $this->socialAssistant = Role::factory()->createQuietly(['name' => RolesEnum::SOCIAL_ASSISTANT->value]);
+    }
+
     public function testViewAnyMethodReturnsTrueForAdminSystemUser()
     {
         $user = $this->createAdminSystemUser();
@@ -124,9 +136,8 @@ class UserPolicyTest extends TestCase
         $organization = $userManager->organizations()->first();
 
         $userSocialAssistant = User::factory()->createQuietly();
-        $roleAssistant = Role::factory()->createQuietly(['name' => RolesEnum::SOCIAL_ASSISTANT->value]);
-        $userSocialAssistant->roles()->attach($roleAssistant);
-        $userSocialAssistant->organizations()->attach($organization, ['role_id' => $roleAssistant->id]);
+        $userSocialAssistant->roles()->attach($this->socialAssistant);
+        $userSocialAssistant->organizations()->attach($organization, ['role_id' => $this->socialAssistant->id]);
 
         $policy = new UserPolicy();
 
@@ -141,9 +152,8 @@ class UserPolicyTest extends TestCase
 
         $organization = Organization::factory()->createOneQuietly();
         $userSocialAssistant = User::factory()->createQuietly();
-        $roleAssistant = Role::factory()->createQuietly(['name' => RolesEnum::SOCIAL_ASSISTANT->value]);
-        $userSocialAssistant->roles()->attach($roleAssistant);
-        $userSocialAssistant->organizations()->attach($organization, ['role_id' => $roleAssistant->id]);
+        $userSocialAssistant->roles()->attach($this->socialAssistant);
+        $userSocialAssistant->organizations()->attach($organization, ['role_id' => $this->socialAssistant->id]);
 
         $policy = new UserPolicy();
 
@@ -189,9 +199,8 @@ class UserPolicyTest extends TestCase
         $organization = $userManager->organizations()->first();
 
         $userSocialAssistant = User::factory()->createQuietly();
-        $roleAssistant = Role::factory()->createQuietly(['name' => RolesEnum::SOCIAL_ASSISTANT->value]);
-        $userSocialAssistant->roles()->attach($roleAssistant);
-        $userSocialAssistant->organizations()->attach($organization, ['role_id' => $roleAssistant->id]);
+        $userSocialAssistant->roles()->attach($this->socialAssistant);
+        $userSocialAssistant->organizations()->attach($organization, ['role_id' => $this->socialAssistant->id]);
 
         $policy = new UserPolicy();
 
@@ -206,9 +215,8 @@ class UserPolicyTest extends TestCase
 
         $organization = Organization::factory()->createOneQuietly();
         $userSocialAssistant = User::factory()->createQuietly();
-        $roleAssistant = Role::factory()->createQuietly(['name' => RolesEnum::SOCIAL_ASSISTANT->value]);
-        $userSocialAssistant->roles()->attach($roleAssistant);
-        $userSocialAssistant->organizations()->attach($organization, ['role_id' => $roleAssistant->id]);
+        $userSocialAssistant->roles()->attach($this->socialAssistant);
+        $userSocialAssistant->organizations()->attach($organization, ['role_id' => $this->socialAssistant->id]);
 
         $policy = new UserPolicy();
 
@@ -231,9 +239,8 @@ class UserPolicyTest extends TestCase
         $organization = Organization::factory()->createQuietly();
 
         $userManager = User::factory()->createQuietly();
-        $role = Role::factory()->createQuietly(['name' => RolesEnum::MANAGER->value]);
-        $userManager->roles()->attach($role);
-        $userManager->organizations()->attach($organization, ['role_id' => $role->id]);
+        $userManager->roles()->attach($this->roleManager);
+        $userManager->organizations()->attach($organization, ['role_id' => $this->roleManager->id]);
 
         return $userManager;
     }
