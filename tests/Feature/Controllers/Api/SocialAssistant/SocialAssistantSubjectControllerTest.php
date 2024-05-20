@@ -239,20 +239,6 @@ class SocialAssistantSubjectControllerTest extends TestCase
             ->assertJsonStructure([
                 'data' => [
                     'skinColors',
-                    'states',
-                ],
-            ]);
-    }
-
-    public function testGetCitiesByStateToSelectMethod()
-    {
-        $state = State::factory()->createOneQuietly();
-        $response = $this->getJson(route('social-assistant.subjects.get-cities-by-state-to-select', $state->id));
-
-        $response->assertStatus(HttpResponse::HTTP_OK)
-            ->assertJsonStructure([
-                'data' => [
-                    'cities',
                 ],
             ]);
     }

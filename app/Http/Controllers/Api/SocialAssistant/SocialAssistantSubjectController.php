@@ -497,28 +497,19 @@ class SocialAssistantSubjectController extends Controller
      *
      *         @OA\JsonContent(
      *
-     *               @OA\Property(
-     *                    property="skinColors",
-     *                    type="array",
-     *
-     *                    @OA\Items(
-     *                        type="object",
-     *
-     *                        @OA\Property(property="id", type="string", example="black"),
-     *                        @OA\Property(property="name", type="string", example="Preto(a)"),
-     *                    )
-     *                ),
-     *                @OA\Property(
-     *                     property="states",
+     *              @OA\Property(property="data", type="array", @OA\Items(
+     *                    @OA\Property(
+     *                     property="skinColors",
      *                     type="array",
      *
      *                     @OA\Items(
      *                         type="object",
      *
-     *                         @OA\Property(property="id", type="integer", example="1"),
-     *                         @OA\Property(property="name", type="string", example="Acre"),
+     *                         @OA\Property(property="id", type="string", example="black"),
+     *                         @OA\Property(property="name", type="string", example="Preto(a)"),
      *                     )
-     *                 )
+     *                 ),
+     *              )),
      *         )
      *     ),
      *
@@ -553,82 +544,11 @@ class SocialAssistantSubjectController extends Controller
                     return ['id' => $skinColor->value, 'name' => SkinColorsEnum::trans($skinColor->value)];
                 });
 
-            $states = to_select(State::all());
-
             return response()->json([
                 'type' => 'success',
                 'message' => __('messages.common.success_view'),
                 'data' => [
                     'skinColors' => $skinColors,
-                    'states' => $states,
-                ],
-            ], HttpResponse::HTTP_OK);
-        } catch (\Exception $e) {
-            return response()->json(['type' => 'error', 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
-        }
-    }
-
-    /**
-     * @OA\Get(
-     *     path="/api/social-assistant/get/cities-by-state-to-select/{state}",
-     *     operationId="SocialAssistantGetCitiesByStateToSelect",
-     *     tags={"SocialAssistant/Subject"},
-     *     summary="Get cities by state to select",
-     *     description="Get cities by state to select",
-     *     security={{"sanctum":{}}},
-     *
-     *     @OA\Response(
-     *         response=200,
-     *         description="Get data successfully",
-     *
-     *                @OA\Property(
-     *                     property="cities",
-     *                     type="array",
-     *
-     *                     @OA\Items(
-     *                         type="object",
-     *
-     *                         @OA\Property(property="id", type="integer", example="1"),
-     *                         @OA\Property(property="name", type="string", example="Acrelândia"),
-     *                     )
-     *                 )
-     *         )
-     *     ),
-     *
-     * @OA\Response(
-     *         response=400,
-     *         description="Bad Request",
-     *
-     *         @OA\JsonContent(
-     *
-     *             @OA\Property(property="type", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Bad Request")
-     *         )
-     *     ),
-     *
-     * @OA\Response(
-     *         response=403,
-     *         description="Forbidden",
-     *
-     *         @OA\JsonContent(
-     *
-     *             @OA\Property(property="type", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="This action is unauthorized.")
-     *         )
-     *     ),
-     * )
-     */
-    public function getCitiesByStateToSelect(State $state): JsonResponse
-    {
-        try {
-            $cities = City::query()->where('state_id', $state->id)->get();
-            $cities = to_select($cities);
-
-            return response()->json([
-                'type' => 'success',
-                'message' => __('messages.common.success_view'),
-                'data' => [
-                    'cities' => $cities,
                 ],
             ], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {

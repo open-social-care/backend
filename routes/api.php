@@ -10,6 +10,8 @@ use App\Http\Controllers\Api\Manager\ManagerFormTemplateShortQuestionController;
 use App\Http\Controllers\Api\Manager\ManagerOrganizationController;
 use App\Http\Controllers\Api\Manager\ManagerUserController;
 use App\Http\Controllers\Api\SocialAssistant\SocialAssistantSubjectController;
+use App\Http\Controllers\Api\Shared\StateController;
+use App\Http\Controllers\Api\Shared\CityController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -125,5 +127,14 @@ Route::middleware(['auth:sanctum', 'only_social_assistant_user'])
         Route::put('/subjects/{subject}', [SocialAssistantSubjectController::class, 'update'])->name('subjects.update');
         Route::get('/subjects/show/{subject}', [SocialAssistantSubjectController::class, 'show'])->name('subjects.show');
         Route::get('/subjects/get/form-infos', [SocialAssistantSubjectController::class, 'getFormInfos'])->name('subjects.get-form-infos');
-        Route::get('/subjects/get/cities-by-state-to-select/{state}', [SocialAssistantSubjectController::class, 'getCitiesByStateToSelect'])->name('subjects.get-cities-by-state-to-select');
+    });
+
+Route::middleware(['auth:sanctum'])
+    ->group(function () {
+
+        // States Routes
+        Route::get('/states', [StateController::class, 'index'])->name('states.index');
+
+        // Cities Routes
+        Route::get('/states/{state}/cities', [CityController::class, 'index'])->name('cities.index');
     });
