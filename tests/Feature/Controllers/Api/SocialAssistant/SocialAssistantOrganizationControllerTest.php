@@ -20,6 +20,8 @@ class SocialAssistantOrganizationControllerTest extends TestCase
 
     private Role $roleSocialAssistant;
 
+    private Role $roleManager;
+
     public function setUp(): void
     {
         parent::setUp();
@@ -31,6 +33,8 @@ class SocialAssistantOrganizationControllerTest extends TestCase
         $this->userSocialAssistant->roles()->attach($this->roleSocialAssistant);
         $this->userSocialAssistant->organizations()->attach($this->organization, ['role_id' => $this->roleSocialAssistant->id]);
         $this->actingAs($this->userSocialAssistant);
+
+        $this->roleManager = Role::factory()->createQuietly(['name' => RolesEnum::MANAGER->value]);
     }
 
     public function testIndexMethod()
