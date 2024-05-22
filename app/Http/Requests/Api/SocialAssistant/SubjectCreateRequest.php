@@ -69,7 +69,7 @@ class SubjectCreateRequest extends FormRequest
             'addresses' => 'sometimes|nullable|array',
             'addresses.*.street' => 'required_with:addresses|string|max:255',
             'addresses.*.number' => 'required_with:addresses|string|max:255',
-            'addresses.*.district' => 'sometimes|nullable|string|max:255',
+            'addresses.*.district' => 'required_with:addresses|string|max:255',
             'addresses.*.complement' => 'sometimes|nullable|string|max:255',
             'addresses.*.state_id' => 'required_with:addresses|exists:states,id',
             'addresses.*.city_id' => 'required_with:addresses|exists:cities,id',
