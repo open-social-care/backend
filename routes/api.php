@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\Shared\CityController;
 use App\Http\Controllers\Api\Shared\StateController;
 use App\Http\Controllers\Api\SocialAssistant\SocialAssistantOrganizationController;
 use App\Http\Controllers\Api\SocialAssistant\SocialAssistantSubjectController;
+use App\Http\Controllers\Api\SocialAssistant\SocialAssistantFormTemplateController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -132,6 +133,10 @@ Route::middleware(['auth:sanctum', 'only_social_assistant_user'])
         // Organization Routes
         Route::resource('organizations', SocialAssistantOrganizationController::class)
             ->only(['index', 'show']);
+
+        // Form Templates Routes
+        Route::get('/form-templates/select/{organization}', [SocialAssistantFormTemplateController::class, 'getToSelect'])->name('form-templates.get-to-select');
+        Route::get('/form-templates/{form_template}', [SocialAssistantFormTemplateController::class, 'show'])->name('form-templates.show');
     });
 
 Route::middleware(['auth:sanctum'])

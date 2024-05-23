@@ -21,7 +21,7 @@ class FormTemplatePolicy
      */
     public function viewForOrganization(User $user, Organization $organization): bool
     {
-        return $user->isManagerOf($organization);
+        return $user->isManagerOf($organization) || $user->isSocialAssistantOf($organization);
     }
 
     /**
