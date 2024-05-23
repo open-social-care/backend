@@ -16,12 +16,14 @@ class FormTemplatePolicyTest extends TestCase
     use RefreshDatabase;
 
     private Role $roleManager;
+    private Role $roleSocialAssistant;
 
     public function setUp(): void
     {
         parent::setUp();
 
         $this->roleManager = Role::factory()->createQuietly(['name' => RolesEnum::MANAGER->value]);
+        $this->roleSocialAssistant = Role::factory()->createQuietly(['name' => RolesEnum::SOCIAL_ASSISTANT->value]);
     }
 
     public function testViewAnyMethodReturnsTrueForAdminSystemUser()
@@ -47,6 +49,16 @@ class FormTemplatePolicyTest extends TestCase
     public function testViewForOrganizationMethodReturnsTrueForManagerOfOrganization()
     {
         $data = $this->createManagerUser();
+        $policy = new FormTemplatePolicy();
+
+        $result = $policy->viewForOrganization($data['user'], $data['organization']);
+
+        $this->assertTrue($result);
+    }
+
+    public function testViewForOrganizationMethodReturnsTrueForSocialAssistantOfOrganization()
+    {
+        $data = $this->createSocialAssistantUser();
         $policy = new FormTemplatePolicy();
 
         $result = $policy->viewForOrganization($data['user'], $data['organization']);
@@ -249,6 +261,19 @@ class FormTemplatePolicyTest extends TestCase
         return [
             'organization' => $organization,
             'user' => $userManager,
+        ];
+    }
+
+    private function createSocialAssistantUser(): array
+    {
+        $organization = Organization::factory()->createQuietly();
+        $userSocialAssistant = User::factory()->createQuietly();
+        $userSocialAssistant->roles()->attach($this->roleSocialAssistant);
+        $userSocialAssistant->organizations()->attach($organization, ['role_id' => $this->roleSocialAssistant->id]);
+
+        return [
+            'organization' => $organization,
+            'user' => $userSocialAssistant,
         ];
     }
 }
