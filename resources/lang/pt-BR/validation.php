@@ -104,6 +104,21 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+        'addresses.*.street' => [
+            'required_with' => 'A Rua é obrigatório',
+        ],
+        'addresses.*.number' => [
+            'required_with' => 'O Número é obrigatório',
+        ],
+        'addresses.*.district' => [
+            'required_with' => 'O Bairro é obrigatório',
+        ],
+        'addresses.*.state_id' => [
+            'required_with' => 'O Estado é obrigatório',
+        ],
+        'addresses.*.city_id' => [
+            'required_with' => 'A Cidade é obrigatório',
+        ],
     ],
 
     /*
@@ -152,5 +167,20 @@ return [
         'data.*.role_name' => 'Perfil de usuário',
         'user_id' => 'Usuário',
         'data.*.user_id' => 'Usuário',
+        'addresses' => 'Endereços',
+        'addresses.*.street' => 'Cidade',
+        'addresses.*.number' => 'Número',
+        'addresses.*.district' => 'Bairro',
+        'addresses.*.complement' => 'Complemento',
+        'addresses.*.state_id' => 'Estado',
+        'addresses.*.city_id' => 'Cidade',
+        'birth_date' => 'Data de nascimento',
+        'nationality' => 'Nacionalidade',
+        'father_name' => 'Nome do pai',
+        'mother_name' => 'Nome da mãe',
+        'skin_color' => 'Cor de pele',
+        'relative_relation_type' => 'Tipo de parentesco',
+        'relative_name' => 'Nome do parente',
+        'relative_phone' => 'Telefone do parente',
     ],
 ];

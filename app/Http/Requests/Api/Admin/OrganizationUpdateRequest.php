@@ -14,6 +14,7 @@ class OrganizationUpdateRequest extends FormRequest
 {
     public function __construct()
     {
+        parent::__construct();
         $this->registerCustomValidations();
     }
 

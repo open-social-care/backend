@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
@@ -31,6 +32,8 @@ class Subject extends Model
         'relative_phone',
         'created_at',
         'updated_at',
+        'organization_id',
+        'user_id',
     ];
 
     /**
@@ -50,5 +53,15 @@ class Subject extends Model
     public function addresses(): MorphMany
     {
         return $this->morphMany(Address::class, 'model');
+    }
+
+    public function organization(): BelongsTo
+    {
+        return $this->belongsTo(Organization::class, 'organization_id');
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

@@ -26,6 +26,8 @@ return new class extends Migration
             $table->string('relative_relation_type')->nullable();
             $table->string('relative_name')->nullable();
             $table->string('relative_phone')->nullable();
+            $table->foreignId('organization_id')->constrained('organizations');
+            $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
         });
     }

@@ -15,6 +15,15 @@ class FormTemplatePolicyTest extends TestCase
 {
     use RefreshDatabase;
 
+    private Role $roleManager;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->roleManager = Role::factory()->createQuietly(['name' => RolesEnum::MANAGER->value]);
+    }
+
     public function testViewAnyMethodReturnsTrueForAdminSystemUser()
     {
         $user = $this->createAdminSystemUser();
@@ -233,11 +242,9 @@ class FormTemplatePolicyTest extends TestCase
     private function createManagerUser(): array
     {
         $organization = Organization::factory()->createQuietly();
-
         $userManager = User::factory()->createQuietly();
-        $role = Role::factory()->createQuietly(['name' => RolesEnum::MANAGER->value]);
-        $userManager->roles()->attach($role);
-        $userManager->organizations()->attach($organization, ['role_id' => $role->id]);
+        $userManager->roles()->attach($this->roleManager);
+        $userManager->organizations()->attach($organization, ['role_id' => $this->roleManager->id]);
 
         return [
             'organization' => $organization,
