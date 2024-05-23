@@ -14,6 +14,18 @@ class OrganizationPolicyTest extends TestCase
 {
     use RefreshDatabase;
 
+    private Role $roleManager;
+
+    private Role $roleSocialAssistant;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->roleManager = Role::factory()->createQuietly(['name' => RolesEnum::MANAGER->value]);
+        $this->roleSocialAssistant = Role::factory()->createQuietly(['name' => RolesEnum::SOCIAL_ASSISTANT->value]);
+    }
+
     public function testViewAnyMethodReturnsTrueForAdminSystemUser()
     {
         $user = $this->createAdminSystemUser();
@@ -77,7 +89,17 @@ class OrganizationPolicyTest extends TestCase
         $this->assertTrue($result);
     }
 
-    public function testViewYoursMethodReturnsFalseForNonManagerOrganizationUser()
+    public function testViewYoursMethodReturnsTrueForSocialAssistantOrganizationUser()
+    {
+        $user = $this->createSocialAssistantUser();
+        $policy = new OrganizationPolicy();
+
+        $result = $policy->viewYours($user);
+
+        $this->assertTrue($result);
+    }
+
+    public function testViewYoursMethodReturnsFalseForNonManagerOrSocialAssistantOrganizationUser()
     {
         $user = $this->createAdminSystemUser();
         $policy = new OrganizationPolicy();
@@ -242,9 +264,19 @@ class OrganizationPolicyTest extends TestCase
         $organization = Organization::factory()->createQuietly();
 
         $userManager = User::factory()->createQuietly();
-        $role = Role::factory()->createQuietly(['name' => RolesEnum::MANAGER->value]);
-        $userManager->roles()->attach($role);
-        $userManager->organizations()->attach($organization, ['role_id' => $role->id]);
+        $userManager->roles()->attach($this->roleManager);
+        $userManager->organizations()->attach($organization, ['role_id' => $this->roleManager->id]);
+
+        return $userManager;
+    }
+
+    private function createSocialAssistantUser(): User
+    {
+        $organization = Organization::factory()->createQuietly();
+
+        $userManager = User::factory()->createQuietly();
+        $userManager->roles()->attach($this->roleSocialAssistant);
+        $userManager->organizations()->attach($organization, ['role_id' => $this->roleSocialAssistant->id]);
 
         return $userManager;
     }

@@ -28,7 +28,7 @@ class OrganizationPolicy
      */
     public function viewYours(User $user): bool
     {
-        return $user->isManager();
+        return $user->isManager() || $user->isSocialAssistant();
     }
 
     /**

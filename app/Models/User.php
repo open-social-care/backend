@@ -165,16 +165,25 @@ class User extends Authenticatable
 
     public function isManager(): bool
     {
-        return $this->hasRoleByName(RolesEnum::MANAGER->value) && $this->organizations()->exists();
+        $roleManager = Role::query()->firstWhere('name', RolesEnum::MANAGER->value);
+
+        return $this->organizations()->wherePivot('role_id', $roleManager->id)->exists();
     }
 
     public function isSocialAssistantOf(Organization $organization): bool
     {
-        $roleSocialAssistant = Role::query()->firstWhere('name', RolesEnum::SOCIAL_ASSISTANT);
+        $roleSocialAssistant = Role::query()->firstWhere('name', RolesEnum::SOCIAL_ASSISTANT->value);
 
         return $this->organizations()
             ->wherePivot('organization_id', $organization->id)
             ->wherePivot('role_id', $roleSocialAssistant->id)
             ->exists();
+    }
+
+    public function isSocialAssistant(): bool
+    {
+        $roleSocialAssistant = Role::query()->firstWhere('name', RolesEnum::SOCIAL_ASSISTANT->value);
+
+        return $this->organizations()->wherePivot('role_id', $roleSocialAssistant->id)->exists();
     }
 }
