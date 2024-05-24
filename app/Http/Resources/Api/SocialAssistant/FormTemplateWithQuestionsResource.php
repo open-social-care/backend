@@ -16,7 +16,7 @@ class FormTemplateWithQuestionsResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
-            'short_questions' => FormTemplateShortQuestionResource::collection($this->shortQuestions)
+            'short_questions' => FormTemplateShortQuestionResource::collection($this->shortQuestions),
         ];
     }
 }

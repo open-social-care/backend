@@ -16,8 +16,11 @@ class SocialAssistantFormTemplateControllerTest extends TestCase
     use RefreshDatabase;
 
     protected Organization $organization;
+
     protected User $userSocialAssistant;
+
     private Role $roleSocialAssistant;
+
     private Role $roleManager;
 
     public function setUp(): void
@@ -75,10 +78,10 @@ class SocialAssistantFormTemplateControllerTest extends TestCase
                         '*' => [
                             'id',
                             'description',
-                            'answer_required'
-                        ]
-                    ]
-                ]
+                            'answer_required',
+                        ],
+                    ],
+                ],
             ]);
 
         $response->assertJsonFragment(['title' => $formTemplate->title]);

@@ -2,14 +2,7 @@
 
 namespace App\Http\Controllers\Api\SocialAssistant;
 
-use App\Actions\Manager\FormTemplates\FormTemplateCreateAction;
-use App\Actions\Manager\FormTemplates\FormTemplateUpdateAction;
-use App\DTO\Manager\FormTemplateDTO;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\Manager\FormTemplateCreateRequest;
-use App\Http\Requests\Api\Manager\FormTemplateUpdateRequest;
-use App\Http\Resources\Api\Manager\FormTemplateResource;
-use App\Http\Resources\Api\Shared\PaginationResource;
 use App\Http\Resources\Api\SocialAssistant\FormTemplateWithQuestionsResource;
 use App\Models\FormTemplate;
 use App\Models\Organization;
@@ -42,22 +35,21 @@ class SocialAssistantFormTemplateController extends Controller
      *         response=200,
      *         description="Successful response",
      *
-     *         @OA\JsonContent(
-     *             type="object",
+     *          @OA\JsonContent(
+     *          type="object",
      *
-     *              @OA\Property(property="data", type="array", @OA\Items(
-     *                     @OA\Property(
-     *                      type="array",
+     *          @OA\Property(property="type", type="string", example="success"),
+     *          @OA\Property(property="message", type="string", example="Registro carregado com sucesso."),
+     *          @OA\Property(property="data", type="array",
      *
-     *                      @OA\Items(
-     *                          type="object",
+     *              @OA\Items(
+     *                  type="object",
      *
-     *                          @OA\Property(property="id", type="string", example="1"),
-     *                          @OA\Property(property="name", type="string", example="Default"),
-     *                      )
-     *                  ),
-     *               )),
-     *         )
+     *                  @OA\Property(property="id", type="integer", example=1),
+     *                  @OA\Property(property="title", type="string", example="formulario 1")
+     *              )
+     *          )
+     *      )
      *     ),
      *
      *     @OA\Response(
@@ -129,17 +121,26 @@ class SocialAssistantFormTemplateController extends Controller
      *         response=200,
      *         description="Successful response",
      *
-     *         @OA\JsonContent(
-     *             type="object",
+     *     @OA\JsonContent(
+     *          type="object",
      *
-     *              @OA\Property(property="type", type="string", example="success"),
-     *              @OA\Property(property="message", type="string", example="Successful response"),
-     *              @OA\Property(property="data", type="array", @OA\Items(
-     *                  @OA\Property(property="id", type="integer", example="1"),
-     *                  @OA\Property(property="title", type="string", example="Social Care"),
-     *                  @OA\Property(property="description", type="string", example="Defautl"),
-     *              ))
-     *         )
+     *          @OA\Property(property="type", type="string", example="success"),
+     *          @OA\Property(property="message", type="string", example="Successful response"),
+     *          @OA\Property(property="data", type="object",
+     *              @OA\Property(property="id", type="integer", example=1),
+     *              @OA\Property(property="title", type="string", example="formulario 1"),
+     *              @OA\Property(property="description", type="string", example="formulario padrão"),
+     *              @OA\Property(property="short_questions", type="array",
+     *
+     *                  @OA\Items(
+     *
+     *                      @OA\Property(property="id", type="integer", example=1),
+     *                      @OA\Property(property="description", type="string", example="Qual idade 2"),
+     *                      @OA\Property(property="answer_required", type="boolean", example=true)
+     *                  )
+     *              )
+     *          )
+     *      )
      *     ),
      *
      *     @OA\Response(

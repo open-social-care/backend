@@ -16,6 +16,7 @@ class FormTemplatePolicyTest extends TestCase
     use RefreshDatabase;
 
     private Role $roleManager;
+
     private Role $roleSocialAssistant;
 
     public function setUp(): void
