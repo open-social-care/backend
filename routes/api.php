@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\Manager\ManagerOrganizationController;
 use App\Http\Controllers\Api\Manager\ManagerUserController;
 use App\Http\Controllers\Api\Shared\CityController;
 use App\Http\Controllers\Api\Shared\StateController;
+use App\Http\Controllers\Api\SocialAssistant\SocialAssistantFormAnswersController;
 use App\Http\Controllers\Api\SocialAssistant\SocialAssistantFormTemplateController;
 use App\Http\Controllers\Api\SocialAssistant\SocialAssistantOrganizationController;
 use App\Http\Controllers\Api\SocialAssistant\SocialAssistantSubjectController;
@@ -137,6 +138,17 @@ Route::middleware(['auth:sanctum', 'only_social_assistant_user'])
         // Form Templates Routes
         Route::get('/form-templates/select/{organization}', [SocialAssistantFormTemplateController::class, 'getToSelect'])->name('form-templates.get-to-select');
         Route::get('/form-templates/{form_template}', [SocialAssistantFormTemplateController::class, 'show'])->name('form-templates.show');
+
+        // Form answer Route
+        Route::resource('form-answers/{subject}', SocialAssistantFormAnswersController::class)
+            ->only(['index', 'store'])
+            ->names([
+                'index' => 'form-answers.index',
+                'store' => 'form-answers.store',
+            ]);
+
+        Route::get('/form-answers/show/{form_answer}', [SocialAssistantFormAnswersController::class, 'show'])->name('form-answers.show');
+        Route::delete('/form-answers/{form_answer}', [SocialAssistantFormAnswersController::class, 'destroy'])->name('form-answers.destroy');
     });
 
 Route::middleware(['auth:sanctum'])

@@ -119,6 +119,12 @@ return [
         'addresses.*.city_id' => [
             'required_with' => 'A Cidade é obrigatório',
         ],
+        'short_answers.*.short_question_id' => [
+            'required' => 'O id da pergunta do template é obrigatório',
+        ],
+        'short_answers.*.answer' => [
+            'required' => 'A pergunta é obrigatória',
+        ],
     ],
 
     /*
@@ -182,5 +188,6 @@ return [
         'relative_relation_type' => 'Tipo de parentesco',
         'relative_name' => 'Nome do parente',
         'relative_phone' => 'Telefone do parente',
+        'short_answers' => 'Pergunta',
     ],
 ];
