@@ -29,7 +29,7 @@ class FormAnswerPolicy
     /**
      * Determine whether the user can create models.
      */
-    public function createBySubject(User $user, Subject $subject): bool
+    public function createForSubject(User $user, Subject $subject): bool
     {
         $subjectOrganization = $subject->organization->id;
 

@@ -88,6 +88,7 @@ return [
     'uploaded' => ':attribute falhou ao ser enviado.',
     'url' => 'O formato de :attribute é inválido.',
     'document' => 'O formato de :attribute é inválido, formatos aceitos (CNPJ) 00.000.000/0000-00 / (CPF) 000.000.000-00',
+    'required_answer' => 'A resposta é obrigatória para esta pergunta',
 
     /*
     |--------------------------------------------------------------------------

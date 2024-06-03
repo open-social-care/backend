@@ -41,7 +41,7 @@ class FormAnswerCreateRequest extends FormRequest
     {
         $subject = $this->route('subject');
 
-        return auth()->user()->can('createBySubject', [FormAnswer::class, $subject]);
+        return auth()->user()->can('createForSubject', [FormAnswer::class, $subject]);
     }
 
     /**
@@ -74,6 +74,6 @@ class FormAnswerCreateRequest extends FormRequest
             }
 
             return true;
-        }, 'A resposta é obrigatória para esta pergunta.');
+        }, __('validation.required_answer'));
     }
 }

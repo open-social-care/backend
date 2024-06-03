@@ -134,37 +134,20 @@ class SocialAssistantFormAnswersController extends Controller
      *         required=true,
      *         description="Data",
      *
-     *         @OA\JsonContent(
-     *             type="object",
+     *      @OA\JsonContent(
+     *           type="object",
      *
-     *             @OA\Property(property="name", type="string", example="Teste"),
-     *             @OA\Property(property="birth_date", type="date", example="1990/05/23"),
-     *             @OA\Property(property="nationality", type="string", example="brasil"),
-     *             @OA\Property(property="phone", type="string", example="(42) 91234-5789", description="(00) 00000-0000"),
-     *             @OA\Property(property="father_name", type="string", example="father example"),
-     *             @OA\Property(property="mother_name", type="string", example="mother example"),
-     *             @OA\Property(property="cpf", type="string", example="123.456.789-0"),
-     *             @OA\Property(property="rg", type="string", example="12.345.678-9"),
-     *             @OA\Property(property="skin_color", type="string", example="black", description="black|medium-black|indigenous|white|yellow"),
-     *             @OA\Property(property="relative_relation_type", type="string", example="uncle"),
-     *             @OA\Property(property="relative_name", type="string", example="uncle name"),
-     *             @OA\Property(property="relative_phone", type="string", example="(42) 91234-5789", description="(00) 00000-0000"),
-     *             @OA\Property(
-     *                  property="addresses",
-     *                  type="array",
+     *           @OA\Property(property="form_template_id", type="integer", example=1),
+     *           @OA\Property(property="short_answers", type="array",
      *
-     *                  @OA\Items(
-     *                      type="object",
+     *               @OA\Items(
+     *                   type="object",
      *
-     *                      @OA\Property(property="street", type="string", example="street name"),
-     *                      @OA\Property(property="number", type="string", example="123"),
-     *                      @OA\Property(property="district", type="string", example="district example"),
-     *                      @OA\Property(property="complement", type="string", example="house"),
-     *                      @OA\Property(property="state_id", type="integer", example="1"),
-     *                      @OA\Property(property="city_id", type="integer", example="1")
-     *                  )
-     *              )
-     *         )
+     *                   @OA\Property(property="short_question_id", type="integer", example=1),
+     *                   @OA\Property(property="answer", type="string", nullable=true, example="test answer")
+     *               )
+     *           )
+     *      )
      *     ),
      *
      *     @OA\Response(
@@ -174,7 +157,7 @@ class SocialAssistantFormAnswersController extends Controller
      *         @OA\JsonContent(
      *
      *             @OA\Property(property="type", type="string", example="success"),
-     *             @OA\Property(property="message", type="string", example="User created successfully")
+     *             @OA\Property(property="message", type="string", example="Created successfully")
      *         )
      *     ),
      *
@@ -198,9 +181,9 @@ class SocialAssistantFormAnswersController extends Controller
      *             @OA\Property(property="type", type="string", example="error"),
      *             @OA\Property(property="message", type="string", example="Unprocessable Entity"),
      *             @OA\Property(property="errors", type="object",
-     *               @OA\Property(property="name", type="array", description="field with errors",
+     *               @OA\Property(property="answer", type="array", description="field with errors",
      *
-     *                  @OA\Items(type="string", description="message error", example="Name is required")
+     *                  @OA\Items(type="string", description="message error", example="answer is required")
      *            )
      *          ),
      *         )
@@ -220,7 +203,7 @@ class SocialAssistantFormAnswersController extends Controller
      */
     public function store(FormAnswerCreateRequest $request, Subject $subject): JsonResponse
     {
-        $this->authorize('createBySubject', [FormAnswer::class, $subject]);
+        $this->authorize('createForSubject', [FormAnswer::class, $subject]);
 
         try {
             DB::beginTransaction();

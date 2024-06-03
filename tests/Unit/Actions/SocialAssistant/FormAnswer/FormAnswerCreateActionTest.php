@@ -21,10 +21,21 @@ class FormAnswerCreateActionTest extends TestCase
 
     protected User $userSocialAssistant;
 
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->organization = Organization::factory()->createQuietly();
+
+        $this->userSocialAssistant = User::factory()->createQuietly();
+        $roleSocialAssistant = Role::factory()->createQuietly(['name' => RolesEnum::SOCIAL_ASSISTANT->value]);
+        $this->userSocialAssistant->roles()->attach($roleSocialAssistant);
+        $this->userSocialAssistant->organizations()->attach($this->organization, ['role_id' => $roleSocialAssistant->id]);
+        $this->actingAs($this->userSocialAssistant);
+    }
+
     public function testExecuteAction()
     {
-        $this->createSocialAssistantUser();
-
         $formTemplate = FormTemplate::factory()->hasAttached($this->organization)->createOneQuietly();
         $subject = Subject::factory()->for($this->organization)->for($this->userSocialAssistant)->createOneQuietly();
 
@@ -37,16 +48,5 @@ class FormAnswerCreateActionTest extends TestCase
         $formTemplate = FormAnswerCreateAction::execute($dto);
 
         $this->assertDatabaseHas('form_answers', ['id' => $formTemplate->id]);
-    }
-
-    public function createSocialAssistantUser(): void
-    {
-        $this->organization = Organization::factory()->createQuietly();
-
-        $this->userSocialAssistant = User::factory()->createQuietly();
-        $roleSocialAssistant = Role::factory()->createQuietly(['name' => RolesEnum::SOCIAL_ASSISTANT->value]);
-        $this->userSocialAssistant->roles()->attach($roleSocialAssistant);
-        $this->userSocialAssistant->organizations()->attach($this->organization, ['role_id' => $roleSocialAssistant->id]);
-        $this->actingAs($this->userSocialAssistant);
     }
 }

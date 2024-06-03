@@ -4966,85 +4966,22 @@
                         "application/json": {
                             "schema": {
                                 "properties": {
-                                    "name": {
-                                        "type": "string",
-                                        "example": "Teste"
+                                    "form_template_id": {
+                                        "type": "integer",
+                                        "example": 1
                                     },
-                                    "birth_date": {
-                                        "type": "string",
-                                        "format": "date",
-                                        "example": "1990/05/23"
-                                    },
-                                    "nationality": {
-                                        "type": "string",
-                                        "example": "brasil"
-                                    },
-                                    "phone": {
-                                        "description": "(00) 00000-0000",
-                                        "type": "string",
-                                        "example": "(42) 91234-5789"
-                                    },
-                                    "father_name": {
-                                        "type": "string",
-                                        "example": "father example"
-                                    },
-                                    "mother_name": {
-                                        "type": "string",
-                                        "example": "mother example"
-                                    },
-                                    "cpf": {
-                                        "type": "string",
-                                        "example": "123.456.789-0"
-                                    },
-                                    "rg": {
-                                        "type": "string",
-                                        "example": "12.345.678-9"
-                                    },
-                                    "skin_color": {
-                                        "description": "black|medium-black|indigenous|white|yellow",
-                                        "type": "string",
-                                        "example": "black"
-                                    },
-                                    "relative_relation_type": {
-                                        "type": "string",
-                                        "example": "uncle"
-                                    },
-                                    "relative_name": {
-                                        "type": "string",
-                                        "example": "uncle name"
-                                    },
-                                    "relative_phone": {
-                                        "description": "(00) 00000-0000",
-                                        "type": "string",
-                                        "example": "(42) 91234-5789"
-                                    },
-                                    "addresses": {
+                                    "short_answers": {
                                         "type": "array",
                                         "items": {
                                             "properties": {
-                                                "street": {
-                                                    "type": "string",
-                                                    "example": "street name"
-                                                },
-                                                "number": {
-                                                    "type": "string",
-                                                    "example": "123"
-                                                },
-                                                "district": {
-                                                    "type": "string",
-                                                    "example": "district example"
-                                                },
-                                                "complement": {
-                                                    "type": "string",
-                                                    "example": "house"
-                                                },
-                                                "state_id": {
+                                                "short_question_id": {
                                                     "type": "integer",
-                                                    "example": "1"
+                                                    "example": 1
                                                 },
-                                                "city_id": {
-                                                    "type": "integer",
-                                                    "example": "1"
+                                                "answer": {
+                                                    "type": "string",
+                                                    "example": "test answer",
+                                                    "nullable": true
                                                 }
                                             },
                                             "type": "object"
@@ -5069,7 +5006,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "User created successfully"
+                                            "example": "Created successfully"
                                         }
                                     },
                                     "type": "object"
@@ -5113,13 +5050,13 @@
                                         },
                                         "errors": {
                                             "properties": {
-                                                "name": {
+                                                "answer": {
                                                     "description": "field with errors",
                                                     "type": "array",
                                                     "items": {
                                                         "description": "message error",
                                                         "type": "string",
-                                                        "example": "Name is required"
+                                                        "example": "answer is required"
                                                     }
                                                 }
                                             },

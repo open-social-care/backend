@@ -102,18 +102,18 @@ class FormAnswerPolicyTest extends TestCase
         $this->assertFalse($result);
     }
 
-    public function testCreateBySubjectMethodReturnsTrueForAdminSystem()
+    public function testCreateForSubjectMethodReturnsTrueForAdminSystem()
     {
         $user = $this->createAdminSystemUser();
         $formAnswer = FormAnswer::factory()->for($user)->createOneQuietly();
         $policy = new FormAnswerPolicy();
 
-        $result = $policy->createBySubject($user, $formAnswer->subject);
+        $result = $policy->createForSubject($user, $formAnswer->subject);
 
         $this->assertTrue($result);
     }
 
-    public function testCreateBySubjectMethodReturnsTrueForUserWithCommonOrganization()
+    public function testCreateForSubjectMethodReturnsTrueForUserWithCommonOrganization()
     {
         $data = $this->createSocialAssistantUser();
         $user = $data['user'];
@@ -121,12 +121,12 @@ class FormAnswerPolicyTest extends TestCase
         $subject = Subject::factory()->createOneQuietly(['organization_id' => $organization->id]);
         $policy = new FormAnswerPolicy();
 
-        $result = $policy->createBySubject($user, $subject);
+        $result = $policy->createForSubject($user, $subject);
 
         $this->assertTrue($result);
     }
 
-    public function testCreateBySubjectMethodReturnsFalseForUserWithoutCommonOrganization()
+    public function testCreateForSubjectMethodReturnsFalseForUserWithoutCommonOrganization()
     {
         $data = $this->createSocialAssistantUser();
         $user = User::factory()->createOneQuietly();
@@ -134,7 +134,7 @@ class FormAnswerPolicyTest extends TestCase
         $subject = Subject::factory()->createOneQuietly(['organization_id' => $organization->id]);
         $policy = new FormAnswerPolicy();
 
-        $result = $policy->createBySubject($user, $subject);
+        $result = $policy->createForSubject($user, $subject);
 
         $this->assertFalse($result);
     }
