@@ -55,6 +55,14 @@ class AuthController extends Controller
      *                   @OA\Property(property="name", type="string", example="Test"),
      *                   @OA\Property(property="email", type="string", example="test@test.com"),
      *                   @OA\Property(property="roles_ids", type="array", @OA\Items(type="integer", example="1")),
+     *                   @OA\Property(property="organizations", type="array", @OA\Items(
+     *                       @OA\Property(property="id", type="integer", example=1),
+     *                       @OA\Property(property="name", type="string", example="Social Care"),
+     *                       @OA\Property(property="document_type", type="string", example="cnpj"),
+     *                       @OA\Property(property="document", type="string", example="12.345.678/0001-00"),
+     *                       @OA\Property(property="phone", type="string", example="(42) 3333-3333"),
+     *                       @OA\Property(property="subject_ref", type="string", example="Subjects")
+     *                   ))
      *              )),
      *          )
      *      ),
@@ -92,6 +100,8 @@ class AuthController extends Controller
 
                 $user = auth()->user();
                 AuditCreateEvent::dispatch($user, $user, AuditEventTypesEnum::LOGIN, request()->ip());
+
+                $user->load(['organizations', 'roles']);
 
                 return response()->json([
                     'type' => 'success',
