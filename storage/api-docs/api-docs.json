@@ -1898,6 +1898,38 @@
                                                             "type": "integer",
                                                             "example": "1"
                                                         }
+                                                    },
+                                                    "organizations": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "properties": {
+                                                                "id": {
+                                                                    "type": "integer",
+                                                                    "example": 1
+                                                                },
+                                                                "name": {
+                                                                    "type": "string",
+                                                                    "example": "Social Care"
+                                                                },
+                                                                "document_type": {
+                                                                    "type": "string",
+                                                                    "example": "cnpj"
+                                                                },
+                                                                "document": {
+                                                                    "type": "string",
+                                                                    "example": "12.345.678/0001-00"
+                                                                },
+                                                                "phone": {
+                                                                    "type": "string",
+                                                                    "example": "(42) 3333-3333"
+                                                                },
+                                                                "subject_ref": {
+                                                                    "type": "string",
+                                                                    "example": "Subjects"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
                                                     }
                                                 },
                                                 "type": "object"
