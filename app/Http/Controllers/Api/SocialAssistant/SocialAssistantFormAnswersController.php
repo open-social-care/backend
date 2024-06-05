@@ -6,6 +6,8 @@ use App\Actions\SocialAssistant\FormAnswer\FormAnswerCreateAction;
 use App\Actions\SocialAssistant\FormAnswer\ShortAnswer\ShortAnswerCreateAction;
 use App\DTO\SocialAssistant\FormAnswerDTO;
 use App\DTO\SocialAssistant\ShortAnswerDTO;
+use App\Enums\AuditEventTypesEnum;
+use App\Events\AuditCreateEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\SocialAssistant\FormAnswerCreateRequest;
 use App\Http\Resources\Api\Shared\PaginationResource;
@@ -219,6 +221,8 @@ class SocialAssistantFormAnswersController extends Controller
                 ShortAnswerCreateAction::execute($dto);
             }
 
+            AuditCreateEvent::dispatch($formAnswer, auth()->user(), AuditEventTypesEnum::CREATE, request()->ip());
+
             DB::commit();
 
             return response()->json(['type' => 'success', 'message' => __('messages.common.success_create')], HttpResponse::HTTP_OK);
@@ -310,6 +314,8 @@ class SocialAssistantFormAnswersController extends Controller
         try {
             $formAnswer->load(['shortAnswers', 'shortAnswers.shortQuestion']);
 
+            AuditCreateEvent::dispatch($formAnswer, auth()->user(), AuditEventTypesEnum::VIEW, request()->ip());
+
             return response()->json([
                 'type' => 'success',
                 'message' => __('messages.common.success_view'),
@@ -379,6 +385,8 @@ class SocialAssistantFormAnswersController extends Controller
         $this->authorize('delete', $formAnswer);
 
         try {
+            AuditCreateEvent::dispatch($formAnswer, auth()->user(), AuditEventTypesEnum::DELETE, request()->ip());
+
             $formAnswer->delete();
 
             return response()->json(['type' => 'success', 'message' => __('messages.common.success_destroy')], HttpResponse::HTTP_OK);

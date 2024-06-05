@@ -7,7 +7,9 @@ use App\Actions\SocialAssistant\Subject\SubjectCreateAction;
 use App\Actions\SocialAssistant\Subject\SubjectUpdateAction;
 use App\DTO\Shared\AddressDTO;
 use App\DTO\SocialAssistant\SubjectDTO;
+use App\Enums\AuditEventTypesEnum;
 use App\Enums\SkinColorsEnum;
+use App\Events\AuditCreateEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\SocialAssistant\SubjectCreateRequest;
 use App\Http\Requests\Api\SocialAssistant\SubjectUpdateRequest;
@@ -251,6 +253,8 @@ class SocialAssistantSubjectController extends Controller
                 AddressCreateAction::execute($dto);
             }
 
+            AuditCreateEvent::dispatch($subject, auth()->user(), AuditEventTypesEnum::CREATE, request()->ip());
+
             DB::commit();
 
             return response()->json(['type' => 'success', 'message' => __('messages.common.success_create')], HttpResponse::HTTP_OK);
@@ -386,6 +390,8 @@ class SocialAssistantSubjectController extends Controller
                 AddressCreateAction::execute($dto);
             }
 
+            AuditCreateEvent::dispatch($subject, auth()->user(), AuditEventTypesEnum::UPDATE, request()->ip());
+
             DB::commit();
 
             return response()->json(['type' => 'success', 'message' => __('messages.common.success_update')], HttpResponse::HTTP_OK);
@@ -479,6 +485,8 @@ class SocialAssistantSubjectController extends Controller
         $this->authorize('viewByOrganization', [Subject::class, $organization]);
 
         try {
+            AuditCreateEvent::dispatch($subject, auth()->user(), AuditEventTypesEnum::VIEW, request()->ip());
+
             return response()->json([
                 'type' => 'success',
                 'message' => __('messages.common.success_view'),
