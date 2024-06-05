@@ -65,7 +65,7 @@ class SocialAssistantSubjectController extends Controller
      *             @OA\Property(property="data", type="array", @OA\Items(
      *                 @OA\Property(property="id", type="integer", example="1"),
      *                 @OA\Property(property="name", type="string", example="Teste"),
-     *                 @OA\Property(property="birth_date", type="string", example="19/05/1990"),
+     *                 @OA\Property(property="birth_date", type="string", format="date-time", example="2024-05-24T18:19:41.000000Z"),
      *                 @OA\Property(property="last_form_answer_date", type="string", example="17/02/2023"),
      *             )),
      *             @OA\Property(property="pagination", type="object",
@@ -421,7 +421,7 @@ class SocialAssistantSubjectController extends Controller
      *         @OA\JsonContent(
      *
      *               @OA\Property(property="name", type="string", example="Teste"),
-     *               @OA\Property(property="birth_date", type="date", example="1990/05/23"),
+     *               @OA\Property(property="birth_date", type="date", format="date-time", example="2024-05-24T18:19:41.000000Z"),
      *               @OA\Property(property="nationality", type="string", example="brasil"),
      *               @OA\Property(property="phone", type="string", example="(42) 91234-5789", description="(00) 00000-0000"),
      *               @OA\Property(property="father_name", type="string", example="father example"),

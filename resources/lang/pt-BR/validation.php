@@ -88,6 +88,7 @@ return [
     'uploaded' => ':attribute falhou ao ser enviado.',
     'url' => 'O formato de :attribute é inválido.',
     'document' => 'O formato de :attribute é inválido, formatos aceitos (CNPJ) 00.000.000/0000-00 / (CPF) 000.000.000-00',
+    'required_answer' => 'A resposta é obrigatória para esta pergunta',
 
     /*
     |--------------------------------------------------------------------------
@@ -118,6 +119,12 @@ return [
         ],
         'addresses.*.city_id' => [
             'required_with' => 'A Cidade é obrigatório',
+        ],
+        'short_answers.*.short_question_id' => [
+            'required' => 'O id da pergunta do template é obrigatório',
+        ],
+        'short_answers.*.answer' => [
+            'required' => 'A pergunta é obrigatória',
         ],
     ],
 
@@ -182,5 +189,6 @@ return [
         'relative_relation_type' => 'Tipo de parentesco',
         'relative_name' => 'Nome do parente',
         'relative_phone' => 'Telefone do parente',
+        'short_answers' => 'Pergunta',
     ],
 ];
