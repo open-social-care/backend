@@ -6,6 +6,7 @@ use App\Enums\RolesEnum;
 use App\Models\FormTemplate;
 use App\Models\Organization;
 use App\Models\Role;
+use App\Models\ShortQuestion;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
@@ -41,6 +42,9 @@ class SocialAssistantFormTemplateControllerTest extends TestCase
     public function testGetToSelectMethod()
     {
         $formTemplates = FormTemplate::factory()->hasAttached($this->organization)->count(10)->createQuietly();
+        foreach ($formTemplates as $formTemplate) {
+         ShortQuestion::factory()->createOne(['form_template_id' => $formTemplate->id]);
+        }
 
         $response = $this->getJson(route('social-assistant.form-templates.get-to-select', $this->organization));
 

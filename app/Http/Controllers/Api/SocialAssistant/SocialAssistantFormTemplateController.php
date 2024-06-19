@@ -81,6 +81,7 @@ class SocialAssistantFormTemplateController extends Controller
 
         try {
             $formTemplates = FormTemplate::query()
+                ->whereHas('shortQuestions')
                 ->whereHas('organizations', function ($query) use ($organization) {
                     return $query->where('organization_id', $organization->id);
                 })->get();
