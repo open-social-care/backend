@@ -119,7 +119,7 @@ class SocialAssistantOrganizationController extends Controller
      * security={{"sanctum":{}}},
      *
      *     @OA\Parameter(
-     *         name="id",
+     *         name="organization",
      *         in="path",
      *         description="The organization id",
      *         required=true,

@@ -204,7 +204,7 @@ class AdminUserController extends Controller
      *     security={{"sanctum":{}}},
      *
      *     @OA\Parameter(
-     *         name="id",
+     *         name="user",
      *         in="path",
      *         description="The user id for update",
      *         required=true,
@@ -305,7 +305,7 @@ class AdminUserController extends Controller
      *     security={{"sanctum":{}}},
      *
      *     @OA\Parameter(
-     *         name="id",
+     *         name="user",
      *         in="path",
      *         description="The user id for destroy",
      *         required=true,
@@ -372,7 +372,7 @@ class AdminUserController extends Controller
      *     security={{"sanctum":{}}},
      *
      *     @OA\Parameter(
-     *         name="id",
+     *         name="user",
      *         in="path",
      *         description="The user id for get",
      *         required=true,

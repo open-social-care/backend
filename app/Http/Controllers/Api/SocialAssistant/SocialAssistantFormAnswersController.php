@@ -31,7 +31,7 @@ class SocialAssistantFormAnswersController extends Controller
      * security={{"sanctum":{}}},
      *
      *     @OA\Parameter(
-     *         name="id",
+     *         name="subject",
      *         in="path",
      *         description="The subject id",
      *         required=true,
@@ -122,7 +122,7 @@ class SocialAssistantFormAnswersController extends Controller
      *     security={{"sanctum":{}}},
      *
      *     @OA\Parameter(
-     *         name="id",
+     *         name="subject",
      *         in="path",
      *         description="The subject id",
      *         required=true,
@@ -241,7 +241,7 @@ class SocialAssistantFormAnswersController extends Controller
      *     security={{"sanctum":{}}},
      *
      *     @OA\Parameter(
-     *         name="id",
+     *         name="form_answer",
      *         in="path",
      *         description="The form answer id for get",
      *         required=true,
@@ -328,7 +328,7 @@ class SocialAssistantFormAnswersController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/api/social-assistant/form-answers/{form_answers}",
+     *     path="/api/social-assistant/form-answers/{form_answer}",
      *     operationId="SocialAssistantDestroyFormAnswers",
      *     tags={"SocialAssistant/FormAnswers"},
      *     summary="Destroy form answer",
@@ -336,7 +336,7 @@ class SocialAssistantFormAnswersController extends Controller
      *     security={{"sanctum":{}}},
      *
      *     @OA\Parameter(
-     *         name="id",
+     *         name="form_answer",
      *         in="path",
      *         description="The form answer id",
      *         required=true,

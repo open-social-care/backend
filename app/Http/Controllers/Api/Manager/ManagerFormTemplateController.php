@@ -27,7 +27,7 @@ class ManagerFormTemplateController extends Controller
      * security={{"sanctum":{}}},
      *
      *     @OA\Parameter(
-     *         name="id",
+     *         name="organization",
      *         in="path",
      *         description="The organization id",
      *         required=true,
@@ -132,7 +132,7 @@ class ManagerFormTemplateController extends Controller
      *     security={{"sanctum":{}}},
      *
      *     @OA\Parameter(
-     *          name="id",
+     *          name="organization",
      *          in="path",
      *          description="The organization id",
      *          required=true,
@@ -231,7 +231,7 @@ class ManagerFormTemplateController extends Controller
      *     security={{"sanctum":{}}},
      *
      *     @OA\Parameter(
-     *         name="id",
+     *         name="form_template",
      *         in="path",
      *         description="The form Template id for update",
      *         required=true,
@@ -330,7 +330,7 @@ class ManagerFormTemplateController extends Controller
      *     security={{"sanctum":{}}},
      *
      *     @OA\Parameter(
-     *         name="id",
+     *         name="form_template",
      *         in="path",
      *         description="The form template id for destroy",
      *         required=true,
@@ -397,7 +397,7 @@ class ManagerFormTemplateController extends Controller
      * security={{"sanctum":{}}},
      *
      *     @OA\Parameter(
-     *         name="id",
+     *         name="form_template",
      *         in="path",
      *         description="The form template id",
      *         required=true,

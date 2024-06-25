@@ -34,7 +34,7 @@ class SocialAssistantSubjectController extends Controller
      * security={{"sanctum":{}}},
      *
      *     @OA\Parameter(
-     *         name="id",
+     *         name="organization",
      *         in="path",
      *         description="The organization id",
      *         required=true,
@@ -137,7 +137,7 @@ class SocialAssistantSubjectController extends Controller
      *     security={{"sanctum":{}}},
      *
      *     @OA\Parameter(
-     *         name="id",
+     *         name="organization",
      *         in="path",
      *         description="The organization id",
      *         required=true,
@@ -273,7 +273,7 @@ class SocialAssistantSubjectController extends Controller
      *     security={{"sanctum":{}}},
      *
      *     @OA\Parameter(
-     *         name="id",
+     *         name="subject",
      *         in="path",
      *         description="The subject id for update",
      *         required=true,
@@ -410,7 +410,7 @@ class SocialAssistantSubjectController extends Controller
      *     security={{"sanctum":{}}},
      *
      *     @OA\Parameter(
-     *         name="id",
+     *         name="subject",
      *         in="path",
      *         description="The subject id for get",
      *         required=true,

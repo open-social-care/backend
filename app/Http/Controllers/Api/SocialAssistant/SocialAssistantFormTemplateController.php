@@ -21,7 +21,7 @@ class SocialAssistantFormTemplateController extends Controller
      * security={{"sanctum":{}}},
      *
      *     @OA\Parameter(
-     *         name="id",
+     *         name="organization",
      *         in="path",
      *         description="The organization id",
      *         required=true,
@@ -108,7 +108,7 @@ class SocialAssistantFormTemplateController extends Controller
      * security={{"sanctum":{}}},
      *
      *     @OA\Parameter(
-     *         name="id",
+     *         name="form_template",
      *         in="path",
      *         description="The form template id",
      *         required=true,

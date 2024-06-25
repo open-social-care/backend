@@ -131,7 +131,7 @@ class AdminOrganizationController extends Controller
      *
      *             @OA\Property(property="name", type="string", example="Social Care"),
      *             @OA\Property(property="phone", type="string", example="(42) 91234-5789", description="(00) 00000-0000"),
-     *             @OA\Property(property="document_type", type="string", example="CPF", description="CNPJ or CPF"),
+     *             @OA\Property(property="document_type", type="string", example="cpf", description="CNPJ or CPF"),
      *             @OA\Property(property="document", type="string", example="123.456.789-0", description="00.000.000/0000-00 / 000.000.000-00"),
      *         )
      *     ),
@@ -213,7 +213,7 @@ class AdminOrganizationController extends Controller
      *     security={{"sanctum":{}}},
      *
      *     @OA\Parameter(
-     *         name="id",
+     *         name="organization",
      *         in="path",
      *         description="The organization id for update",
      *         required=true,
@@ -232,7 +232,7 @@ class AdminOrganizationController extends Controller
      *
      *             @OA\Property(property="name", type="string", example="Social Care"),
      *             @OA\Property(property="phone", type="string", example="(42) 91234-5789", description="(00) 00000-0000"),
-     *             @OA\Property(property="document_type", type="string", example="CPF", description="CNPJ or CPF"),
+     *             @OA\Property(property="document_type", type="string", example="cpf", description="CNPJ or CPF"),
      *             @OA\Property(property="document", type="string", example="123.456.789-0", description="00.000.000/0000-00 / 000.000.000-00"),
      *         )
      *     ),
@@ -314,7 +314,7 @@ class AdminOrganizationController extends Controller
      *     security={{"sanctum":{}}},
      *
      *     @OA\Parameter(
-     *         name="id",
+     *         name="organization",
      *         in="path",
      *         description="The organization id for destroy",
      *         required=true,
@@ -381,7 +381,7 @@ class AdminOrganizationController extends Controller
      *     security={{"sanctum":{}}},
      *
      *     @OA\Parameter(
-     *         name="id",
+     *         name="organization",
      *         in="path",
      *         description="The organization id for associate users",
      *         required=true,
@@ -490,7 +490,7 @@ class AdminOrganizationController extends Controller
      *     security={{"sanctum":{}}},
      *
      *     @OA\Parameter(
-     *         name="id",
+     *         name="organization",
      *         in="path",
      *         description="The organization id for associate users",
      *         required=true,
@@ -599,7 +599,7 @@ class AdminOrganizationController extends Controller
      * security={{"sanctum":{}}},
      *
      *     @OA\Parameter(
-     *         name="id",
+     *         name="organization",
      *         in="path",
      *         description="The organization id for list users",
      *         required=true,
@@ -702,7 +702,7 @@ class AdminOrganizationController extends Controller
      * security={{"sanctum":{}}},
      *
      *     @OA\Parameter(
-     *         name="id",
+     *         name="organization",
      *         in="path",
      *         description="The organization id",
      *         required=true,
@@ -780,7 +780,7 @@ class AdminOrganizationController extends Controller
      * security={{"sanctum":{}}},
      *
      *     @OA\Parameter(
-     *         name="id",
+     *         name="organization",
      *         in="path",
      *         description="The organization id",
      *         required=true,

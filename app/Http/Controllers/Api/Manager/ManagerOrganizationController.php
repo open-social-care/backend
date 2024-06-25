@@ -126,7 +126,7 @@ class ManagerOrganizationController extends Controller
      * security={{"sanctum":{}}},
      *
      *     @OA\Parameter(
-     *         name="id",
+     *         name="organization",
      *         in="path",
      *         description="The organization id",
      *         required=true,
@@ -202,7 +202,7 @@ class ManagerOrganizationController extends Controller
      *     security={{"sanctum":{}}},
      *
      *     @OA\Parameter(
-     *         name="id",
+     *         name="organization",
      *         in="path",
      *         description="The organization id",
      *         required=true,
@@ -295,7 +295,7 @@ class ManagerOrganizationController extends Controller
 
     /**
      * @OA\Get(
-     * path="/api/manager/organizations/get-users-by-role/{role}",
+     * path="/api/manager/organizations/{organization}/get-users-by-role/{role}",
      * operationId="ManagerGetOrganizationUsersByRole",
      * tags={"Manager/Organization"},
      * summary="Get a list of organization users by role",
@@ -303,7 +303,7 @@ class ManagerOrganizationController extends Controller
      * security={{"sanctum":{}}},
      *
      *     @OA\Parameter(
-     *         name="id",
+     *         name="organization",
      *         in="path",
      *         description="The organization id",
      *         required=true,
