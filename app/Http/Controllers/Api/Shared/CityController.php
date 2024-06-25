@@ -20,7 +20,7 @@ class CityController extends Controller
      * security={{"sanctum":{}}},
      *
      *     @OA\Parameter(
-     *           name="id",
+     *           name="state",
      *           in="path",
      *           description="The state id for get cities",
      *           required=true,

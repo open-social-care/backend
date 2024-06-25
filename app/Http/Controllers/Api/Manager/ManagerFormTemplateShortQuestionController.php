@@ -25,7 +25,7 @@ class ManagerFormTemplateShortQuestionController extends Controller
      * security={{"sanctum":{}}},
      *
      *     @OA\Parameter(
-     *         name="id",
+     *         name="form_template",
      *         in="path",
      *         description="The form template id",
      *         required=true,
@@ -104,7 +104,7 @@ class ManagerFormTemplateShortQuestionController extends Controller
      *     security={{"sanctum":{}}},
      *
      *     @OA\Parameter(
-     *         name="id",
+     *         name="form_template",
      *         in="path",
      *         description="The form template id",
      *         required=true,
@@ -203,7 +203,7 @@ class ManagerFormTemplateShortQuestionController extends Controller
      *     security={{"sanctum":{}}},
      *
      *     @OA\Parameter(
-     *         name="id",
+     *         name="form_template",
      *         in="path",
      *         description="The form Template id from short question",
      *         required=true,
@@ -214,7 +214,7 @@ class ManagerFormTemplateShortQuestionController extends Controller
      *     ),
      *
      *     @OA\Parameter(
-     *         name="id",
+     *         name="short_question",
      *         in="path",
      *         description="The form Template short question id for update",
      *         required=true,
@@ -316,7 +316,7 @@ class ManagerFormTemplateShortQuestionController extends Controller
      *     security={{"sanctum":{}}},
      *
      *     @OA\Parameter(
-     *         name="id",
+     *         name="form_template",
      *         in="path",
      *         description="The form template id",
      *         required=true,
@@ -327,7 +327,7 @@ class ManagerFormTemplateShortQuestionController extends Controller
      *     ),
      *
      *     @OA\Parameter(
-     *         name="id",
+     *         name="short_question",
      *         in="path",
      *         description="The form template short questions id for destroy",
      *         required=true,
@@ -394,7 +394,7 @@ class ManagerFormTemplateShortQuestionController extends Controller
      * security={{"sanctum":{}}},
      *
      *     @OA\Parameter(
-     *         name="id",
+     *         name="form_template",
      *         in="path",
      *         description="The form template id",
      *         required=true,
@@ -405,7 +405,7 @@ class ManagerFormTemplateShortQuestionController extends Controller
      *     ),
      *
      *     @OA\Parameter(
-     *         name="id",
+     *         name="short_question",
      *         in="path",
      *         description="The form template short question id for show",
      *         required=true,
