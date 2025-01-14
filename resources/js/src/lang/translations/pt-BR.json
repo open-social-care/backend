@@ -1,0 +1,115 @@
+{
+  "pt-BR": {
+    "landing_page": {
+      "login": "Entrar",
+      "title": "Olá, seja bem vindo ao Open Social Care!",
+      "subtitle": "Um sistema feito para agilizar o seu trabalho.",
+      "content": "O atendimento social consiste em muitas informações a serem consideradas, como também muitas etapas para executar. Pensado no dia a dia de trabalho, o sistema surgiu para ajudar as agências sociais a organizar seus atendimentos aos clientes."
+    },
+
+    "auth": {
+      "login": "Login",
+      "email": "Email",
+      "password": "Senha",
+      "password_confirmation": "Confirmação de senha"
+    },
+
+    "roles": {
+      "admin": "Administrador",
+      "manager": "Gestor",
+      "managers": "Gestores",
+      "social-assistant": "Assistente social",
+      "social_assistant": "Assistente social",
+      "social_assistants": "Assistentes sociais"
+    },
+
+    "page_titles": {
+      "profile_select": "Olá {{name}}, escolha o seu perfil:",
+      "users": "Usuários",
+      "create_user": "Cadastrar usuário",
+      "create_social_assistant": "Cadastrar assistente social",
+      "edit_user": "Editar usuário",
+      "organizations": "Organizações",
+      "create_organization": "Cadastrar organização",
+      "edit_organization": "Editar organização",
+      "form_templates": "Templates de formulário",
+      "create_form_template": "Cadastrar template de formulário",
+      "fill_forms": "Preencher formulário",
+      "filled_forms": "Formulários preenchidos",
+      "view_form_answer": "Visualizar formulário preenchido",
+      "edit_form_template": "Editar template de formulário",
+      "create_subject": "Cadastrar {{subject_ref}}",
+      "edit_subject": "Editar {{subject_ref}}"
+    },
+
+    "general_actions": {
+      "create": "Cadastrar",
+      "edit": "Editar",
+      "add": "Adicionar",
+      "cancel": "Cancelar",
+      "dissociate": "Dissociar",
+      "manage": "Gerenciar",
+      "update": "Atualizar",
+      "remove": "Remover",
+      "search": "Pesquisar",
+      "view": "Visualizar"
+    },
+
+    "labels": {
+      "start": "Início",
+      "change_profile": "Alternar perfil",
+      "subject_reference": "Referência para sujeito(os)",
+      "subjects": "Sujeitos",
+      "name": "Nome",
+      "phone": "Telefone",
+      "organization": "Organização",
+      "templates": "Templates",
+      "filled_by": "Preenchido por",
+      "date": "Data",
+      "last_form_answer_date": "Data do último formulário",
+      "document": "Documento",
+      "document_type": "Tipo de documento",
+      "description": "Descrição",
+      "add_question": "Adicionar questão",
+      "answer_required": "Questão obrigatória",
+      "personal_information": "Informações pessoais",
+      "additional_information": "Informações adicionais",
+      "birth_date": "Data de nascimento",
+      "address": "Endereço",
+      "street": "Rua",
+      "father_name": "Nome do pai",
+      "mother_name": "Nome da mãe",
+      "skin_color": "Cor de pele",
+      "nationality": "Nacionalidade",
+      "number": "Número",
+      "district": "Bairro",
+      "state": "Estado",
+      "city": "Cidade",
+      "complement": "Complemento",
+      "relative_relation": "Parente/conhecido próximo",
+      "relative_relation_type": "Tipo de relação",
+      "select_a_template": "Escolha um template:"
+    },
+
+    "informations": {
+      "users_not_found": "Nenhum usuário encontrado.",
+      "organization_not_found": "Nenhuma organização encontrada.",
+      "form_templates_not_found": "Nenhum template encontrado.",
+      "form_answers_not_found": "Nenhuma resposta de formulário encontrada.",
+      "questions_not_found": "Nenhuma questão encontrada.",
+      "question_not_filled": "Questão não preenchida.",
+      "role_not_found": "Nenhum perfil encontrado, contate o administrador do sistema.",
+      "subjects_not_found": "Nenhum {{subject_ref}} encontrado."
+    },
+
+    "document_types": {
+      "cpf": "CPF",
+      "cnpj": "CNPJ"
+    },
+
+    "errors": {
+      "generic_next_error": "Ops... algo deu errado!",
+      "generic_next_error_try_again": "Tentar novamente"
+    }
+  }
+}
