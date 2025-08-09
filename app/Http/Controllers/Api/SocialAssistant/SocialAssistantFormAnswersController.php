@@ -221,6 +221,12 @@ class SocialAssistantFormAnswersController extends Controller
                 ShortAnswerCreateAction::execute($dto);
             }
 
+            $multipleChoiceAnswers = data_get($data, 'multiple_choice_answers', []);
+            foreach ($multipleChoiceAnswers as $multipleChoiceAnswer) {
+                $dto = new MultipleChoiceAnswerDTO($multipleChoiceAnswer, $formAnswer, $subject);
+                MultipleChoiceAnswerCreateAction::execute($dto);
+            }
+
             AuditCreateEvent::dispatch($formAnswer, auth()->user(), AuditEventTypesEnum::CREATE, request()->ip());
 
             DB::commit();

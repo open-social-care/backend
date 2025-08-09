@@ -1,43 +1,33 @@
 <?php
-
-namespace App\DTO\SocialAssistant;
+namespace App\DTO\Manager;
 
 use App\Models\FormAnswer;
-use App\Models\ShortQuestion;
 use App\Models\Subject;
+use App\Models\MultipleChoiceQuestion;
 
-class ShortAnswerDTO
+class MultipleChoiceAnswerDTO
 {
-    public int $short_question_id;
-
+    public int $multiple_choice_question_id;
     public int $form_answer_id;
-
     public int $subject_id;
-
-    public ?string $answer;
+    public string $answer;
     public ?string $question_description;
 
-    /**
-     * Construct class set DTO attributes
-     */
     public function __construct(array $data, FormAnswer $formAnswer, Subject $subject)
     {
-        $this->short_question_id = data_get($data, 'short_question_id');
+        $this->multiple_choice_question_id = data_get($data, 'multiple_choice_question_id');
         $this->form_answer_id = $formAnswer->id;
         $this->subject_id = $subject->id;
         $this->answer = data_get($data, 'answer');
 
-        $shortQuestion = ShortQuestion::find($this->short_question_id);
-        $this->question_description = $shortQuestion ? $shortQuestion->description : null;
+        $question = MultipleChoiceQuestion::find($this->multiple_choice_question_id);
+        $this->question_description = $question ? $question->description : null;
     }
 
-    /**
-     * Returns array of DTO attributes
-     */
     public function toArray(): array
     {
         return [
-            'short_question_id' => $this->short_question_id,
+            'multiple_choice_question_id' => $this->multiple_choice_question_id,
             'form_answer_id' => $this->form_answer_id,
             'subject_id' => $this->subject_id,
             'answer' => $this->answer,
