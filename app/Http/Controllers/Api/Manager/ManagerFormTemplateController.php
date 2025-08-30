@@ -452,12 +452,18 @@ class ManagerFormTemplateController extends Controller
         $this->authorize('view', $formTemplate);
 
         try {
-            return response()->json([
-                'type' => 'success',
+            $formTemplate->load(['shortQuestions', 'multipleChoiceQuestions.multipleChoiceOptions']);
+
+            $responsePayload = [
+                'type'    => 'success',
                 'message' => __('messages.common.success_view'),
-                'data' => FormTemplateResource::make($formTemplate),
-            ], HttpResponse::HTTP_OK);
+                'data'    => FormTemplateResource::make($formTemplate),
+            ];
+
+            return response()->json($responsePayload, HttpResponse::HTTP_OK);
+
         } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error($e);
             return response()->json(['message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
         }
     }

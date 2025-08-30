@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers\Api\Manager;
 
+use App\Actions\Manager\FormTemplates\MultipleChoiceQuestions\MultipleChoiceQuestionCreateAction;
 use App\Actions\Manager\FormTemplates\ShortQuestions\ShortQuestionCreateAction;
 use App\Actions\Manager\FormTemplates\ShortQuestions\ShortQuestionUpdateAction;
+use App\DTO\Manager\MultipleChoiceQuestionDTO;
 use App\DTO\Manager\ShortQuestionDTO;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\Manager\FormTemplateQuestionStoreRequest;
 use App\Http\Requests\Api\Manager\FormTemplateShortQuestionCreateRequest;
+use App\Http\Resources\Api\Manager\FormTemplateResource;
 use App\Http\Resources\Api\Manager\FormTemplateShortQuestionResource;
 use App\Models\FormTemplate;
 use App\Models\ShortQuestion;
@@ -177,15 +181,26 @@ class ManagerFormTemplateShortQuestionController extends Controller
      *     ),
      * )
      */
-    public function store(FormTemplateShortQuestionCreateRequest $request, FormTemplate $formTemplate): JsonResponse
+    public function store(FormTemplateQuestionStoreRequest $request, FormTemplate $formTemplate): JsonResponse
     {
         $this->authorize('createQuestionsForFormTemplate', $formTemplate);
 
         try {
             $data = $request->validated();
 
-            $dto = new ShortQuestionDTO($data);
-            ShortQuestionCreateAction::execute($dto, $formTemplate);
+            $questionType = $data['type'];
+
+            match ($questionType) {
+                'short_question' => ShortQuestionCreateAction::execute(
+                    new ShortQuestionDTO($data),
+                    $formTemplate
+                ),
+                'multiple_choice' => MultipleChoiceQuestionCreateAction::execute(
+                    new MultipleChoiceQuestionDTO($data),
+                    $formTemplate
+                ),
+                default => throw new \InvalidArgumentException('Tipo de pergunta inválido ou não suportado.'),
+            };
 
             return response()->json(['type' => 'success', 'message' => __('messages.common.success_create')], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {

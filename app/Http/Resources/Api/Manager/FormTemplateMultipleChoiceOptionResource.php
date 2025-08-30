@@ -5,7 +5,7 @@ namespace App\Http\Resources\Api\Manager;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class FormTemplateShortQuestionResource extends JsonResource
+class FormTemplateMultipleChoiceOptionResource extends JsonResource
 {
     /**
      * Return array of attributes
@@ -15,8 +15,6 @@ class FormTemplateShortQuestionResource extends JsonResource
         return [
             'id' => $this->id,
             'description' => $this->description,
-            'answer_required' => $this->answer_required,
-            'type' => 'short_question',
         ];
     }
 }

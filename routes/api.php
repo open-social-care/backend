@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Auth\ForgotPasswordController;
 use App\Http\Controllers\Api\Auth\ResetPasswordController;
 use App\Http\Controllers\Api\Manager\ManagerFormTemplateController;
+use App\Http\Controllers\Api\Manager\ManagerFormTemplateMultipleChoiceQuestionController;
 use App\Http\Controllers\Api\Manager\ManagerFormTemplateShortQuestionController;
 use App\Http\Controllers\Api\Manager\ManagerOrganizationController;
 use App\Http\Controllers\Api\Manager\ManagerUserController;
@@ -110,6 +111,17 @@ Route::middleware(['auth:sanctum', 'only_manager_user'])
                 'update' => 'form-templates.short-questions.update',
                 'destroy' => 'form-templates.short-questions.destroy',
                 'show' => 'form-templates.short-questions.show',
+            ]);
+
+        // Form Templates Routes > Multiple Choice questions
+        Route::resource('form-templates/{form_template}/multiple-choice-questions', ManagerFormTemplateMultipleChoiceQuestionController::class)
+            ->names([
+                // to do
+//                'index' => 'form-templates.multiple-choice-questions.index',
+//                'store' => 'form-templates.multiple-choice-questions.store',
+//                'update' => 'form-templates.multiple-choice-questions.update',
+//                'destroy' => 'form-templates.multiple-choice-questions.destroy',
+                'show' => 'form-templates.multiple-choice-questions.show',
             ]);
     });
 
