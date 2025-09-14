@@ -116,11 +116,10 @@ Route::middleware(['auth:sanctum', 'only_manager_user'])
         // Form Templates Routes > Multiple Choice questions
         Route::resource('form-templates/{form_template}/multiple-choice-questions', ManagerFormTemplateMultipleChoiceQuestionController::class)
             ->names([
-                // to do
-//                'index' => 'form-templates.multiple-choice-questions.index',
-//                'store' => 'form-templates.multiple-choice-questions.store',
-//                'update' => 'form-templates.multiple-choice-questions.update',
-//                'destroy' => 'form-templates.multiple-choice-questions.destroy',
+                'index' => 'form-templates.multiple-choice-questions.index',
+                'store' => 'form-templates.multiple-choice-questions.store',
+                'update' => 'form-templates.multiple-choice-questions.update',
+                'destroy' => 'form-templates.multiple-choice-questions.destroy',
                 'show' => 'form-templates.multiple-choice-questions.show',
             ]);
     });

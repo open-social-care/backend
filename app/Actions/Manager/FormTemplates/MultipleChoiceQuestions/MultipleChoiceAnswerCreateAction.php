@@ -12,7 +12,6 @@ class MultipleChoiceAnswerCreateAction
         DB::beginTransaction();
 
         $data = $dto->toArray();
-        $data['data_type'] = 'multiple_choice';
         $multipleChoiceAnswer = MultipleChoiceAnswer::create($data);
 
         DB::commit();

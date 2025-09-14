@@ -15,8 +15,8 @@ class FormAnswerListResource extends JsonResource
         return [
             'id' => $this->id,
             'created_at' => $this->created_at,
-            'user_name' => $this->user->name,
-            'form_template_title' => $this->formTemplate->title,
+            'user_name' => $this->user->name ?? 'Usuário não encontrado',
+            'form_template_title' => $this->formTemplate?->title ?? 'Formulário não encontrado',
         ];
     }
 }

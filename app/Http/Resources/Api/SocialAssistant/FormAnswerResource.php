@@ -10,14 +10,19 @@ class FormAnswerResource extends JsonResource
     /**
      * Return array of attributes
      */
-    public function toArray(Request $request): array
+    function toArray(Request $request): array
     {
+        $shortAnswers = ShortAnswerResource::collection($this->whenLoaded('shortAnswers'));
+        $multipleChoiceAnswers = MultipleChoiceAnswerResource::collection($this->whenLoaded('multipleChoiceAnswers'));
+
+        $allAnswers = $shortAnswers->toBase()->merge($multipleChoiceAnswers);
+
         return [
             'id' => $this->id,
-            'created_at' => $this->created_at->toISOString(),
-            'user_name' => $this->user->name,
-            'form_template_title' => $this->formTemplate->title,
-            'short_answers' => FormAnswerShortAnswerResource::collection($this->shortAnswers)->resolve(),
+            'created_at' => $this->created_at,
+            'user_name' => $this->user?->name,
+            'form_template_title' => $this->formTemplate?->title,
+            'question_answers' => $allAnswers,
         ];
     }
 }

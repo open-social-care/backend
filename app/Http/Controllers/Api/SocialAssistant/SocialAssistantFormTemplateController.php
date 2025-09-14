@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\SocialAssistant;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Api\Manager\FormTemplateResource;
 use App\Http\Resources\Api\SocialAssistant\FormTemplateWithQuestionsResource;
 use App\Models\FormTemplate;
 use App\Models\Organization;
@@ -169,15 +170,15 @@ class SocialAssistantFormTemplateController extends Controller
      */
     public function show(FormTemplate $formTemplate): JsonResponse
     {
+        info('caiu aqui');
         $this->authorize('view', $formTemplate);
 
         try {
-            $formTemplate->load('shortQuestions');
-
+            $formTemplate->load(['shortQuestions', 'multipleChoiceQuestions.multipleChoiceOptions']);
             return response()->json([
                 'type' => 'success',
                 'message' => __('messages.common.success_view'),
-                'data' => FormTemplateWithQuestionsResource::make($formTemplate),
+                'data' => FormTemplateResource::make($formTemplate),
             ], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);

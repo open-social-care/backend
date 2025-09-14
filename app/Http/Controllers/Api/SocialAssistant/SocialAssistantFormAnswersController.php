@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Api\SocialAssistant;
 
+use App\Actions\Manager\FormTemplates\MultipleChoiceQuestions\MultipleChoiceAnswerCreateAction;
 use App\Actions\SocialAssistant\FormAnswer\FormAnswerCreateAction;
 use App\Actions\SocialAssistant\FormAnswer\ShortAnswer\ShortAnswerCreateAction;
+use App\DTO\Manager\MultipleChoiceAnswerDTO;
 use App\DTO\SocialAssistant\FormAnswerDTO;
 use App\DTO\SocialAssistant\ShortAnswerDTO;
 use App\Enums\AuditEventTypesEnum;
@@ -17,6 +19,7 @@ use App\Models\FormAnswer;
 use App\Models\Subject;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class SocialAssistantFormAnswersController extends Controller
@@ -104,7 +107,7 @@ class SocialAssistantFormAnswersController extends Controller
             return response()->json([
                 'type' => 'success',
                 'message' => __('messages.common.success_view'),
-                'data' => FormAnswerListResource::collection($paginate),
+                'data' => FormAnswerListResource::collection($paginate->items()),
                 'pagination' => PaginationResource::make($paginate),
             ], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
@@ -318,7 +321,12 @@ class SocialAssistantFormAnswersController extends Controller
         $this->authorize('view', $formAnswer);
 
         try {
-            $formAnswer->load(['shortAnswers', 'shortAnswers.shortQuestion']);
+            $formAnswer->load([
+                'user',
+                'formTemplate',
+                'shortAnswers.shortQuestion',
+                'multipleChoiceAnswers.multipleChoiceQuestion',
+            ]);
 
             AuditCreateEvent::dispatch($formAnswer, auth()->user(), AuditEventTypesEnum::VIEW, request()->ip());
 
@@ -328,6 +336,7 @@ class SocialAssistantFormAnswersController extends Controller
                 'data' => FormAnswerResource::make($formAnswer),
             ], HttpResponse::HTTP_OK);
         } catch (\Exception $e) {
+            Log::error("ERRO AO CARREGAR FORMANSWER: " . $e->getMessage() . "\n" . $e->getTraceAsString());
             return response()->json(['type' => 'error', 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
         }
     }

@@ -109,15 +109,20 @@ class ManagerFormTemplateController extends Controller
                 $query->whereRaw("LOWER(title) LIKE '%' || LOWER(?) || '%'", [$search]);
             }
 
+            $query->with(['shortQuestions', 'multipleChoiceQuestions.multipleChoiceOptions']);
+
             $paginate = $query->paginate(30);
+            $items = $paginate->items();
 
             return response()->json([
                 'type' => 'success',
                 'message' => __('messages.common.success_view'),
-                'data' => FormTemplateResource::collection($paginate),
+                'data' => FormTemplateResource::collection($paginate->items()),
                 'pagination' => PaginationResource::make($paginate),
             ], HttpResponse::HTTP_OK);
+
         } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error($e);
             return response()->json(['type' => 'error', 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
         }
     }
