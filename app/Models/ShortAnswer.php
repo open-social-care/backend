@@ -22,6 +22,7 @@ class ShortAnswer extends Model
         'answer',
         'created_at',
         'updated_at',
+        'question_description'
     ];
 
     public function shortQuestion(): BelongsTo

@@ -51,9 +51,14 @@ class FormAnswerCreateRequest extends FormRequest
     {
         $rules = [
             'form_template_id' => 'required|integer|exists:form_templates,id',
-            'short_answers' => 'required|array',
+
+            'short_answers' => 'nullable|array',
             'short_answers.*.short_question_id' => 'required|integer|exists:short_questions,id',
-            'short_answers.*.answer' => 'sometimes|max:255|required_answer',
+            'short_answers.*.answer' => 'nullable|string|max:255|required_answer',
+
+            'multiple_choice_answers' => 'nullable|array',
+            'multiple_choice_answers.*.multiple_choice_question_id' => 'required|integer|exists:multiple_choice_questions,id',
+            'multiple_choice_answers.*.answer' => 'required|string|max:255',
         ];
 
         return $rules;

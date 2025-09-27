@@ -20,6 +20,7 @@ class MultipleChoiceAnswer extends Model
         'answer',
         'multiple_choice_question_id',
         'subject_id',
+        'question_description',
     ];
 
     public function formAnswer(): BelongsTo

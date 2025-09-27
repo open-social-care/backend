@@ -7,15 +7,26 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class FormTemplateResource extends JsonResource
 {
-    /**
-     * Return array of attributes
-     */
     public function toArray(Request $request): array
     {
+        $shortQuestions = $this->whenLoaded('shortQuestions');
+        $multipleChoiceQuestions = $this->whenLoaded('multipleChoiceQuestions');
+
+        $shortQuestionsArray = $shortQuestions->map(function ($question) {
+            return (new FormTemplateShortQuestionResource($question))->resolve();
+        });
+
+        $multipleChoiceQuestionsArray = $multipleChoiceQuestions->map(function ($question) {
+            return (new FormTemplateMultipleChoiceQuestionResource($question))->resolve();
+        });
+
+        $allQuestions = $shortQuestionsArray->toBase()->merge($multipleChoiceQuestionsArray);
+
         return [
             'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
+            'questions' => $allQuestions,
         ];
     }
 }

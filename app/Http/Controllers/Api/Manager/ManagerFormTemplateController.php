@@ -109,15 +109,20 @@ class ManagerFormTemplateController extends Controller
                 $query->whereRaw("LOWER(title) LIKE '%' || LOWER(?) || '%'", [$search]);
             }
 
+            $query->with(['shortQuestions', 'multipleChoiceQuestions.multipleChoiceOptions']);
+
             $paginate = $query->paginate(30);
+            $items = $paginate->items();
 
             return response()->json([
                 'type' => 'success',
                 'message' => __('messages.common.success_view'),
-                'data' => FormTemplateResource::collection($paginate),
+                'data' => FormTemplateResource::collection($paginate->items()),
                 'pagination' => PaginationResource::make($paginate),
             ], HttpResponse::HTTP_OK);
+
         } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error($e);
             return response()->json(['type' => 'error', 'message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
         }
     }
@@ -452,12 +457,18 @@ class ManagerFormTemplateController extends Controller
         $this->authorize('view', $formTemplate);
 
         try {
-            return response()->json([
-                'type' => 'success',
+            $formTemplate->load(['shortQuestions', 'multipleChoiceQuestions.multipleChoiceOptions']);
+
+            $responsePayload = [
+                'type'    => 'success',
                 'message' => __('messages.common.success_view'),
-                'data' => FormTemplateResource::make($formTemplate),
-            ], HttpResponse::HTTP_OK);
+                'data'    => FormTemplateResource::make($formTemplate),
+            ];
+
+            return response()->json($responsePayload, HttpResponse::HTTP_OK);
+
         } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error($e);
             return response()->json(['message' => $e->getMessage()], HttpResponse::HTTP_BAD_REQUEST);
         }
     }
