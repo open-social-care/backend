@@ -170,7 +170,6 @@ class SocialAssistantFormTemplateController extends Controller
      */
     public function show(FormTemplate $formTemplate): JsonResponse
     {
-        info('caiu aqui');
         $this->authorize('view', $formTemplate);
 
         try {
