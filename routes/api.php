@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\Admin\AdminUserController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Auth\ForgotPasswordController;
 use App\Http\Controllers\Api\Auth\ResetPasswordController;
+use App\Http\Controllers\Api\Manager\AnalyticsController;
 use App\Http\Controllers\Api\Manager\ManagerFormTemplateController;
 use App\Http\Controllers\Api\Manager\ManagerFormTemplateMultipleChoiceQuestionController;
 use App\Http\Controllers\Api\Manager\ManagerFormTemplateShortQuestionController;
@@ -122,6 +123,13 @@ Route::middleware(['auth:sanctum', 'only_manager_user'])
                 'destroy' => 'form-templates.multiple-choice-questions.destroy',
                 'show' => 'form-templates.multiple-choice-questions.show',
             ]);
+
+        Route::get(
+            '/form-templates/select/{organization}',
+            [AnalyticsController::class, 'selectList']
+        )->name('form-templates.select-list');
+
+        Route::get('/analytics/form-template/{form_template}/{period?}', [AnalyticsController::class, 'forTemplate']);
     });
 
 // Social Assistant Routes
@@ -160,7 +168,11 @@ Route::middleware(['auth:sanctum', 'only_social_assistant_user'])
 
         Route::get('/form-answers/show/{form_answer}', [SocialAssistantFormAnswersController::class, 'show'])->name('form-answers.show');
         Route::delete('/form-answers/{form_answer}', [SocialAssistantFormAnswersController::class, 'destroy'])->name('form-answers.destroy');
-    });
+        Route::get(
+            '/form-templates/select/{organization}',
+            [AnalyticsController::class, 'selectList']
+        )->name('form-templates.select-list');
+        Route::get('/analytics/form-template/{form_template}/{period?}', [AnalyticsController::class, 'forTemplate']);    });
 
 Route::middleware(['auth:sanctum'])
     ->group(function () {

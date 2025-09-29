@@ -41,7 +41,6 @@ class DemoDataSeeder extends Seeder
 
         foreach ($subjects as $subject) {
             $numberOfAnswers = rand(1, 3);
-
             for ($i = 0; $i < $numberOfAnswers; $i++) {
                 $formAnswer = FormAnswer::create([
                     'user_id' => $socialAssistant->id,
@@ -50,11 +49,39 @@ class DemoDataSeeder extends Seeder
                 ]);
 
                 foreach ($shortQuestions as $question) {
-                    $formAnswer->shortAnswers()->create([
-                        'short_question_id' => $question->id,
-                        'subject_id' => $subject->id,
-                        'answer' => fake()->address(),
-                    ]);
+                    $answerText = null;
+
+                    switch ($question->description) {
+                        case 'Nome completo do atendido':
+                            $answerText = $subject->name;
+                            break;
+                        case 'Data de nascimento':
+                            $answerText = $subject->birth_date;
+                            break;
+                        case 'Endereço completo e bairro':
+                            $answerText = fake()->streetAddress() . ', ' . fake()->city();
+                            break;
+                        case 'Número de pessoas no domicílio':
+                            $answerText = fake()->numberBetween(1, 6);
+                            break;
+                        case 'Principais fontes de renda da família':
+                            $answerText = fake()->randomElement(['Salário', 'Bolsa Família', 'Aposentadoria', 'Trabalho Informal']);
+                            break;
+                        case 'Encaminhamentos realizados':
+                            $answerText = fake()->randomElement(['CRAS', 'CREAS', 'Posto de Saúde', 'Nenhum']);
+                            break;
+                        case 'Observações adicionais':
+                            $answerText = fake()->boolean(25) ? fake()->sentence() : null;
+                            break;
+                    }
+
+                    if ($answerText) {
+                        $formAnswer->shortAnswers()->create([
+                            'short_question_id' => $question->id,
+                            'subject_id' => $subject->id,
+                            'answer' => $answerText,
+                        ]);
+                    }
                 }
 
                 foreach ($multipleChoiceQuestions as $question) {
