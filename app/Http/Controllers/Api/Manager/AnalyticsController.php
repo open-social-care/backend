@@ -10,13 +10,13 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
-
+use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 class AnalyticsController extends Controller
 {
     public function forTemplate(FormTemplate $formTemplate, Request $request): JsonResponse
     {
         $query = AnalyticsData::where('form_template_id', $formTemplate->id);
-
         $period = $request->query('period');
 
         if ($period && $period !== 'all') {
@@ -26,11 +26,11 @@ class AnalyticsController extends Controller
 
         $answers = $query->get();
 
-        if ($formTemplate->title === 'Ficha de Atendimento CCG') {
-            $chartData = $this->processCcgAnalytics($answers);
-        } else {
-            $chartData = $this->processGenericAnalytics($answers);
-        }
+        $chartData = match ($formTemplate->title) {
+            'Ficha de Atendimento CCG' => $this->processCcgAnalytics($answers),
+            'Plano de Acompanhamento - Albergue' => $this->processAlbergueAnalytics($answers),
+            default => $this->processGenericAnalytics($answers),
+        };
 
         return response()->json([
             'type' => 'success',
@@ -80,6 +80,41 @@ class AnalyticsController extends Controller
         $analytics['operational'] = [
             'referrals' => $this->getAnswerCountsForQuestion($answers, 'Encaminhamentos realizados'),
             'topNeighborhoods' => $this->getTopNeighborhoods($answers),
+        ];
+
+        return $analytics;
+    }
+
+    private function processAlbergueAnalytics(Collection $answers): array
+    {
+        $analytics = [];
+
+        $analytics['mobility_profile'] = [
+            'recurrentVisitors' => $this->getAnswerCountsForQuestion($answers, 'Já esteve em Guarapuava em outra(s) ocasião(ões)?'),
+            'topOriginCities' => $this->getTopTextAnswers($answers, 'Cidade de Origem'),
+            'genderDistribution' => $this->getAnswerCountsForQuestion($answers, 'Qual é seu gênero?'),
+            'raceDistribution' => $this->getAnswerCountsForQuestion($answers, 'Você se considera:'),
+        ];
+
+        $analytics['health_profile'] = [
+            'chronicDiseases' => $this->getAnswerCountsForQuestion($answers, 'Doença Crônica?'),
+            'substanceUse' => $this->getAnswerCountsForQuestion($answers, 'Faz uso de substâncias?'),
+            'psychologicalConditions' => $this->getAnswerCountsForQuestion($answers, 'Doença Psicológica?'),
+            'hasSoughtTreatment' => $this->getAnswerCountsForQuestion($answers, 'Já passou por tratamento para dependência?'),
+            'usesMedication' => $this->getAnswerCountsForQuestion($answers, 'Faz uso de medicação?'),
+            'medicationAccess' => $this->getAnswerCountsForQuestion($answers, 'Tem acesso a medicação?'),
+            'receivesFollowUp' => $this->getAnswerCountsForQuestion($answers, 'Faz acompanhamento?'),
+        ];
+
+        $analytics['socioeconomic_profile'] = [
+            'hasCadUnico' => $this->getAnswerCountsForQuestion($answers, 'Possui Cad Único?'),
+            'socialBenefits' => $this->getAnswerCountsForQuestion($answers, 'Recebe Benefício Social?'),
+            'pensionBenefits' => $this->getAnswerCountsForQuestion($answers, 'Recebe Benefício Previdenciário?'),
+            'documentation' => [
+                'hasRG' => $this->getAnswerCountsForQuestion($answers, 'Possui RG?'),
+                'hasCPF' => $this->getAnswerCountsForQuestion($answers, 'Possui CPF?'),
+                'hasWorkCard' => $this->getAnswerCountsForQuestion($answers, 'Possui Carteira de Trabalho?'),
+            ],
         ];
 
         return $analytics;
@@ -152,5 +187,15 @@ class AnalyticsController extends Controller
             '1y' => Carbon::now()->subYear(),
             default => Carbon::minValue(),
         };
+    }
+
+    private function getTopTextAnswers(Collection $answers, string $questionDescription, int $limit = 10): Collection
+    {
+        return $answers->where('question_description', $questionDescription)
+            ->pluck('answer')
+            ->map(fn($answer) => trim($answer))
+            ->countBy()
+            ->sortDesc()
+            ->take($limit);
     }
 }

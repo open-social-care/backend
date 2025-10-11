@@ -130,6 +130,10 @@ Route::middleware(['auth:sanctum', 'only_manager_user'])
         )->name('form-templates.select-list');
 
         Route::get('/analytics/form-template/{form_template}/{period?}', [AnalyticsController::class, 'forTemplate']);
+        Route::get(
+            '/analytics/form-template/{form_template}/export-data',
+            [AnalyticsController::class, 'exportData']
+        );
     });
 
 // Social Assistant Routes
@@ -172,7 +176,12 @@ Route::middleware(['auth:sanctum', 'only_social_assistant_user'])
             '/form-templates/select/{organization}',
             [AnalyticsController::class, 'selectList']
         )->name('form-templates.select-list');
-        Route::get('/analytics/form-template/{form_template}/{period?}', [AnalyticsController::class, 'forTemplate']);    });
+        Route::get('/analytics/form-template/{form_template}/{period?}', [AnalyticsController::class, 'forTemplate']);
+        Route::get(
+            '/analytics/form-template/{form_template}/export-data',
+            [AnalyticsController::class, 'exportData']
+        );
+    });
 
 Route::middleware(['auth:sanctum'])
     ->group(function () {
